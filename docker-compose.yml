@@ -1,0 +1,16 @@
+version: '3'
+
+services:
+  db:
+    image: mysql:latest
+    command: ["mysqld", "--mysql-native-password=ON"]
+    restart: always
+    environment:
+      MYSQL_RANDOM_ROOT_PASSWORD: yes
+      MYSQL_USER: mysql
+      MYSQL_DATABASE: black-circle
+      MYSQL_PASSWORD: password
+    ports:
+      - 3306:3306
+    volumes:
+      - ./db-dump:/docker-entrypoint-initdb.d
