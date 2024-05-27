@@ -9,6 +9,14 @@ export class UsersRepository extends Repository<User> {
     super(User, dataSource.createEntityManager());
   }
 
+  async findById(id: string): Promise<User> {
+    return this.findOne({
+      where: {
+        id,
+      },
+    });
+  }
+
   async createOne(createUserDto: CreateUserDto): Promise<User> {
     const { name, email, passwordHash, passwordSalt } = createUserDto;
 
