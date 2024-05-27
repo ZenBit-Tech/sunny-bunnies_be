@@ -25,6 +25,6 @@ export class AuthSignUpDto {
     description: 'User password for user account',
   })
   @IsString()
-  @MinLength(8)
+  @MinLength(8, { message: 'Password needs to be at least 8 characters' })
   password: string;
 }
