@@ -10,9 +10,10 @@ export class UsersRepository extends Repository<User> {
   }
 
   async createOne(createUserDto: CreateUserDto): Promise<User> {
-    const { email, passwordHash, passwordSalt } = createUserDto;
+    const { name, email, passwordHash, passwordSalt } = createUserDto;
 
     const user = this.create({
+      name,
       email,
       passwordSalt,
       passwordHash,

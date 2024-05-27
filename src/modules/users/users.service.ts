@@ -1,9 +1,7 @@
 import { Injectable } from '@nestjs/common';
-import { genSalt, hash } from 'bcrypt';
 import { UsersRepository } from './users.repository';
 import { User } from './user.entity';
-import { UserSignUpDto } from './dto';
-import { USER_PASSWORD_SALT_ROUNDS } from '../../common/constants/user-password-salt-rounds.constant';
+import { CreateUserDto } from './dto';
 
 @Injectable()
 export class UsersService {
@@ -13,13 +11,11 @@ export class UsersService {
     this.usersRepository = usersRepository;
   }
 
-  async createOne(userSignUpDto: UserSignUpDto): Promise<User> {
-    const { email, password } = userSignUpDto;
-
-    const passwordSalt = await genSalt(USER_PASSWORD_SALT_ROUNDS);
-    const passwordHash = await hash(password, passwordSalt);
+  async createOne(createUserDto: CreateUserDto): Promise<User> {
+    const { name, email, passwordHash, passwordSalt } = createUserDto;
 
     return this.usersRepository.createOne({
+      name,
       email,
       passwordHash,
       passwordSalt,

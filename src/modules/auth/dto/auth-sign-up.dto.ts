@@ -1,7 +1,15 @@
-import { IsString, Matches, MinLength } from 'class-validator';
+import { IsNotEmpty, IsString, Matches, MinLength } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 
-export class UserSignUpDto {
+export class AuthSignUpDto {
+  @ApiProperty({
+    type: String,
+    description: 'Name for user account',
+  })
+  @IsString()
+  @IsNotEmpty()
+  name: string;
+
   @ApiProperty({
     type: String,
     description: 'Sign up gmail value for user account',
