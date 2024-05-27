@@ -3,7 +3,7 @@ import { ApiTags } from '@nestjs/swagger';
 import { AuthService } from './auth.service';
 import { AuthSignUpDto } from './dto';
 import { AuthResponse } from '../../common/types';
-import { PublicRoute } from '../../common/decorators/public-route.decorator';
+import { PublicRoute } from '../../common/decorators';
 
 @ApiTags('Auth')
 @Controller('auth')
