@@ -2,7 +2,7 @@ import { ConflictException, Injectable } from '@nestjs/common';
 import { UsersService } from '../users/users.service';
 import { EncryptService } from './encrypt.service';
 import { AuthSignUpDto } from './dto';
-import { USER_PASSWORD_SALT_ROUNDS } from '../../common/constants';
+import { USER_PASSWORD_SALT_ROUNDS } from '../../common/constants/constants';
 import { TokenService } from './token.service';
 import { AuthPayloadToken, AuthResponse } from '../../common/types';
 
