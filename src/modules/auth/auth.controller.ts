@@ -1,9 +1,10 @@
-import { Body, Controller, Post } from '@nestjs/common';
+import { Body, Controller, Get, HttpCode, Post } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { AuthService } from './auth.service';
 import { AuthSignUpDto } from './dto';
-import { AuthResponse } from '../../common/types';
-import { PublicRoute } from '../../common/decorators';
+import { AuthTokens } from '../../common/types';
+import { PublicRoute, GetUser } from '../../common/decorators';
+import { User } from '../users/user.entity';
 
 @ApiTags('Auth')
 @Controller('auth')
@@ -14,9 +15,15 @@ export class AuthController {
     this.authService = authService;
   }
 
+  @Get('generate-access')
+  async generateAccess(@GetUser() user: User): Promise<AuthTokens> {
+    return this.authService.generateAccess(user.id);
+  }
+
   @PublicRoute()
   @Post('sign-up')
-  async signUp(@Body() authSignUpDto: AuthSignUpDto): Promise<AuthResponse> {
-    return this.authService.signUp(authSignUpDto);
+  @HttpCode(200)
+  async signUp(@Body() authSignUpDto: AuthSignUpDto): Promise<void> {
+    return void (await this.authService.signUp(authSignUpDto));
   }
 }

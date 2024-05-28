@@ -44,15 +44,23 @@ export class JwtAuthGuard implements CanActivate {
       );
     }
 
-    const { userId } = this.tokenService.decode<AuthPayloadToken>(token);
+    const { userId, exp } = this.tokenService.decode<AuthPayloadToken>(token);
     if (!userId) {
       throw new UnauthorizedException('Invalid token');
+    }
+
+    const isExpired = this.tokenService.isExpired(exp);
+
+    if (isExpired) {
+      throw new UnauthorizedException('Token expired');
     }
 
     const user = await this.usersService.findById(userId);
     if (!user) {
       throw new UnauthorizedException('Invalid token');
     }
+
+    request.user = user;
 
     return true;
   }

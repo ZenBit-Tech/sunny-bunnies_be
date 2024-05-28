@@ -4,7 +4,7 @@ import { EncryptService } from './encrypt.service';
 import { AuthSignUpDto } from './dto';
 import { USER_PASSWORD_SALT_ROUNDS } from '../../common/constants/constants';
 import { TokenService } from './token.service';
-import { AuthPayloadToken, AuthResponse } from '../../common/types';
+import { AuthPayloadToken, AuthResponse, AuthTokens } from '../../common/types';
 
 @Injectable()
 export class AuthService {
@@ -46,9 +46,7 @@ export class AuthService {
       passwordSalt,
       passwordHash,
     });
-    const token = await this.tokenService.create<AuthPayloadToken>({
-      userId: user.id,
-    });
+    const { refreshToken, accessToken } = await this.generateAccess(user.id);
 
     return {
       user: {
@@ -58,7 +56,23 @@ export class AuthService {
         createdAt: user.createdAt,
         updatedAt: user.updatedAt,
       },
-      token,
+      accessToken,
+      refreshToken,
+    };
+  }
+
+  async generateAccess(userId: string): Promise<AuthTokens> {
+    const accessToken = await this.tokenService.createAccess<AuthPayloadToken>({
+      userId,
+    });
+    const refreshToken =
+      await this.tokenService.createRefresh<AuthPayloadToken>({
+        userId,
+      });
+
+    return {
+      accessToken,
+      refreshToken,
     };
   }
 }
