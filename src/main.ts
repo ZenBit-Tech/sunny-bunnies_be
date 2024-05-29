@@ -5,6 +5,9 @@ import { AppModule } from './app.module';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
+  app.enableCors();
+  app.setGlobalPrefix('api');
+
   const config = new DocumentBuilder()
     .setTitle('Black circle')
     .setDescription('The black circle app API description')
