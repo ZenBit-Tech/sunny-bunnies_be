@@ -10,7 +10,7 @@ async function bootstrap() {
   app.setGlobalPrefix('api');
 
   const config = new DocumentBuilder()
-    .setTitle('Black circle')
+    .setTitle('Sunny-bunnies')
     .setDescription('The black circle app API description')
     .setVersion('1.0')
     .addBearerAuth({

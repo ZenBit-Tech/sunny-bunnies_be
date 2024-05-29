@@ -1,6 +1,6 @@
 import { Body, Controller, Get, Post } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
-import { TestEntity } from './test.entity';
+import { TestEntity } from '../../entities';
 import { TestService } from './test.service';
 import { CreateTestEntityDto } from './dto';
 
