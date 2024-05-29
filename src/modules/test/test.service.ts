@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { TestRepository } from './test.repository';
 import { CreateTestEntityDto } from './dto';
-import { TestEntity } from './test.entity';
+import { TestEntity } from '../../entities';
 
 @Injectable()
 export class TestService {
@@ -11,12 +11,10 @@ export class TestService {
     this.testRepository = testRepository;
   }
 
-  // Returning all data
   async findAll(): Promise<TestEntity[]> {
     return this.testRepository.findAll();
   }
 
-  // Creates new data entity.
   async createOne(createTestDto: CreateTestEntityDto): Promise<TestEntity> {
     const { value } = createTestDto;
     return this.testRepository.createOne({ value });
