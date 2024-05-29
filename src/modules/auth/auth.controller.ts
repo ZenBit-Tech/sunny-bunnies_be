@@ -4,7 +4,7 @@ import { AuthService } from './auth.service';
 import { AuthSignUpDto } from './dto';
 import { AuthResponse, AuthTokens } from '../../common/types';
 import { PublicRoute, GetUser } from '../../common/decorators';
-import { User } from '../users/user.entity';
+import { User } from '../../entities';
 
 @ApiTags('Auth')
 @Controller('auth')
