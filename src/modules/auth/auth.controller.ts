@@ -2,7 +2,7 @@ import { Body, Controller, Get, HttpCode, Post } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { AuthService } from './auth.service';
 import { AuthSignUpDto } from './dto';
-import { AuthTokens } from '../../common/types';
+import { AuthResponse, AuthTokens } from '../../common/types';
 import { PublicRoute, GetUser } from '../../common/decorators';
 import { User } from '../users/user.entity';
 
@@ -22,8 +22,8 @@ export class AuthController {
 
   @PublicRoute()
   @Post('sign-up')
-  @HttpCode(200)
-  async signUp(@Body() authSignUpDto: AuthSignUpDto): Promise<void> {
-    return void (await this.authService.signUp(authSignUpDto));
+  @HttpCode(201)
+  async signUp(@Body() authSignUpDto: AuthSignUpDto): Promise<AuthResponse> {
+    return this.authService.signUp(authSignUpDto);
   }
 }

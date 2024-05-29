@@ -14,8 +14,12 @@ export class TokenService {
     payload: T,
   ): Promise<string> {
     return new SignJWT(payload)
-      .setProtectedHeader({ alg: 'HS256' })
-      .setExpirationTime('7d')
+      .setProtectedHeader({
+        alg: this.configService.get<string>('AUTH_ALGORITHM'),
+      })
+      .setExpirationTime(
+        this.configService.get<string>('REFRESH_TOKEN_EXPIRATION_TIME'),
+      )
       .sign(
         new TextEncoder().encode(
           this.configService.get<string>('JWT_SECRET_KEY'),
@@ -27,8 +31,12 @@ export class TokenService {
     payload: T,
   ): Promise<string> {
     return new SignJWT(payload)
-      .setProtectedHeader({ alg: 'HS256' })
-      .setExpirationTime('5m')
+      .setProtectedHeader({
+        alg: this.configService.get<string>('AUTH_ALGORITHM'),
+      })
+      .setExpirationTime(
+        this.configService.get<string>('ACCESS_TOKEN_EXPIRATION_TIME'),
+      )
       .sign(
         new TextEncoder().encode(
           this.configService.get<string>('JWT_SECRET_KEY'),
