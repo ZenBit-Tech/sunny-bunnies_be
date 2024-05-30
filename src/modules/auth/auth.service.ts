@@ -1,7 +1,11 @@
-import { ConflictException, Injectable } from '@nestjs/common';
+import {
+  ConflictException,
+  Injectable,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { UsersService } from '../users/users.service';
 import { EncryptService } from './encrypt.service';
-import { AuthSignInDto, AuthSignUpDto } from './dto';
+import { AuthGenerateAccess, AuthSignInDto, AuthSignUpDto } from './dto';
 import { USER_PASSWORD_SALT_ROUNDS } from '../../common/constants/constants';
 import { TokenService } from './token.service';
 import { AuthPayloadToken, AuthResponse, AuthTokens } from '../../common/types';
@@ -43,7 +47,7 @@ export class AuthService {
       throw new ConflictException('Password is not correct');
     }
 
-    const { refreshToken, accessToken } = await this.generateAccess(user.id);
+    const { refreshToken, accessToken } = await this.generateTokens(user.id);
 
     return {
       user: {
@@ -80,7 +84,7 @@ export class AuthService {
       passwordSalt,
       passwordHash,
     });
-    const { refreshToken, accessToken } = await this.generateAccess(user.id);
+    const { refreshToken, accessToken } = await this.generateTokens(user.id);
 
     return {
       user: {
@@ -95,7 +99,26 @@ export class AuthService {
     };
   }
 
-  async generateAccess(userId: string): Promise<AuthTokens> {
+  async generateAccess(
+    authGenerateAccessDto: AuthGenerateAccess,
+  ): Promise<AuthTokens> {
+    const { refreshToken: token } = authGenerateAccessDto;
+    const { userId, type } = this.tokenService.decode<AuthPayloadToken>(token);
+
+    const user = await this.usersService.findById(userId);
+
+    if (!user) {
+      throw new UnauthorizedException('Invalid token');
+    }
+
+    if (type !== 'refresh') {
+      throw new UnauthorizedException('Provide refresh token');
+    }
+
+    return this.generateTokens(userId);
+  }
+
+  async generateTokens(userId: string): Promise<AuthTokens> {
     const accessToken = await this.tokenService.createAccess<AuthPayloadToken>({
       userId,
     });
