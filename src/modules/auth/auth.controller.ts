@@ -1,10 +1,9 @@
 import { Body, Controller, Get, HttpCode, Post } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { AuthService } from './auth.service';
-import { AuthSignUpDto } from './dto';
+import { AuthGenerateAccess, AuthSignUpDto } from './dto';
 import { AuthResponse, AuthTokens } from '../../common/types';
-import { PublicRoute, GetUser } from '../../common/decorators';
-import { User } from '../../entities';
+import { PublicRoute } from '../../common/decorators';
 
 @ApiTags('Auth')
 @Controller('auth')
@@ -15,9 +14,12 @@ export class AuthController {
     this.authService = authService;
   }
 
-  @Get('generate-access')
-  async generateAccess(@GetUser() user: User): Promise<AuthTokens> {
-    return this.authService.generateAccess(user.id);
+  @PublicRoute()
+  @Post('generate-access')
+  async generateAccess(
+    @Body() authGenerateAccessDto: AuthGenerateAccess,
+  ): Promise<AuthTokens> {
+    return this.authService.generateAccess(authGenerateAccessDto);
   }
 
   @PublicRoute()
