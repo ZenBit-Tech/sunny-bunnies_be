@@ -38,4 +38,11 @@ export class UsersRepository extends Repository<User> {
       },
     });
   }
+
+  async patchById(id: string, payload: Partial<User>): Promise<User> {
+    return this.save({
+      id,
+      ...payload,
+    });
+  }
 }

@@ -29,4 +29,8 @@ export class UsersService {
   async findByEmail(email: string): Promise<User> {
     return this.usersRepository.findByEmail(email);
   }
+
+  async patchById(id: string, payload: Partial<User>): Promise<User> {
+    return this.usersRepository.patchById(id, payload);
+  }
 }
