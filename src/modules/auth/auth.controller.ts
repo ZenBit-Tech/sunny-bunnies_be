@@ -1,7 +1,13 @@
 import { Body, Controller, Get, HttpCode, Post } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { AuthService } from './auth.service';
-import { AuthGenerateAccess, AuthSignInDto, AuthSignUpDto } from './dto';
+import {
+  AuthGenerateAccess,
+  AuthSignInDto,
+  AuthSignUpDto,
+  AuthVerifyEmailDto,
+  AuthVerifyOtpDto,
+} from './dto';
 import { AuthResponse, AuthTokens } from '../../common/types';
 import { GetUser, PublicRoute } from '../../common/decorators';
 import { User } from '../../entities';
@@ -35,6 +41,22 @@ export class AuthController {
     @Body() authGenerateAccessDto: AuthGenerateAccess,
   ): Promise<AuthTokens> {
     return this.authService.generateAccess(authGenerateAccessDto);
+  }
+
+  @PublicRoute()
+  @HttpCode(200)
+  @Post('verify-email')
+  async verifyEmail(
+    @Body() authVerifyEmail: AuthVerifyEmailDto,
+  ): Promise<void> {
+    return this.authService.verifyEmail(authVerifyEmail);
+  }
+
+  @PublicRoute()
+  @HttpCode(200)
+  @Post('verify-otp')
+  async verifyOtp(@Body() authVerifyOtpDto: AuthVerifyOtpDto): Promise<void> {
+    return this.authService.verifyOtp(authVerifyOtpDto);
   }
 
   @Get('current')

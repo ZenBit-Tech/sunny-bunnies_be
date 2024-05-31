@@ -24,6 +24,12 @@ export class User {
   @Column()
   passwordSalt: string;
 
+  @Column({ type: 'boolean', default: false, name: 'is_verified' })
+  isVerified: boolean;
+
+  @Column({ name: 'otp_token', nullable: true })
+  otpToken: string | null;
+
   @ApiProperty({ description: 'Created date of user' })
   @CreateDateColumn({ name: 'created_at' })
   createdAt: Date;
