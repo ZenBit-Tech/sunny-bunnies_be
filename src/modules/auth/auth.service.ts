@@ -144,7 +144,7 @@ export class AuthService {
     await this.mailerService.sendMail({
       to: user.email,
       subject: 'Black circle OTP code email verification',
-      html: `<p>${otp}</p>`,
+      html: `<p>OTP code: <b>${otp}</b></p>`,
     });
 
     const otpToken = await this.tokenService.create<OtpCodePayloadToken>(
