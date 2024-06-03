@@ -157,7 +157,8 @@ export class AuthService {
       },
     );
 
-    return void (await this.usersService.patchById(user.id, {
+    return void (await this.usersService.patch({
+      id: user.id,
       otpToken,
     }));
   }
@@ -182,7 +183,8 @@ export class AuthService {
       throw new ConflictException('Code is expired');
     }
 
-    return void (await this.usersService.patchById(user.id, {
+    return void (await this.usersService.patch({
+      id: user.id,
       isVerified: true,
       otpToken: null,
     }));

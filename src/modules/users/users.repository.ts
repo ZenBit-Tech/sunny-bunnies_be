@@ -1,7 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { DataSource, Repository } from 'typeorm';
 import { User } from '../../entities';
-import { CreateUserDto } from './dto';
 
 @Injectable()
 export class UsersRepository extends Repository<User> {
@@ -17,8 +16,10 @@ export class UsersRepository extends Repository<User> {
     });
   }
 
-  async createOne(createUserDto: CreateUserDto): Promise<User> {
-    const { name, email, passwordHash, passwordSalt } = createUserDto;
+  async createOne(
+    payload: Pick<User, 'name' | 'email' | 'passwordHash' | 'passwordSalt'>,
+  ): Promise<User> {
+    const { name, email, passwordHash, passwordSalt } = payload;
 
     const user = this.create({
       name,
@@ -39,9 +40,8 @@ export class UsersRepository extends Repository<User> {
     });
   }
 
-  async patchById(id: string, payload: Partial<User>): Promise<User> {
+  async patch(payload: Pick<User, 'id'> & Partial<User>): Promise<User> {
     return this.save({
-      id,
       ...payload,
     });
   }

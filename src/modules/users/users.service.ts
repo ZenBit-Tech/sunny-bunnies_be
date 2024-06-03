@@ -30,7 +30,7 @@ export class UsersService {
     return this.usersRepository.findByEmail(email);
   }
 
-  async patchById(id: string, payload: Partial<User>): Promise<User> {
-    return this.usersRepository.patchById(id, payload);
+  async patch(payload: Pick<User, 'id'> & Partial<User>): Promise<User> {
+    return this.usersRepository.patch(payload);
   }
 }
