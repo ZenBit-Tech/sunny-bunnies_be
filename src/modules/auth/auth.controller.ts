@@ -1,12 +1,21 @@
-import { Body, Controller, Get, HttpCode, Post } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  HttpCode,
+  Get,
+  Post,
+  UseInterceptors,
+} from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { AuthService } from './auth.service';
 import { AuthGenerateAccess, AuthSignInDto, AuthSignUpDto } from './dto';
 import { AuthResponse, AuthTokens } from '../../common/types';
 import { GetUser, PublicRoute } from '../../common/decorators';
 import { User } from '../../entities';
+import { TransformationInterceptor } from '../../common/interceptors';
 
 @ApiTags('Auth')
+@UseInterceptors(TransformationInterceptor)
 @Controller('auth')
 export class AuthController {
   private readonly authService: AuthService;
