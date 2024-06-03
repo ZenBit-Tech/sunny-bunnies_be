@@ -35,3 +35,19 @@ Examples:
 - `feature-add-dashboard`
 - `feature-add-user-flow`
 - `fix-user-flow`
+
+### 4. DB schema
+
+```mermaid
+erDiagram
+
+  users {
+    int id PK
+    varchar name
+    varchar email
+    text password_hash
+    text password_salt
+    dateTime created_at
+    dateTime updated_at
+  }
+```
