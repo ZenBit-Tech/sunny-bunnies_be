@@ -30,6 +30,7 @@ export class User {
   @Column({ type: 'boolean', default: false, name: 'is_verified' })
   isVerified: boolean;
 
+  @Exclude()
   @Column({ name: 'otp_token', nullable: true })
   otpToken: string | null;
 
