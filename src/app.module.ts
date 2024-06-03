@@ -5,7 +5,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { nodemailerConfigFactory, typeOrmConfigAsync } from './common/configs';
 import { TestModule } from './modules/test/test.module';
 import { AuthModule } from './modules/auth/auth.module';
-import { JwtAuthGuard } from './modules/auth/guards';
+import { AuthGuard } from './modules/auth/guards';
 import { UsersModule } from './modules/users/users.module';
 
 @Module({
@@ -28,7 +28,7 @@ import { UsersModule } from './modules/users/users.module';
   providers: [
     {
       provide: 'APP_GUARD',
-      useClass: JwtAuthGuard,
+      useClass: AuthGuard,
     },
   ],
 })
