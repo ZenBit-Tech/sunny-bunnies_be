@@ -168,6 +168,14 @@ export class AuthService {
 
     const user = await this.usersService.findByEmail(email);
 
+    if (!user) {
+      throw new ConflictException('This email is not associated with any user');
+    }
+
+    if (user.isVerified) {
+      throw new ConflictException('Email is already verified');
+    }
+
     const { code: otpCode, exp } =
       this.tokenService.decode<OtpCodePayloadToken>(user.otpToken);
 
