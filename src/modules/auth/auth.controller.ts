@@ -7,7 +7,7 @@ import {
 } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { AuthService } from './auth.service';
-import { AuthGenerateAccess, AuthSignUpDto } from './dto';
+import { AuthGenerateAccess, AuthSignInDto, AuthSignUpDto } from './dto';
 import { AuthResponse, AuthTokens } from '../../common/types';
 import { PublicRoute } from '../../common/decorators';
 import { TransformationInterceptor } from '../../common/interceptors';
@@ -23,11 +23,10 @@ export class AuthController {
   }
 
   @PublicRoute()
-  @Post('generate-access')
-  async generateAccess(
-    @Body() authGenerateAccessDto: AuthGenerateAccess,
-  ): Promise<AuthTokens> {
-    return this.authService.generateAccess(authGenerateAccessDto);
+  @Post('sign-in')
+  @HttpCode(200)
+  async signIn(@Body() authSignInDto: AuthSignInDto): Promise<AuthResponse> {
+    return this.authService.signIn(authSignInDto);
   }
 
   @PublicRoute()
@@ -35,5 +34,13 @@ export class AuthController {
   @HttpCode(201)
   async signUp(@Body() authSignUpDto: AuthSignUpDto): Promise<AuthResponse> {
     return this.authService.signUp(authSignUpDto);
+  }
+
+  @PublicRoute()
+  @Post('generate-access')
+  async generateAccess(
+    @Body() authGenerateAccessDto: AuthGenerateAccess,
+  ): Promise<AuthTokens> {
+    return this.authService.generateAccess(authGenerateAccessDto);
   }
 }
