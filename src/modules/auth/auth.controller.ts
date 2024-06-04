@@ -2,7 +2,6 @@ import {
   Body,
   Controller,
   HttpCode,
-  Get,
   Post,
   UseInterceptors,
 } from '@nestjs/common';
@@ -10,8 +9,7 @@ import { ApiTags } from '@nestjs/swagger';
 import { AuthService } from './auth.service';
 import { AuthGenerateAccess, AuthSignInDto, AuthSignUpDto } from './dto';
 import { AuthResponse, AuthTokens } from '../../common/types';
-import { GetUser, PublicRoute } from '../../common/decorators';
-import { User } from '../../entities';
+import { PublicRoute } from '../../common/decorators';
 import { TransformationInterceptor } from '../../common/interceptors';
 
 @ApiTags('Auth')
@@ -44,11 +42,5 @@ export class AuthController {
     @Body() authGenerateAccessDto: AuthGenerateAccess,
   ): Promise<AuthTokens> {
     return this.authService.generateAccess(authGenerateAccessDto);
-  }
-
-  @Get('current')
-  @HttpCode(200)
-  getCurrent(@GetUser() user: User): User {
-    return user;
   }
 }
