@@ -47,13 +47,7 @@ export class AuthService {
 
     if (existedUser) {
       return {
-        user: {
-          id: existedUser.id,
-          name: existedUser.name,
-          email: existedUser.email,
-          createdAt: existedUser.createdAt,
-          updatedAt: existedUser.updatedAt,
-        },
+        user: existedUser,
         accessToken,
         refreshToken,
       };
@@ -76,13 +70,7 @@ export class AuthService {
     });
 
     return {
-      user: {
-        id: user.id,
-        name: user.name,
-        email: user.email,
-        createdAt: user.createdAt,
-        updatedAt: user.updatedAt,
-      },
+      user,
       accessToken,
       refreshToken,
     };
@@ -114,13 +102,7 @@ export class AuthService {
     const { refreshToken, accessToken } = await this.generateTokens(user.id);
 
     return {
-      user: {
-        id: user.id,
-        name: user.name,
-        email: user.email,
-        createdAt: user.createdAt,
-        updatedAt: user.updatedAt,
-      },
+      user,
       accessToken,
       refreshToken,
     };
