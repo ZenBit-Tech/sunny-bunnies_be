@@ -20,7 +20,8 @@ _To work properly, fill in the **`.env`** file. Use the **`.env.example`** file 
 1. Install dependencies: **`npm install`**.
 2. Create docker image: **`docker compose up`**
 3. Run all migrations: **`npm run migration:run`**
-4. Start the server: **`npm run start`**
+4. Run all seeds: **`npm run seed`**
+5. Start the server: **`npm run start`**
 
 ### 3. Branch Flow
 
@@ -50,4 +51,62 @@ erDiagram
     dateTime created_at
     dateTime updated_at
   }
+
+  brand {
+    int id PK
+    varchar name
+  }
+
+  color {
+    int id PK
+    varchar name
+  }
+
+  image {
+    int id PK
+    varchar url
+    varchar description
+    dateTime created_at
+  }
+
+  material {
+    int id PK
+    varchar name
+  }
+
+  size {
+    int id PK
+    varchar name
+  }
+
+  style {
+    int id PK
+    varchar name
+  }
+
+  category {
+    int id PK
+    varchar category
+  }
+
+  PRODUCT {
+    int id PK
+    varchar name
+    varchar description
+    int quantity
+    gender 
+    status 
+    decimal priceFrom
+    decimal priceTo
+    dateTime createdAt
+    dateTime updatedAt
+  }
+
+  PRODUCT ||--o{ IMAGE : "has"
+  PRODUCT ||--o{ SIZE : "has"
+  PRODUCT ||--o{ CATEGORY : "has"
+  PRODUCT ||--o{ COLOR : "has"
+  PRODUCT ||--o{ STYLE : "has"
+  PRODUCT ||--o{ BRAND : "has"
+  PRODUCT ||--o{ MATERIAL : "has"
 ```
