@@ -29,7 +29,6 @@
     "@nestjs/platform-express": "^10.0.0",
     "@nestjs/swagger": "^7.3.1",
     "@nestjs/typeorm": "^10.0.2",
-    "change-case": "^5.4.4",
     "dotenv": "^16.4.5",
     "lodash": "^4.17.21",
     "mysql2": "^3.9.7",
