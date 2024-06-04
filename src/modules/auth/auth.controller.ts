@@ -1,12 +1,20 @@
-import { Body, Controller, HttpCode, Post } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  HttpCode,
+  Post,
+  UseInterceptors,
+} from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { AuthService } from './auth.service';
 import { AuthGenerateAccess, AuthSignUpDto } from './dto';
 import { AuthResponse, AuthTokens } from '../../common/types';
 import { PublicRoute } from '../../common/decorators';
+import { TransformationInterceptor } from '../../common/interceptors';
 import { GoogleAuthSingUpDto } from './dto/google-auth-sing-up.dto';
 
 @ApiTags('Auth')
+@UseInterceptors(TransformationInterceptor)
 @Controller('auth')
 export class AuthController {
   private readonly authService: AuthService;
