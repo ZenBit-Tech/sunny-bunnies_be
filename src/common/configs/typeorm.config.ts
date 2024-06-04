@@ -3,6 +3,7 @@ import {
   TypeOrmModuleOptions,
 } from '@nestjs/typeorm';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import { SnakeNamingStrategy } from 'typeorm-naming-strategies';
 
 class TypeOrmConfig {
   static getOrmConfig(configService: ConfigService): TypeOrmModuleOptions {
@@ -16,6 +17,7 @@ class TypeOrmConfig {
       entities: [`${__dirname}/../../entities/*.entity{.ts,.js}`],
       migrations: [`${__dirname}/../../migrations/*.ts`],
       synchronize: true,
+      namingStrategy: new SnakeNamingStrategy(),
     };
   }
 }
