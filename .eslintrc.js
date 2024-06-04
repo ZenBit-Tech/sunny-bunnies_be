@@ -16,7 +16,9 @@ module.exports = {
     'import/prefer-default-export': 'off',
     'class-methods-use-this': 'off',
     '@typescript-eslint/indent': 'off',
-    'object-curly-newline': 'off'
+    'object-curly-newline': 'off',
+    'operator-linebreak': 'off',
+    'no-void': 'off'
   },
   root: true,
   env: {
