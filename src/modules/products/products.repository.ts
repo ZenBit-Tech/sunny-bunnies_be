@@ -1,7 +1,12 @@
 import { DataSource, Repository } from 'typeorm';
 import { Injectable } from '@nestjs/common';
 
-import { ProductEntity } from 'src/entities';
+import {
+  PRODUCTS_LIMIT,
+  PRODUCTS_OFFSET,
+} from '../../common/constants/constants';
+import { ProductEntity } from '../../entities/index';
+
 import { GetProductsQueryDto } from './dto/get-products-query.dto';
 
 @Injectable()
@@ -22,8 +27,9 @@ export class ProductsRepository extends Repository<ProductEntity> {
       .select([
         'product.id as id',
         'product.name as name',
-        'product.price_from as priceFrom',
-        'product.price_to as priceTo',
+        'product.min_price as minPrice',
+        'product.max_price as maxPrice',
+        'product.created_at as createdAt',
         'image.url as imageUrl',
         'size.name as sizeName',
         'category.name as categoryName',
@@ -32,6 +38,11 @@ export class ProductsRepository extends Repository<ProductEntity> {
         'brand.name as brandName',
         'material.name as materialName',
       ]);
+
+    const limit = query.limit || PRODUCTS_LIMIT;
+    const offset = query.offset || PRODUCTS_OFFSET;
+
+    qb.limit(limit).offset(offset);
 
     if (query.category) {
       qb.andWhere('category.name = :categoryName', {
