@@ -52,44 +52,44 @@ erDiagram
     dateTime updated_at
   }
 
-  brand {
+  brands {
     int id PK
     varchar name
   }
 
-  color {
+  colors {
     int id PK
     varchar name
   }
 
-  image {
+  product_images {
     int id PK
     varchar url
     varchar description
     dateTime created_at
   }
 
-  material {
+  materials {
     int id PK
     varchar name
   }
 
-  size {
+  sizes {
     int id PK
     varchar name
   }
 
-  style {
+  styles {
     int id PK
     varchar name
   }
 
-  category {
+  categories {
     int id PK
     varchar category
   }
 
-  PRODUCT {
+  PRODUCTS {
     int id PK
     varchar name
     varchar description
@@ -102,11 +102,11 @@ erDiagram
     dateTime updatedAt
   }
 
-  PRODUCT ||--o{ IMAGE : "has"
-  PRODUCT ||--o{ SIZE : "has"
-  PRODUCT ||--o{ CATEGORY : "has"
-  PRODUCT ||--o{ COLOR : "has"
-  PRODUCT ||--o{ STYLE : "has"
-  PRODUCT ||--o{ BRAND : "has"
-  PRODUCT ||--o{ MATERIAL : "has"
+  PRODUCTS ||--o{ PRODUCT_IMAGES : "has"
+  PRODUCTS ||--o{ SIZES : "has"
+  PRODUCTS ||--o{ CATEGORIES : "has"
+  PRODUCTS ||--o{ COLORS : "has"
+  PRODUCTS ||--o{ STYLES : "has"
+  PRODUCTS ||--o{ BRANDS : "has"
+  PRODUCTS ||--o{ MATERIALS : "has"
 ```
