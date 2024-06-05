@@ -40,8 +40,12 @@ export class UsersRepository extends Repository<User> {
     });
   }
 
-  async patch(payload: Pick<User, 'id'> & Partial<User>): Promise<User> {
+  async updateById(
+    id: string,
+    payload: Partial<Omit<User, 'id'>>,
+  ): Promise<User> {
     return this.save({
+      id,
       ...payload,
     });
   }
