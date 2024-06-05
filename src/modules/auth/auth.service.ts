@@ -6,7 +6,7 @@ import {
 } from '@nestjs/common';
 import { UsersService } from '../users/users.service';
 import { EncryptService } from './encrypt.service';
-import { AuthGenerateAccess, AuthSignUpDto } from './dto';
+import { AuthGenerateAccess, AuthSignInDto, AuthSignUpDto } from './dto';
 import { USER_PASSWORD_SALT_ROUNDS } from '../../common/constants/constants';
 import { TokenService } from './token.service';
 import { AuthPayloadToken, AuthResponse, AuthTokens } from '../../common/types';
@@ -28,6 +28,34 @@ export class AuthService {
     this.usersService = usersService;
     this.encryptService = encryptService;
     this.tokenService = tokenService;
+  }
+
+  async signIn(authSignInDto: AuthSignInDto): Promise<AuthResponse> {
+    const { email, password } = authSignInDto;
+
+    const user = await this.usersService.findByEmail(email);
+
+    if (!user) {
+      throw new ConflictException('User with this email does not exist');
+    }
+
+    const hasSamePassword = await this.encryptService.compare({
+      data: password,
+      salt: user.passwordSalt,
+      passwordHash: user.passwordHash,
+    });
+
+    if (!hasSamePassword) {
+      throw new ConflictException('Password is not correct');
+    }
+
+    const { refreshToken, accessToken } = await this.generateTokens(user.id);
+
+    return {
+      user,
+      accessToken,
+      refreshToken,
+    };
   }
 
   async signUpGoogle(body: GoogleAuthSingUpDto): Promise<AuthResponse> {
