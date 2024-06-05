@@ -1,4 +1,4 @@
-import { Gender, ProductStatus } from '../entities/product.entity';
+import { Gender, ProductStatus } from '../common/enums/index';
 
 const colorsSeedData = [
   { name: 'red' },
@@ -17,7 +17,7 @@ const categoriesSeedData = [
   { name: 'bags' },
   { name: 'shoes' },
   { name: 'designers' },
-  { name: 'Other' },
+  { name: 'other' },
 ];
 
 const sizesSeedData = [
@@ -26,7 +26,7 @@ const sizesSeedData = [
   { name: 'm' },
   { name: 'l' },
   { name: 'xl' },
-  { name: 'Other' },
+  { name: 'other' },
 ];
 
 const stylesSeedData = [
@@ -35,7 +35,7 @@ const stylesSeedData = [
   { name: 'event dressing' },
   { name: 'wedding guest' },
   { name: 'street style' },
-  { name: 'Other' },
+  { name: 'other' },
 ];
 
 const brandsSeedData = [
@@ -48,12 +48,12 @@ const brandsSeedData = [
 ];
 
 const materialsSeedData = [
-  { name: 'Cotton' },
-  { name: 'Leather' },
-  { name: 'Denim' },
-  { name: 'Wool' },
-  { name: 'Silk' },
-  { name: 'Other' },
+  { name: 'cotton' },
+  { name: 'leather' },
+  { name: 'denim' },
+  { name: 'wool' },
+  { name: 'silk' },
+  { name: 'other' },
 ];
 
 const imageSeedData = [
@@ -94,10 +94,10 @@ const productsSeedData = [
     name: 'Green dress',
     description: 'Long green dress',
     quantity: 10,
-    gender: Gender.Female,
-    status: ProductStatus.Both,
-    price_from: 100,
-    price_to: 150,
+    gender: Gender.FEMALE,
+    status: ProductStatus.BOTH,
+    min_price: 100,
+    max_price: 150,
     image_id: 1,
     size_id: 1,
     category_id: 1,
@@ -112,10 +112,10 @@ const productsSeedData = [
     name: 'Shoes',
     description: 'Shoes',
     quantity: 2,
-    gender: Gender.Male,
-    status: ProductStatus.Both,
-    price_from: 200,
-    price_to: 250,
+    gender: Gender.MALE,
+    status: ProductStatus.BOTH,
+    min_price: 200,
+    max_price: 250,
     image_id: 2,
     size_id: 3,
     category_id: 4,
@@ -130,10 +130,10 @@ const productsSeedData = [
     name: 'Pants',
     description: 'pants',
     quantity: 4,
-    gender: Gender.Female,
-    status: ProductStatus.Both,
-    price_from: 200,
-    price_to: 220,
+    gender: Gender.FEMALE,
+    status: ProductStatus.BOTH,
+    min_price: 200,
+    max_price: 220,
     image_id: 3,
     size_id: 2,
     category_id: 1,
@@ -148,10 +148,10 @@ const productsSeedData = [
     name: 'Shoes',
     description: 'Shoes nike',
     quantity: 2,
-    gender: Gender.Male,
-    status: ProductStatus.Both,
-    price_from: 150,
-    price_to: 170,
+    gender: Gender.MALE,
+    status: ProductStatus.BOTH,
+    min_price: 150,
+    max_price: 170,
     image_id: 4,
     size_id: 3,
     category_id: 4,
@@ -166,10 +166,10 @@ const productsSeedData = [
     name: 'Red bag',
     description: 'Red bag',
     quantity: 2,
-    gender: Gender.Female,
-    status: ProductStatus.ForSale,
-    price_from: 250,
-    price_to: 270,
+    gender: Gender.FEMALE,
+    status: ProductStatus.FOR_RENT,
+    min_price: 250,
+    max_price: 270,
     image_id: 5,
     size_id: 1,
     category_id: 3,
@@ -184,10 +184,10 @@ const productsSeedData = [
     name: 'Accessory',
     description: 'Accessory',
     quantity: 2,
-    gender: Gender.Female,
-    status: ProductStatus.ForSale,
-    price_from: 50,
-    price_to: 70,
+    gender: Gender.FEMALE,
+    status: ProductStatus.FOR_SALE,
+    min_price: 50,
+    max_price: 70,
     image_id: 6,
     size_id: 1,
     category_id: 2,

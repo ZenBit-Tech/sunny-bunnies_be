@@ -4,7 +4,7 @@ export class StyleEntity1717425420610 implements MigrationInterface {
   public async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.createTable(
       new Table({
-        name: 'style',
+        name: 'styles',
         columns: [
           {
             name: 'id',

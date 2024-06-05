@@ -4,7 +4,7 @@ export class MaterialEntity1717426524891 implements MigrationInterface {
   public async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.createTable(
       new Table({
-        name: 'material',
+        name: 'materials',
         columns: [
           {
             name: 'id',

@@ -8,6 +8,7 @@ import {
 } from 'typeorm';
 import { ApiProperty } from '@nestjs/swagger';
 
+import { gender, productStatus } from '../common/constants/constants';
 import { ImageEntity } from './image.entity';
 import { SizeEntity } from './size.entity';
 import { CategoryEntity } from './category.entity';
@@ -16,18 +17,7 @@ import { StyleEntity } from './style.entity';
 import { BrandEntity } from './brand.entity';
 import { MaterialEntity } from './material.entity';
 
-export enum Gender {
-  Male = 'male',
-  Female = 'female',
-}
-
-export enum ProductStatus {
-  ForSale = 'forSale',
-  ForRent = 'forRent',
-  Both = 'both',
-}
-
-@Entity({ name: 'product' })
+@Entity({ name: 'products' })
 export class ProductEntity {
   @ApiProperty({
     type: Number,
@@ -59,48 +49,34 @@ export class ProductEntity {
 
   @ApiProperty({
     type: String,
-    enum: Gender,
+    enum: gender,
     description: 'This is the gender of the product',
   })
-  @Column({ type: 'enum', enum: Gender })
-  gender: Gender;
+  @Column({ type: 'enum', enum: gender })
+  gender: gender;
 
   @ApiProperty({
     type: String,
-    enum: ProductStatus,
+    enum: productStatus,
     description:
       'This is the status of the product (for sale, for rent, or both)',
   })
-  @Column({ type: 'enum', enum: ProductStatus })
-  status: ProductStatus;
+  @Column({ type: 'enum', enum: productStatus })
+  status: productStatus;
 
   @ApiProperty({
     type: Number,
     description: 'This is the minimum price of the product',
   })
-  @Column({ type: 'decimal', precision: 10, scale: 2, name: 'price_from' })
-  priceFrom: number;
+  @Column({ type: 'decimal', precision: 10, scale: 2, name: 'min_price' })
+  minPrice: number;
 
   @ApiProperty({
     type: Number,
     description: 'This is the maximum price of the product',
   })
-  @Column({ type: 'decimal', precision: 10, scale: 2, name: 'price_to' })
-  priceTo: number;
-
-  @ApiProperty({
-    type: Number,
-    description: 'This is the time when product was created',
-  })
-  @CreateDateColumn({ name: 'created_at' })
-  createdAt: Date;
-
-  @ApiProperty({
-    type: Number,
-    description: 'This is the time when product was updated',
-  })
-  @CreateDateColumn({ name: 'updated_at' })
-  updatedAt: Date;
+  @Column({ type: 'decimal', precision: 10, scale: 2, name: 'max_price' })
+  maxPrice: number;
 
   @ApiProperty({
     type: Number,
@@ -157,4 +133,18 @@ export class ProductEntity {
   @ManyToOne(() => MaterialEntity)
   @JoinColumn({ name: 'material_id' })
   material: MaterialEntity;
+
+  @ApiProperty({
+    type: Number,
+    description: 'This is the time when product was created',
+  })
+  @CreateDateColumn({ name: 'created_at' })
+  createdAt: Date;
+
+  @ApiProperty({
+    type: Number,
+    description: 'This is the time when product was updated',
+  })
+  @CreateDateColumn({ name: 'updated_at' })
+  updatedAt: Date;
 }

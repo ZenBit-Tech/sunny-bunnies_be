@@ -4,7 +4,7 @@ export class SizeEntity1717425420610 implements MigrationInterface {
   public async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.createTable(
       new Table({
-        name: 'size',
+        name: 'sizes',
         columns: [
           {
             name: 'id',

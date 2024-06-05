@@ -9,7 +9,7 @@ export class CreateProductTable1717426580703 implements MigrationInterface {
   public async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.createTable(
       new Table({
-        name: 'product',
+        name: 'products',
         columns: [
           {
             name: 'id',
@@ -41,14 +41,14 @@ export class CreateProductTable1717426580703 implements MigrationInterface {
             enum: ['forSale', 'forRent', 'both'],
           },
           {
-            name: 'price_from',
+            name: 'min_price',
             type: 'decimal',
             precision: 10,
             scale: 2,
             isNullable: false,
           },
           {
-            name: 'price_to',
+            name: 'max_price',
             type: 'decimal',
             precision: 10,
             scale: 2,

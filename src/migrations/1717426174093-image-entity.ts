@@ -1,10 +1,10 @@
 import { MigrationInterface, QueryRunner, Table } from 'typeorm';
 
-export class ImageEntity1717425420610 implements MigrationInterface {
+export class ProductImagesEntity1717425420610 implements MigrationInterface {
   public async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.createTable(
       new Table({
-        name: 'image',
+        name: 'product_images',
         columns: [
           {
             name: 'id',

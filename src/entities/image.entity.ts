@@ -6,7 +6,7 @@ import {
 } from 'typeorm';
 import { ApiProperty } from '@nestjs/swagger';
 
-@Entity({ name: 'image' })
+@Entity({ name: 'product_images' })
 export class ImageEntity {
   @ApiProperty({
     type: Number,
@@ -26,8 +26,8 @@ export class ImageEntity {
     type: String,
     description: 'This is a description of the image',
   })
-  @Column({ type: 'text', nullable: true })
-  description?: string;
+  @Column({ type: 'text' })
+  description: string;
 
   @ApiProperty({
     type: String,

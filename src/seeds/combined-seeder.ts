@@ -45,49 +45,49 @@ export class CombinedSeeder implements Seeder {
   }
 
   private async seedColors(dataSource: DataSource): Promise<void> {
-    await dataSource.query('TRUNCATE TABLE color;');
+    await dataSource.query('TRUNCATE TABLE colors;');
     const repository = dataSource.getRepository(ColorEntity);
     await repository.insert(colorsSeedData);
   }
 
   private async seedCategories(dataSource: DataSource): Promise<void> {
-    await dataSource.query('TRUNCATE TABLE category;');
+    await dataSource.query('TRUNCATE TABLE categories;');
     const repository = dataSource.getRepository(CategoryEntity);
     await repository.insert(categoriesSeedData);
   }
 
   private async seedSizes(dataSource: DataSource): Promise<void> {
-    await dataSource.query('TRUNCATE TABLE size;');
+    await dataSource.query('TRUNCATE TABLE sizes;');
     const repository = dataSource.getRepository(SizeEntity);
     await repository.insert(sizesSeedData);
   }
 
   private async seedStyles(dataSource: DataSource): Promise<void> {
-    await dataSource.query('TRUNCATE TABLE style;');
+    await dataSource.query('TRUNCATE TABLE styles;');
     const repository = dataSource.getRepository(StyleEntity);
     await repository.insert(stylesSeedData);
   }
 
   private async seedImages(dataSource: DataSource): Promise<void> {
-    await dataSource.query('TRUNCATE TABLE image;');
+    await dataSource.query('TRUNCATE TABLE product_images;');
     const repository = dataSource.getRepository(ImageEntity);
     await repository.insert(imageSeedData);
   }
 
   private async seedMaterials(dataSource: DataSource): Promise<void> {
-    await dataSource.query('TRUNCATE TABLE material;');
+    await dataSource.query('TRUNCATE TABLE materials;');
     const repository = dataSource.getRepository(MaterialEntity);
     await repository.insert(materialsSeedData);
   }
 
   private async seedBrands(dataSource: DataSource): Promise<void> {
-    await dataSource.query('TRUNCATE TABLE brand;');
+    await dataSource.query('TRUNCATE TABLE brands;');
     const repository = dataSource.getRepository(BrandEntity);
     await repository.insert(brandsSeedData);
   }
 
   private async seedProducts(dataSource: DataSource): Promise<void> {
-    await dataSource.query('TRUNCATE TABLE product;');
+    await dataSource.query('TRUNCATE TABLE products;');
     const repository = dataSource.getRepository(ProductEntity);
 
     const seedOperations = productsSeedData.map(async (product) => {
@@ -140,8 +140,8 @@ export class CombinedSeeder implements Seeder {
         style: resolvedStyle,
         brand: resolvedBrand,
         material: resolvedMaterial,
-        priceFrom: product.price_from,
-        priceTo: product.price_to,
+        minPrice: product.min_price,
+        maxPrice: product.max_price,
       });
     });
 
