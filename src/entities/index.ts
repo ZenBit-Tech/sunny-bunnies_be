@@ -1,2 +1,10 @@
 export { TestEntity } from './test.entity';
+export { BrandEntity } from './brand.entity';
+export { CategoryEntity } from './category.entity';
+export { ColorEntity } from './colors.entity';
+export { ImageEntity } from './image.entity';
+export { MaterialEntity } from './material.entity';
+export { ProductEntity } from './product.entity';
+export { SizeEntity } from './size.entity';
+export { StyleEntity } from './style.entity';
 export { User } from './user.entity';
