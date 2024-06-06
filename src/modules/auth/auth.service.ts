@@ -58,6 +58,37 @@ export class AuthService {
     };
   }
 
+  async signInGoogle(body: GoogleAuthSingUpDto): Promise<AuthResponse> {
+    const { email, name } = this.tokenService.decode(body.credential) as {
+      email: string;
+      name: string;
+    };
+
+    if (!email || !name) {
+      throw new NotFoundException("Can't find your google account.");
+    }
+
+    const user = await this.usersService.findByEmail(email);
+
+    if (!user) {
+      throw new NotFoundException("Can't find user with this credential");
+    }
+
+    const { refreshToken, accessToken } = await this.generateTokens(email);
+
+    return {
+      user: {
+        id: user.id,
+        name: user.name,
+        email: user.email,
+        createdAt: user.createdAt,
+        updatedAt: user.updatedAt,
+      },
+      accessToken,
+      refreshToken,
+    };
+  }
+
   async signUpGoogle(body: GoogleAuthSingUpDto): Promise<AuthResponse> {
     const { email, name, jti } = this.tokenService.decode(body.credential) as {
       email: string;
