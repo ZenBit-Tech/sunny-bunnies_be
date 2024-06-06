@@ -5,11 +5,13 @@ import {
   TableForeignKey,
 } from 'typeorm';
 
+import { DataBaseTables } from '../common/enums/index';
+
 export class CreateProductTable1717426580703 implements MigrationInterface {
   public async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.createTable(
       new Table({
-        name: 'products',
+        name: DataBaseTables.PRODUCTS,
         columns: [
           {
             name: 'id',
@@ -97,78 +99,78 @@ export class CreateProductTable1717426580703 implements MigrationInterface {
     );
 
     await queryRunner.createForeignKey(
-      'product',
+      DataBaseTables.PRODUCTS,
       new TableForeignKey({
         columnNames: ['image_id'],
         referencedColumnNames: ['id'],
-        referencedTableName: 'image',
+        referencedTableName: DataBaseTables.PRODUCT_IMAGES,
         onDelete: 'CASCADE',
       }),
     );
 
     await queryRunner.createForeignKey(
-      'product',
+      DataBaseTables.PRODUCTS,
       new TableForeignKey({
         columnNames: ['size_id'],
         referencedColumnNames: ['id'],
-        referencedTableName: 'size',
+        referencedTableName: DataBaseTables.SIZES,
         onDelete: 'CASCADE',
       }),
     );
 
     await queryRunner.createForeignKey(
-      'product',
+      DataBaseTables.PRODUCTS,
       new TableForeignKey({
         columnNames: ['category_id'],
         referencedColumnNames: ['id'],
-        referencedTableName: 'category',
+        referencedTableName: DataBaseTables.CATEGORIES,
         onDelete: 'CASCADE',
       }),
     );
 
     await queryRunner.createForeignKey(
-      'product',
+      DataBaseTables.PRODUCTS,
       new TableForeignKey({
         columnNames: ['color_id'],
         referencedColumnNames: ['id'],
-        referencedTableName: 'color',
+        referencedTableName: DataBaseTables.COLORS,
         onDelete: 'CASCADE',
       }),
     );
 
     await queryRunner.createForeignKey(
-      'product',
+      DataBaseTables.PRODUCTS,
       new TableForeignKey({
         columnNames: ['style_id'],
         referencedColumnNames: ['id'],
-        referencedTableName: 'style',
+        referencedTableName: DataBaseTables.STYLES,
         onDelete: 'CASCADE',
       }),
     );
 
     await queryRunner.createForeignKey(
-      'product',
+      DataBaseTables.PRODUCTS,
       new TableForeignKey({
         columnNames: ['brand_id'],
         referencedColumnNames: ['id'],
-        referencedTableName: 'brand',
+        referencedTableName: DataBaseTables.BRANDS,
         onDelete: 'CASCADE',
       }),
     );
 
     await queryRunner.createForeignKey(
-      'product',
+      DataBaseTables.PRODUCTS,
       new TableForeignKey({
         columnNames: ['material_id'],
         referencedColumnNames: ['id'],
-        referencedTableName: 'material',
+        referencedTableName: DataBaseTables.MATERIALS,
         onDelete: 'CASCADE',
       }),
     );
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {
-    await queryRunner.dropForeignKey('product', 'FK_image_id');
-    await queryRunner.dropTable('product');
+    await queryRunner.dropForeignKey(DataBaseTables.PRODUCTS, 'FK_image_id');
+    await queryRunner.dropTable(DataBaseTables.PRODUCTS);
   }
 }

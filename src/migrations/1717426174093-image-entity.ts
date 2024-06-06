@@ -1,10 +1,12 @@
 import { MigrationInterface, QueryRunner, Table } from 'typeorm';
 
+import { DataBaseTables } from '../common/enums/index';
+
 export class ProductImagesEntity1717425420610 implements MigrationInterface {
   public async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.createTable(
       new Table({
-        name: 'product_images',
+        name: DataBaseTables.PRODUCT_IMAGES,
         columns: [
           {
             name: 'id',
@@ -33,6 +35,6 @@ export class ProductImagesEntity1717425420610 implements MigrationInterface {
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {
-    await queryRunner.dropTable('image');
+    await queryRunner.dropTable(DataBaseTables.PRODUCT_IMAGES);
   }
 }
