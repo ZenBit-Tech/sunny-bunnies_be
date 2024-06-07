@@ -1,7 +1,9 @@
+import { subDays, format } from 'date-fns';
 import { DataSource, Repository } from 'typeorm';
 import { Injectable } from '@nestjs/common';
 
 import {
+  PRODUCT_DATE_RANGE_FORMAT,
   PRODUCTS_LIMIT,
   PRODUCTS_OFFSET,
 } from '../../common/constants/constants';
@@ -48,6 +50,14 @@ export class ProductsRepository extends Repository<ProductEntity> {
       qb.andWhere('category.name = :categoryName', {
         categoryName: query.category,
       });
+    }
+
+    if (query.dateRange) {
+      const startDate = format(
+        subDays(new Date(), query.dateRange),
+        PRODUCT_DATE_RANGE_FORMAT,
+      );
+      qb.andWhere('product.created_at >= :startDate', { startDate });
     }
 
     return qb.getRawMany();
