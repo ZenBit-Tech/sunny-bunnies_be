@@ -31,6 +31,12 @@ export class AuthController {
   }
 
   @PublicRoute()
+  @Post('google-login')
+  async signInGoogle(@Body() body: GoogleAuthSingUpDto): Promise<AuthResponse> {
+    return this.authService.signInGoogle(body);
+  }
+
+  @PublicRoute()
   @Post('google')
   async signUpGoogle(@Body() body: GoogleAuthSingUpDto): Promise<AuthResponse> {
     return this.authService.signUpGoogle(body);
