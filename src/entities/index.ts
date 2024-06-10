@@ -1,3 +1,4 @@
+export { UserProfile } from './user-profile.entity';
 export { TestEntity } from './test.entity';
 export { BrandEntity } from './brand.entity';
 export { CategoryEntity } from './category.entity';

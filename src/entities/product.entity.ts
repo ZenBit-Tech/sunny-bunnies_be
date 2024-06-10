@@ -8,7 +8,7 @@ import {
 } from 'typeorm';
 import { ApiProperty } from '@nestjs/swagger';
 
-import { gender, productStatus } from '../common/constants/constants';
+import { Gender, ProductStatus } from '../common/enums/index';
 import { ImageEntity } from './image.entity';
 import { SizeEntity } from './size.entity';
 import { CategoryEntity } from './category.entity';
@@ -49,20 +49,20 @@ export class ProductEntity {
 
   @ApiProperty({
     type: String,
-    enum: gender,
+    enum: Gender,
     description: 'This is the gender of the product',
   })
-  @Column({ type: 'enum', enum: gender })
-  gender: gender;
+  @Column({ type: 'enum', enum: Gender })
+  gender: Gender;
 
   @ApiProperty({
     type: String,
-    enum: productStatus,
+    enum: ProductStatus,
     description:
       'This is the status of the product (for sale, for rent, or both)',
   })
-  @Column({ type: 'enum', enum: productStatus })
-  status: productStatus;
+  @Column({ type: 'enum', enum: ProductStatus })
+  status: ProductStatus;
 
   @ApiProperty({
     type: Number,

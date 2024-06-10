@@ -80,7 +80,6 @@ export class AuthService {
         refreshToken,
       };
     }
-
     const passwordSalt = await this.encryptService.generateSalt(
       USER_PASSWORD_SALT_ROUNDS,
     );
