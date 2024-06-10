@@ -60,6 +60,10 @@ export class UserProfile {
   @Column()
   cvv_code: string;
 
+  @OneToOne(() => User, (user) => user.profile)
+  @JoinColumn({ name: 'user_id' })
+  user: User;
+
   @ApiProperty({ description: 'Created date of user profile' })
   @CreateDateColumn({ name: 'created_at' })
   createdAt: Date;
@@ -67,8 +71,4 @@ export class UserProfile {
   @ApiProperty({ description: 'Updated date of user profile' })
   @UpdateDateColumn({ name: 'updated_at' })
   updatedAt: Date;
-
-  @OneToOne(() => User, (user) => user.profile)
-  @JoinColumn({ name: 'user_id' })
-  user: User;
 }

@@ -67,9 +67,9 @@ export class UsersRepository extends Repository<User> {
   }
 
   async updateProfile(
-    user: User,
+    userId: string,
     patchProfileDto: UserProfileUpdateDto,
   ): Promise<void> {
-    await this.userProfileRepository.update(user.profile.id, patchProfileDto);
+    await this.userProfileRepository.update(userId, patchProfileDto);
   }
 }

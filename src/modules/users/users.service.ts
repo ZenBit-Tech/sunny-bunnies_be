@@ -41,7 +41,7 @@ export class UsersService {
       throw new NotFoundException('User not found');
     }
 
-    await this.usersRepository.updateProfile(user, patchProfileDto);
+    await this.usersRepository.updateProfile(user.profile.id, patchProfileDto);
 
     return this.usersRepository.findById(userId);
   }
