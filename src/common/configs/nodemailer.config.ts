@@ -1,5 +1,6 @@
 import { ConfigService } from '@nestjs/config';
 import { MailerOptions } from '@nestjs-modules/mailer';
+import { HandlebarsAdapter } from '@nestjs-modules/mailer/dist/adapters/handlebars.adapter';
 
 export const nodemailerConfigFactory = async (
   configService: ConfigService,
@@ -13,5 +14,9 @@ export const nodemailerConfigFactory = async (
   },
   defaults: {
     from: configService.get<string>('AUTH_EMAIL'),
+  },
+  template: {
+    dir: process.cwd() + '/src/common/templates/',
+    adapter: new HandlebarsAdapter(),
   },
 });

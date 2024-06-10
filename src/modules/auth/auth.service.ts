@@ -141,10 +141,18 @@ export class AuthService {
       otp += Math.floor(Math.random() * 10);
     }
 
+    const expiresIn = '2m';
+
     await this.mailerService.sendMail({
       to: user.email,
       subject: 'Black circle OTP code email verification',
-      html: `<p>OTP code: <b>${otp}</b></p>`,
+      template: 'verify-email',
+      context: {
+        name: user.name,
+        userEmail: user.email,
+        code: otp,
+        expiresIn,
+      },
     });
 
     const otpToken = await this.tokenService.create<OtpCodePayloadToken>(
@@ -153,13 +161,13 @@ export class AuthService {
         email,
       },
       {
-        expiresIn: '1m',
+        expiresIn,
       },
     );
 
-    return void (await this.usersService.updateById(user.id, {
+    await this.usersService.updateById(user.id, {
       otpToken,
-    }));
+    });
   }
 
   async verifyOtp(authVerifyOtp: AuthVerifyOtpDto): Promise<void> {
@@ -190,10 +198,10 @@ export class AuthService {
       throw new ConflictException('Code is expired');
     }
 
-    return void (await this.usersService.updateById(user.id, {
+    await this.usersService.updateById(user.id, {
       isVerified: true,
       otpToken: null,
-    }));
+    });
   }
 
   async generateTokens(userId: string): Promise<AuthTokens> {
