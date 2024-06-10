@@ -36,4 +36,13 @@ export class GetProductsQueryDto {
   @IsOptional()
   @IsString()
   offset?: number;
+
+  @ApiProperty({
+    type: Number,
+    description: 'The number of days for choose products',
+    required: false,
+  })
+  @IsOptional()
+  @IsString()
+  dateRange?: number;
 }
