@@ -16,7 +16,7 @@ export const nodemailerConfigFactory = async (
     from: configService.get<string>('AUTH_EMAIL'),
   },
   template: {
-    dir: process.cwd() + '/src/common/templates/',
+    dir: `${process.cwd()}/src/common/templates/`,
     adapter: new HandlebarsAdapter(),
   },
 });

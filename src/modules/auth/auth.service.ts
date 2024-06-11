@@ -1,6 +1,7 @@
 import {
   ConflictException,
   Injectable,
+  NotFoundException,
   UnauthorizedException,
 } from '@nestjs/common';
 import { MailerService } from '@nestjs-modules/mailer';
@@ -15,6 +16,7 @@ import {
 } from './dto';
 import { USER_PASSWORD_SALT_ROUNDS } from '../../common/constants/constants';
 import { TokenService } from './token.service';
+import { GoogleAuthSingUpDto } from './dto/google-auth-sing-up.dto';
 import {
   AuthPayloadToken,
   AuthResponse,
@@ -72,6 +74,52 @@ export class AuthService {
     };
   }
 
+  async signUpGoogle(body: GoogleAuthSingUpDto): Promise<AuthResponse> {
+    const { email, name, jti } = this.tokenService.decode(body.credential) as {
+      email: string;
+      name: string;
+      jti: string;
+    };
+
+    if (!email || !name) {
+      throw new NotFoundException("Can't find your google account.");
+    }
+
+    const existedUser = await this.usersService.findByEmail(email);
+
+    const { refreshToken, accessToken } = await this.generateTokens(email);
+
+    if (existedUser) {
+      return {
+        user: existedUser,
+        accessToken,
+        refreshToken,
+      };
+    }
+
+    const passwordSalt = await this.encryptService.generateSalt(
+      USER_PASSWORD_SALT_ROUNDS,
+    );
+    const randomPassword = this.encryptService.generateRandomPassword();
+    const passwordHash = await this.encryptService.encrypt(
+      `${jti}+${randomPassword}`,
+      passwordSalt,
+    );
+
+    const user = await this.usersService.createOne({
+      name,
+      email,
+      passwordSalt,
+      passwordHash,
+    });
+
+    return {
+      user,
+      accessToken,
+      refreshToken,
+    };
+  }
+
   async signUp(authSignUpDto: AuthSignUpDto): Promise<AuthResponse> {
     const { name, email, password } = authSignUpDto;
     const existedUser = await this.usersService.findByEmail(email);
@@ -83,6 +131,7 @@ export class AuthService {
     const passwordSalt = await this.encryptService.generateSalt(
       USER_PASSWORD_SALT_ROUNDS,
     );
+
     const passwordHash = await this.encryptService.encrypt(
       password,
       passwordSalt,

@@ -1,13 +1,18 @@
 import { NestFactory } from '@nestjs/core';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { ValidationPipe } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import { AppModule } from './app.module';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+  const configService = app.get(ConfigService);
 
-  app.enableCors({ origin: false });
-  app.setGlobalPrefix('api');
+  app.enableCors({
+    origin: configService.get<string>('ORIGIN_URL'),
+    methods: 'GET,PUT,PATCH,POST,DELETE',
+    credentials: true,
+  });
 
   const config = new DocumentBuilder()
     .setTitle('Sunny-bunnies')
@@ -35,6 +40,6 @@ async function bootstrap() {
     }),
   );
 
-  await app.listen(3000);
+  await app.listen(configService.get<number>('PORT') || 3000);
 }
 bootstrap();
