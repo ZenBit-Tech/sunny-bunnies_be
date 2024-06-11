@@ -12,7 +12,6 @@ async function bootstrap() {
     origin: [
       configService.get<string>('ORIGIN_URL'),
       configService.get<string>('PRODUCTION_ORIGIN_URL'),
-      'https://sunny-bunnies-fe.onrender.com',
     ],
     methods: 'GET,PUT,PATCH,POST,DELETE',
     credentials: true,
