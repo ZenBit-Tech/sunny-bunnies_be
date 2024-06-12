@@ -15,6 +15,7 @@ enum DataBaseTables {
   SIZES = 'sizes',
   STYLES = 'styles',
   PRODUCT_IMAGES = 'product_images',
+  PRODUCTS_SIZES = 'product_sizes',
   BRANDS = 'brands',
   MATERIALS = 'materials',
   PRODUCTS = 'products',

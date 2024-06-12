@@ -61,10 +61,6 @@ export class CreateProductTable1717426580703 implements MigrationInterface {
             type: 'int',
           },
           {
-            name: 'size_id',
-            type: 'int',
-          },
-          {
             name: 'category_id',
             type: 'int',
           },
@@ -104,16 +100,6 @@ export class CreateProductTable1717426580703 implements MigrationInterface {
         columnNames: ['image_id'],
         referencedColumnNames: ['id'],
         referencedTableName: DataBaseTables.PRODUCT_IMAGES,
-        onDelete: 'CASCADE',
-      }),
-    );
-
-    await queryRunner.createForeignKey(
-      DataBaseTables.PRODUCTS,
-      new TableForeignKey({
-        columnNames: ['size_id'],
-        referencedColumnNames: ['id'],
-        referencedTableName: DataBaseTables.SIZES,
         onDelete: 'CASCADE',
       }),
     );

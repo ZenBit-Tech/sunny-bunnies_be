@@ -17,10 +17,53 @@ export class ProductsRepository extends Repository<ProductEntity> {
     super(ProductEntity, dataSource.createEntityManager());
   }
 
+  async findById(id: number): Promise<ProductEntity> {
+    const product = await this.createQueryBuilder('product')
+      .leftJoinAndSelect('product.image', 'image')
+      .leftJoinAndSelect('product.category', 'category')
+      .leftJoinAndSelect('product.color', 'color')
+      .leftJoinAndSelect('product.style', 'style')
+      .leftJoinAndSelect('product.brand', 'brand')
+      .leftJoinAndSelect('product.material', 'material')
+      .select([
+        'product.id as id',
+        'product.description as description',
+        'product.name as name',
+        'product.min_price as minPrice',
+        'product.max_price as maxPrice',
+        'product.created_at as createdAt',
+        'image.url as imageUrl',
+        'category.name as categoryName',
+        'color.name as colorName',
+        'style.name as styleName',
+        'brand.name as brandName',
+        'material.name as materialName',
+        'product.gender as gender',
+      ])
+      .where('product.id = :id', { id })
+      .getRawOne();
+
+    const productSizes = await this.createQueryBuilder('product')
+      .leftJoin('product.sizes', 'size')
+      .select(['size.id as id', 'size.name as name'])
+      .where('product.id = :id', { id })
+      .getRawMany();
+
+    return {
+      ...product,
+      sizes: productSizes,
+    };
+  }
+
   async findAll(query: GetProductsQueryDto): Promise<ProductEntity[]> {
     const qb = this.createQueryBuilder('product')
       .leftJoinAndSelect('product.image', 'image')
-      .leftJoinAndSelect('product.size', 'size')
+      .leftJoinAndMapMany(
+        'product.sizes',
+        'product.productSizes',
+        'productSize',
+      )
+      .leftJoin('productSize.size', 'size')
       .leftJoinAndSelect('product.category', 'category')
       .leftJoinAndSelect('product.color', 'color')
       .leftJoinAndSelect('product.style', 'style')

@@ -3,6 +3,8 @@ import {
   CreateDateColumn,
   Entity,
   JoinColumn,
+  JoinTable,
+  ManyToMany,
   ManyToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
@@ -87,12 +89,22 @@ export class ProductEntity {
   image: ImageEntity;
 
   @ApiProperty({
-    type: Number,
+    type: [SizeEntity],
     description: 'Reference to the size entity',
   })
-  @ManyToOne(() => SizeEntity)
-  @JoinColumn({ name: 'size_id' })
-  size: SizeEntity;
+  @ManyToMany(() => SizeEntity, { cascade: true })
+  @JoinTable({
+    name: 'product_sizes',
+    joinColumn: {
+      name: 'product_id',
+      referencedColumnName: 'id',
+    },
+    inverseJoinColumn: {
+      name: 'size_id',
+      referencedColumnName: 'id',
+    },
+  })
+  sizes: SizeEntity[];
 
   @ApiProperty({
     type: Number,

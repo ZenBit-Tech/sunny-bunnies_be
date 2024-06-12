@@ -1,6 +1,7 @@
 import { Seeder } from 'typeorm-extension';
 import { DataSource } from 'typeorm';
 
+import { DataBaseTables } from '../common/enums';
 import {
   BrandEntity,
   CategoryEntity,
@@ -91,12 +92,11 @@ export class CombinedSeeder implements Seeder {
     const repository = dataSource.getRepository(ProductEntity);
 
     const seedOperations = productsSeedData.map(async (product) => {
+      const { size_ids: sizeIds, ...productData } = product;
+
       const image = dataSource
         .getRepository(ImageEntity)
         .findOneBy({ id: product.image_id });
-      const size = dataSource
-        .getRepository(SizeEntity)
-        .findOneBy({ id: product.size_id });
       const category = dataSource
         .getRepository(CategoryEntity)
         .findOneBy({ id: product.category_id });
@@ -115,26 +115,16 @@ export class CombinedSeeder implements Seeder {
 
       const [
         resolvedImage,
-        resolvedSize,
         resolvedCategory,
         resolvedColor,
         resolvedStyle,
         resolvedBrand,
         resolvedMaterial,
-      ] = await Promise.all([
-        image,
-        size,
-        category,
-        color,
-        style,
-        brand,
-        material,
-      ]);
+      ] = await Promise.all([image, category, color, style, brand, material]);
 
-      await repository.insert({
-        ...product,
+      const insertedProduct = await repository.save({
+        ...productData,
         image: resolvedImage,
-        size: resolvedSize,
         category: resolvedCategory,
         color: resolvedColor,
         style: resolvedStyle,
@@ -143,6 +133,22 @@ export class CombinedSeeder implements Seeder {
         minPrice: product.min_price,
         maxPrice: product.max_price,
       });
+
+      const productSizeRepository = dataSource.getRepository(
+        DataBaseTables.PRODUCTS_SIZES,
+      );
+
+      const insertOperations = sizeIds.map(
+        (sizeId) =>
+          // eslint-disable-next-line implicit-arrow-linebreak
+          productSizeRepository.insert({
+            product_id: insertedProduct.id,
+            size_id: sizeId,
+          }),
+        // eslint-disable-next-line function-paren-newline
+      );
+
+      await Promise.all(insertOperations);
     });
 
     await Promise.all(seedOperations);
