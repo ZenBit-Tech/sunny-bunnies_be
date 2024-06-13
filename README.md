@@ -64,8 +64,8 @@ erDiagram
     varchar state
     varchar city
     varchar clothes_size
-    varchar jeansSize
-    varchar shoeSize
+    varchar jeans_size
+    varchar shoe_size
     varchar card_number
     varchar expire_date
     varchar cvv_code

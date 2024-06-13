@@ -54,11 +54,11 @@ class CreateUserProfilesTable1716809999999 implements MigrationInterface {
             type: 'varchar',
           },
           {
-            name: 'jeansSize',
+            name: 'jeans_size',
             type: 'varchar',
           },
           {
-            name: 'shoeSize',
+            name: 'shoe_size',
             type: 'varchar',
           },
           {
