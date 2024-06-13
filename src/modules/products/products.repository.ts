@@ -1,7 +1,9 @@
+import { subDays, format } from 'date-fns';
 import { DataSource, Repository } from 'typeorm';
 import { Injectable } from '@nestjs/common';
 
 import {
+  PRODUCT_DATE_RANGE_FORMAT,
   PRODUCTS_LIMIT,
   PRODUCTS_OFFSET,
 } from '../../common/constants/constants';
@@ -37,6 +39,7 @@ export class ProductsRepository extends Repository<ProductEntity> {
         'style.name as styleName',
         'brand.name as brandName',
         'material.name as materialName',
+        'product.gender as gender',
       ]);
 
     const limit = query.limit || PRODUCTS_LIMIT;
@@ -47,6 +50,58 @@ export class ProductsRepository extends Repository<ProductEntity> {
     if (query.category) {
       qb.andWhere('category.name = :categoryName', {
         categoryName: query.category,
+      });
+    }
+
+    if (query.dateRange) {
+      const startDate = format(
+        subDays(new Date(), query.dateRange),
+        PRODUCT_DATE_RANGE_FORMAT,
+      );
+      qb.andWhere('product.created_at >= :startDate', { startDate });
+    }
+
+    if (query.name) {
+      qb.andWhere('LOWER(product.name) LIKE LOWER(:name)', {
+        name: `%${query.name}%`,
+      });
+    }
+
+    if (query.minPrice) {
+      qb.andWhere('product.min_price >= :min_price', {
+        minPrice: query.minPrice,
+      });
+    }
+
+    if (query.maxPrice) {
+      qb.andWhere('product.max_price <= :maxPrice', {
+        maxPrice: query.maxPrice,
+      });
+    }
+
+    if (query.gender) {
+      qb.andWhere('product.gender = :gender', { gender: query.gender });
+    }
+
+    if (query.size) {
+      qb.andWhere('size.name = :sizeName', { sizeName: query.size });
+    }
+
+    if (query.color) {
+      qb.andWhere('color.name = :colorName', { colorName: query.color });
+    }
+
+    if (query.style) {
+      qb.andWhere('style.name = :styleName', { styleName: query.style });
+    }
+
+    if (query.brand) {
+      qb.andWhere('brand.name = :brandName', { brandName: query.brand });
+    }
+
+    if (query.material) {
+      qb.andWhere('material.name = :materialName', {
+        materialName: query.material,
       });
     }
 
