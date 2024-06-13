@@ -1,5 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsOptional, IsString, IsNumber } from 'class-validator';
+import { Type } from 'class-transformer';
 
 import {
   PRODUCTS_LIMIT,
@@ -71,6 +72,7 @@ export class GetProductsQueryDto {
   })
   @IsOptional()
   @IsNumber()
+  @Type(() => Number)
   minPrice?: number;
 
   @ApiProperty({
@@ -80,6 +82,7 @@ export class GetProductsQueryDto {
   })
   @IsOptional()
   @IsNumber()
+  @Type(() => Number)
   maxPrice?: number;
 
   @ApiProperty({
