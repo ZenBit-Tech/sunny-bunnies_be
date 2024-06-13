@@ -18,7 +18,8 @@ class CreateUserProfilesTable1716809999999 implements MigrationInterface {
           {
             name: 'role',
             type: 'enum',
-            enum: ['buyer', 'vendor'],
+            enum: ['buyer', 'vendor', 'admin'],
+            isNullable: true,
           },
           {
             name: 'phone_number',
@@ -53,11 +54,11 @@ class CreateUserProfilesTable1716809999999 implements MigrationInterface {
             type: 'varchar',
           },
           {
-            name: 'jeans_size',
+            name: 'jeansSize',
             type: 'varchar',
           },
           {
-            name: 'shoe_size',
+            name: 'shoeSize',
             type: 'varchar',
           },
           {
@@ -73,7 +74,7 @@ class CreateUserProfilesTable1716809999999 implements MigrationInterface {
             type: 'varchar',
           },
           {
-            name: 'registration_completed',
+            name: 'is_registration_completed',
             type: 'boolean',
             default: false,
           },

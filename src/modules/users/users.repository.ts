@@ -36,25 +36,29 @@ export class UsersRepository extends Repository<User> {
 
     const userProfile = this.userProfileRepository.create({
       user_id: user.id,
-      role: 'buyer',
-      phone_number: '',
-      profile_photo: '',
-      address_line_1: '',
-      address_line_2: '',
+      role: null,
+      phoneNumber: '',
+      profilePhoto: '',
+      addressLineOne: '',
+      addressLineTwo: '',
       country: '',
       state: '',
       city: '',
-      clothes_size: '',
-      jeans_size: '',
-      shoe_size: '',
-      card_number: '',
-      expire_date: '',
-      cvv_code: '',
+      clothesSize: '',
+      jeansSize: '',
+      shoeSize: '',
+      cardNumber: '',
+      expireDate: '',
+      cvvCode: '',
+      isRegistrationCompleted: false,
     });
 
     await this.userProfileRepository.save(userProfile);
 
-    return user;
+    return this.findOne({
+      where: { id: user.id },
+      relations: ['profile'],
+    });
   }
 
   async findByEmail(email: string): Promise<User> {

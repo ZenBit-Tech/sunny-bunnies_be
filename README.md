@@ -64,8 +64,8 @@ erDiagram
     varchar state
     varchar city
     varchar clothes_size
-    varchar jeans_size
-    varchar shoe_size
+    varchar jeansSize
+    varchar shoeSize
     varchar card_number
     varchar expire_date
     varchar cvv_code
@@ -73,6 +73,8 @@ erDiagram
     dateTime created_at
     dateTime updated_at
   }
+
+   users  ||--|| user_profiles : user_id
 
   brands {
     int id PK

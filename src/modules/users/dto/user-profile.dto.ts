@@ -2,25 +2,29 @@ import { ApiProperty } from '@nestjs/swagger';
 import { IsEnum, IsString } from 'class-validator';
 
 class UserProfileDto {
-  @ApiProperty({ example: 'buyer' })
-  @IsEnum(['buyer', 'vendor'])
-  role: 'buyer' | 'vendor';
+  @ApiProperty({
+    example: 'buyer',
+    enum: ['buyer', 'vendor', 'admin'],
+    nullable: true,
+  })
+  @IsEnum(['buyer', 'vendor', 'admin'])
+  role: 'buyer' | 'vendor' | 'admin' | null;
 
   @ApiProperty({ example: '1234567890' })
   @IsString()
-  phone_number: string;
+  phoneNumber: string;
 
   @ApiProperty({ example: 'http://example.com/photo.jpg' })
   @IsString()
-  profile_photo: string;
+  profilePhoto: string;
 
   @ApiProperty({ example: '123 Main St' })
   @IsString()
-  address_line_1: string;
+  addressLineOne: string;
 
   @ApiProperty({ example: 'Apt 4B' })
   @IsString()
-  address_line_2: string;
+  addressLineTwo: string;
 
   @ApiProperty({ example: 'USA' })
   @IsString()
@@ -36,30 +40,30 @@ class UserProfileDto {
 
   @ApiProperty({ example: 'M' })
   @IsString()
-  clothes_size: string;
+  clothesSize: string;
 
   @ApiProperty({ example: '32' })
   @IsString()
-  jeans_size: string;
+  jeansSize: string;
 
   @ApiProperty({ example: '10' })
   @IsString()
-  shoe_size: string;
+  shoeSize: string;
 
   @ApiProperty({ example: '1234-5678-9012-3456' })
   @IsString()
-  card_number: string;
+  cardNumber: string;
 
   @ApiProperty({ example: '12/23' })
   @IsString()
-  expire_date: string;
+  expireDate: string;
 
   @ApiProperty({ example: '123' })
   @IsString()
-  cvv_code: string;
+  cvvCode: string;
 
   @ApiProperty({ example: true })
-  isRegistrationComplete: boolean;
+  isRegistrationCompleted: boolean;
 }
 
 export { UserProfileDto };
