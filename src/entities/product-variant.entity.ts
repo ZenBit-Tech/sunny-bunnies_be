@@ -31,18 +31,4 @@ export class ProductVariantEntity {
   @ManyToOne(() => ColorEntity, { eager: true })
   @JoinColumn({ name: 'color_id' })
   color: ColorEntity;
-
-  // @ManyToOne('ProductEntity', 'variants', {
-  //   onDelete: 'CASCADE',
-  // })
-  // @JoinColumn({ name: 'product_id' })
-  // product: 'ProductEntity';
-
-  // @ManyToOne('SizeEntity', { eager: true })
-  // @JoinColumn({ name: 'size_id' })
-  // size: 'SizeEntity';
-
-  // @ManyToOne('ColorEntity', { eager: true })
-  // @JoinColumn({ name: 'color_id' })
-  // color: 'ColorEntity';
 }
