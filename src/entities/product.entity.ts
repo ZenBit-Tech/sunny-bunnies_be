@@ -3,21 +3,21 @@ import {
   CreateDateColumn,
   Entity,
   JoinColumn,
-  JoinTable,
-  ManyToMany,
   ManyToOne,
+  OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { ApiProperty } from '@nestjs/swagger';
 
 import { Gender, ProductStatus } from '../common/enums/index';
 import { ImageEntity } from './image.entity';
-import { SizeEntity } from './size.entity';
-import { CategoryEntity } from './category.entity';
-import { ColorEntity } from './colors.entity';
-import { StyleEntity } from './style.entity';
-import { BrandEntity } from './brand.entity';
-import { MaterialEntity } from './material.entity';
+import {
+  BrandEntity,
+  CategoryEntity,
+  MaterialEntity,
+  StyleEntity,
+} from './index';
+import { ProductVariantEntity } from './product-variant.entity';
 
 @Entity({ name: 'products' })
 export class ProductEntity {
@@ -81,30 +81,17 @@ export class ProductEntity {
   maxPrice: number;
 
   @ApiProperty({
-    type: Number,
+    type: [ImageEntity],
     description: 'Reference to the image entity',
   })
-  @ManyToOne(() => ImageEntity)
-  @JoinColumn({ name: 'image_id' })
-  image: ImageEntity;
+  @OneToMany(() => ImageEntity, (image) => image.product, { eager: true })
+  images: ImageEntity[];
 
-  @ApiProperty({
-    type: [SizeEntity],
-    description: 'Reference to the size entity',
+  @OneToMany(() => ProductVariantEntity, (variant) => variant.product, {
+    eager: true,
+    cascade: true,
   })
-  @ManyToMany(() => SizeEntity, { cascade: true })
-  @JoinTable({
-    name: 'product_sizes',
-    joinColumn: {
-      name: 'product_id',
-      referencedColumnName: 'id',
-    },
-    inverseJoinColumn: {
-      name: 'size_id',
-      referencedColumnName: 'id',
-    },
-  })
-  sizes: SizeEntity[];
+  variants: ProductVariantEntity[];
 
   @ApiProperty({
     type: Number,
@@ -113,15 +100,21 @@ export class ProductEntity {
   @ManyToOne(() => CategoryEntity)
   @JoinColumn({ name: 'category_id' })
   category: CategoryEntity;
+  // @ApiProperty({
+  //   type: Number,
+  //   description: 'Reference to the category entity',
+  // })
+  // @ManyToOne('CategoryEntity')
+  // @JoinColumn({ name: 'category_id' })
+  // category: 'CategoryEntity';
 
-  @ApiProperty({
-    type: Number,
-    description: 'Reference to the color entity',
-  })
-  @ManyToOne(() => ColorEntity)
-  @JoinColumn({ name: 'color_id' })
-  color: ColorEntity;
-
+  // @ApiProperty({
+  //   type: Number,
+  //   description: 'Reference to the style entity',
+  // })
+  // @ManyToOne('StyleEntity')
+  // @JoinColumn({ name: 'style_id' })
+  // style: 'StyleEntity';
   @ApiProperty({
     type: Number,
     description: 'Reference to the style entity',
@@ -130,6 +123,13 @@ export class ProductEntity {
   @JoinColumn({ name: 'style_id' })
   style: StyleEntity;
 
+  // @ApiProperty({
+  //   type: Number,
+  //   description: 'Reference to the brand entity',
+  // })
+  // @ManyToOne('BrandEntity')
+  // @JoinColumn({ name: 'brand_id' })
+  // brand: 'BrandEntity';
   @ApiProperty({
     type: Number,
     description: 'Reference to the brand entity',
@@ -138,6 +138,13 @@ export class ProductEntity {
   @JoinColumn({ name: 'brand_id' })
   brand: BrandEntity;
 
+  // @ApiProperty({
+  //   type: Number,
+  //   description: 'Reference to the material entity',
+  // })
+  // @ManyToOne('MaterialEntity')
+  // @JoinColumn({ name: 'material_id' })
+  // material: 'MaterialEntity';
   @ApiProperty({
     type: Number,
     description: 'Reference to the material entity',
