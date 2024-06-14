@@ -18,7 +18,10 @@ module.exports = {
     '@typescript-eslint/indent': 'off',
     'object-curly-newline': 'off',
     'operator-linebreak': 'off',
-    'no-void': 'off'
+    'no-void': 'off',
+    "function-paren-newline": "off",
+    "implicit-arrow-linebreak": "off",
+    "import/no-cycle": "off"
   },
   root: true,
   env: {
