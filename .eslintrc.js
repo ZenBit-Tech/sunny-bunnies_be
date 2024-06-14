@@ -19,10 +19,15 @@ module.exports = {
     'object-curly-newline': 'off',
     'operator-linebreak': 'off',
     'no-void': 'off',
-    "function-paren-newline": "off",
-    "implicit-arrow-linebreak": "off",
-    "import/no-cycle": "off"
   },
+  overrides: [
+    {
+      files: ['**/entities/*.ts'], 
+      rules: {
+        'import/no-cycle': 'off',
+      },
+    },
+  ],
   root: true,
   env: {
     node: true,
