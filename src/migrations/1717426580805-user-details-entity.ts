@@ -28,6 +28,7 @@ class CreateUserProfilesTable1716809999999 implements MigrationInterface {
           {
             name: 'profile_photo',
             type: 'varchar',
+            isNullable: true,
           },
           {
             name: 'address_line_1',

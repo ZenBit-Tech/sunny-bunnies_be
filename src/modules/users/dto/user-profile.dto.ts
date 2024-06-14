@@ -16,7 +16,7 @@ class UserProfileDto {
 
   @ApiProperty({ example: 'http://example.com/photo.jpg' })
   @IsString()
-  profilePhoto: string;
+  profilePhoto: string | null;
 
   @ApiProperty({ example: '123 Main St' })
   @IsString()

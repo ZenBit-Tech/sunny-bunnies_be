@@ -38,7 +38,7 @@ export class UsersRepository extends Repository<User> {
       user_id: user.id,
       role: null,
       phoneNumber: '',
-      profilePhoto: '',
+      profilePhoto: null,
       addressLineOne: '',
       addressLineTwo: '',
       country: '',

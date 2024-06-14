@@ -24,8 +24,8 @@ export class UserProfile {
   @Column()
   phoneNumber: string;
 
-  @Column()
-  profilePhoto: string;
+  @Column({ nullable: true })
+  profilePhoto: string | null;
 
   @Column()
   addressLineOne: string;
