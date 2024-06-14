@@ -1,7 +1,6 @@
 import { Seeder } from 'typeorm-extension';
 import { DataSource } from 'typeorm';
 
-import { DataBaseTables } from '../common/enums';
 import {
   BrandEntity,
   CategoryEntity,
@@ -9,6 +8,7 @@ import {
   ImageEntity,
   MaterialEntity,
   ProductEntity,
+  ProductVariantEntity,
   SizeEntity,
   StyleEntity,
 } from '../entities/index';
@@ -89,44 +89,42 @@ export class CombinedSeeder implements Seeder {
 
   private async seedProducts(dataSource: DataSource): Promise<void> {
     await dataSource.query('TRUNCATE TABLE products;');
+    await dataSource.query('TRUNCATE TABLE product_variants;');
     const repository = dataSource.getRepository(ProductEntity);
+    const imageRepository = dataSource.getRepository(ImageEntity);
+    const variantRepository = dataSource.getRepository(ProductVariantEntity);
 
     const seedOperations = productsSeedData.map(async (product) => {
-      const { size_ids: sizeIds, ...productData } = product;
+      const { variants, image_ids: imageIds, ...productData } = product;
 
-      const image = dataSource
-        .getRepository(ImageEntity)
-        .findOneBy({ id: product.image_id });
+      async function fetchImageById(
+        imageId: number,
+      ): Promise<ImageEntity | null> {
+        return imageRepository.findOne({ where: { id: imageId } });
+      }
+
+      const images = await Promise.all(imageIds.map(fetchImageById));
+
       const category = dataSource
         .getRepository(CategoryEntity)
-        .findOneBy({ id: product.category_id });
-      const color = dataSource
-        .getRepository(ColorEntity)
-        .findOneBy({ id: product.color_id });
+        .findOne({ where: { id: product.category_id } });
       const style = dataSource
         .getRepository(StyleEntity)
-        .findOneBy({ id: product.style_id });
+        .findOne({ where: { id: product.style_id } });
       const brand = dataSource
         .getRepository(BrandEntity)
-        .findOneBy({ id: product.brand_id });
+        .findOne({ where: { id: product.brand_id } });
       const material = dataSource
         .getRepository(MaterialEntity)
-        .findOneBy({ id: product.material_id });
+        .findOne({ where: { id: product.material_id } });
 
-      const [
-        resolvedImage,
-        resolvedCategory,
-        resolvedColor,
-        resolvedStyle,
-        resolvedBrand,
-        resolvedMaterial,
-      ] = await Promise.all([image, category, color, style, brand, material]);
+      const [resolvedCategory, resolvedStyle, resolvedBrand, resolvedMaterial] =
+        await Promise.all([category, style, brand, material]);
 
       const insertedProduct = await repository.save({
         ...productData,
-        image: resolvedImage,
+        images,
         category: resolvedCategory,
-        color: resolvedColor,
         style: resolvedStyle,
         brand: resolvedBrand,
         material: resolvedMaterial,
@@ -134,21 +132,23 @@ export class CombinedSeeder implements Seeder {
         maxPrice: product.max_price,
       });
 
-      const productSizeRepository = dataSource.getRepository(
-        DataBaseTables.PRODUCTS_SIZES,
-      );
+      const variantOperations = variants.map(async (variant) => {
+        const size = await dataSource
+          .getRepository(SizeEntity)
+          .findOne({ where: { id: variant.size_id } });
+        const color = await dataSource
+          .getRepository(ColorEntity)
+          .findOne({ where: { id: variant.color_id } });
 
-      const insertOperations = sizeIds.map(
-        (sizeId) =>
-          // eslint-disable-next-line implicit-arrow-linebreak
-          productSizeRepository.insert({
-            product_id: insertedProduct.id,
-            size_id: sizeId,
-          }),
-        // eslint-disable-next-line function-paren-newline
-      );
+        return variantRepository.save({
+          product: insertedProduct,
+          size,
+          color,
+          quantity: variant.quantity,
+        });
+      });
 
-      await Promise.all(insertOperations);
+      await Promise.all(variantOperations);
     });
 
     await Promise.all(seedOperations);
