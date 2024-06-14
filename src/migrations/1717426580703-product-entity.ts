@@ -57,15 +57,7 @@ export class CreateProductTable1717426580703 implements MigrationInterface {
             isNullable: false,
           },
           {
-            name: 'image_id',
-            type: 'int',
-          },
-          {
             name: 'category_id',
-            type: 'int',
-          },
-          {
-            name: 'color_id',
             type: 'int',
           },
           {
@@ -157,6 +149,11 @@ export class CreateProductTable1717426580703 implements MigrationInterface {
 
   public async down(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.dropForeignKey(DataBaseTables.PRODUCTS, 'FK_image_id');
+    await queryRunner.dropForeignKey(DataBaseTables.PRODUCTS, 'FK_category_id');
+    await queryRunner.dropForeignKey(DataBaseTables.PRODUCTS, 'FK_color_id');
+    await queryRunner.dropForeignKey(DataBaseTables.PRODUCTS, 'FK_style_id');
+    await queryRunner.dropForeignKey(DataBaseTables.PRODUCTS, 'FK_brand_id');
+    await queryRunner.dropForeignKey(DataBaseTables.PRODUCTS, 'FK_material_id');
     await queryRunner.dropTable(DataBaseTables.PRODUCTS);
   }
 }
