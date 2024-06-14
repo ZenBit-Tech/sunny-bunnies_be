@@ -89,6 +89,11 @@ erDiagram
     varchar category
   }
 
+  product_variants {
+    int id PK
+    int quantity
+  }
+
   PRODUCTS {
     int id PK
     varchar name
@@ -102,11 +107,16 @@ erDiagram
     dateTime updatedAt
   }
 
-  PRODUCTS ||--o{ PRODUCT_IMAGES : "has"
-  PRODUCTS ||--o{ SIZES : "has"
-  PRODUCTS ||--o{ CATEGORIES : "has"
-  PRODUCTS ||--o{ COLORS : "has"
-  PRODUCTS ||--o{ STYLES : "has"
-  PRODUCTS ||--o{ BRANDS : "has"
-  PRODUCTS ||--o{ MATERIALS : "has"
+ products ||--o{ product_images : "has"
+  products ||--o{ sizes : "has"
+  products ||--o{ categories : "has"
+  products ||--o{ colors : "has"
+  products ||--o{ styles : "has"
+  products ||--o{ brands : "has"
+  products ||--o{ materials : "has"
+  products ||--o{ product_variants : "has"
+
+  product_variants }o--|| products : "belongs to"
+  product_variants }o--|| sizes : "belongs to"
+  product_variants }o--|| colors : "belongs to"
 ```
