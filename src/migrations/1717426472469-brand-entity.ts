@@ -1,22 +1,27 @@
 import { MigrationInterface, QueryRunner, Table } from 'typeorm';
 
-import { DataBaseTables } from '~/common/enums';
+const TABLE_NAME = 'brands';
+
+const ColumnName = {
+  ID: 'id',
+  NAME: 'name',
+};
 
 export class BrandEntity1717425420610 implements MigrationInterface {
   public async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.createTable(
       new Table({
-        name: DataBaseTables.BRANDS,
+        name: TABLE_NAME,
         columns: [
           {
-            name: 'id',
+            name: ColumnName.ID,
             type: 'int',
             isPrimary: true,
             isGenerated: true,
             generationStrategy: 'increment',
           },
           {
-            name: 'name',
+            name: ColumnName.NAME,
             type: 'varchar',
           },
         ],
@@ -25,6 +30,6 @@ export class BrandEntity1717425420610 implements MigrationInterface {
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {
-    await queryRunner.dropTable(DataBaseTables.BRANDS);
+    await queryRunner.dropTable(TABLE_NAME);
   }
 }

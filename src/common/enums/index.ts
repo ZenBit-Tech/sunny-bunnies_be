@@ -9,15 +9,4 @@ enum ProductStatus {
   BOTH = 'both',
 }
 
-enum DataBaseTables {
-  COLORS = 'colors',
-  CATEGORIES = 'categories',
-  SIZES = 'sizes',
-  STYLES = 'styles',
-  PRODUCT_IMAGES = 'product_images',
-  BRANDS = 'brands',
-  MATERIALS = 'materials',
-  PRODUCTS = 'products',
-}
-
-export { DataBaseTables, Gender, ProductStatus };
+export { Gender, ProductStatus };
