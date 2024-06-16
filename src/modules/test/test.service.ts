@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { TestRepository } from './test.repository';
 import { CreateTestEntityDto } from './dto';
-import { TestEntity } from '../../entities';
+import { TestEntity } from '~/entities';
 
 @Injectable()
 export class TestService {

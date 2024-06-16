@@ -18,12 +18,13 @@ module.exports = {
     '@typescript-eslint/indent': 'off',
     'object-curly-newline': 'off',
     'operator-linebreak': 'off',
-    'no-void': 'off'
+    'no-void': 'off',
+    'import/extensions': 'off',
   },
   root: true,
   env: {
     node: true,
     jest: true,
   },
-  ignorePatterns: ['.eslintrc.js']
+  ignorePatterns: ['.eslintrc.js'],
 };

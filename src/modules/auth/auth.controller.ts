@@ -14,10 +14,10 @@ import {
   AuthVerifyEmailDto,
   AuthVerifyOtpDto,
 } from './dto';
-import { AuthResponse, AuthTokens } from '../../common/types';
-import { PublicRoute } from '../../common/decorators';
-import { TransformationInterceptor } from '../../common/interceptors';
-import { GoogleAuthSingUpDto } from './dto/google-auth-sing-up.dto';
+import { TransformationInterceptor } from '~/common/interceptors';
+import { GoogleAuthSingUpDto } from '~/modules/auth/dto';
+import { PublicRoute } from '~/common/decorators';
+import { type AuthResponse, type AuthTokens } from '~/common/types';
 
 @ApiTags('Auth')
 @UseInterceptors(TransformationInterceptor)

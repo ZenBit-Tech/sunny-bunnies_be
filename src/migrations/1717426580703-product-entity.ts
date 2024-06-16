@@ -5,7 +5,7 @@ import {
   TableForeignKey,
 } from 'typeorm';
 
-import { DataBaseTables } from '../common/enums/index';
+import { DataBaseTables } from '~/common/enums';
 
 export class CreateProductTable1717426580703 implements MigrationInterface {
   public async up(queryRunner: QueryRunner): Promise<void> {

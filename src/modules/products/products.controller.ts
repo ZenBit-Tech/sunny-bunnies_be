@@ -3,7 +3,7 @@ import { ApiTags } from '@nestjs/swagger';
 
 import { PublicRoute } from 'src/common/decorators';
 
-import { ProductEntity } from '../../entities';
+import { ProductEntity } from '~/entities';
 import { ProductsService } from './products.service';
 import { GetProductsQueryDto } from './dto/get-products-query.dto';
 

@@ -6,7 +6,7 @@ import {
 } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import { TokenService } from '../token.service';
-import { AuthPayloadToken } from '../../../common/types';
+import { AuthPayloadToken } from '~/common/types';
 import { UsersService } from '../../users/users.service';
 
 @Injectable()

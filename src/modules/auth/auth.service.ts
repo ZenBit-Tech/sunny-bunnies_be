@@ -14,15 +14,15 @@ import {
   AuthVerifyEmailDto,
   AuthVerifyOtpDto,
 } from './dto';
-import { USER_PASSWORD_SALT_ROUNDS } from '../../common/constants/constants';
+import { USER_PASSWORD_SALT_ROUNDS } from '~/common/constants/constants';
 import { TokenService } from './token.service';
-import { GoogleAuthSingUpDto } from './dto/google-auth-sing-up.dto';
+import { GoogleAuthSingUpDto } from '~/modules/auth/dto';
 import {
   AuthPayloadToken,
   AuthResponse,
   AuthTokens,
   OtpCodePayloadToken,
-} from '../../common/types';
+} from '~/common/types';
 
 @Injectable()
 export class AuthService {
