@@ -1,13 +1,13 @@
 import { MigrationInterface, QueryRunner, Table } from 'typeorm';
 
-class CreateUserProfilesTable1716809999999 implements MigrationInterface {
+class CreateUserCardTable1716810000000 implements MigrationInterface {
   public async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.createTable(
       new Table({
-        name: 'user_profiles',
+        name: 'user_card',
         columns: [
           {
-            name: 'profile_id',
+            name: 'card_id',
             type: 'varchar',
             isPrimary: true,
           },
@@ -16,56 +16,16 @@ class CreateUserProfilesTable1716809999999 implements MigrationInterface {
             type: 'varchar',
           },
           {
-            name: 'role',
-            type: 'enum',
-            enum: ['buyer', 'vendor', 'admin'],
-            isNullable: true,
-          },
-          {
-            name: 'phone_number',
+            name: 'card_number',
             type: 'varchar',
           },
           {
-            name: 'profile_photo',
-            type: 'varchar',
-            isNullable: true,
-          },
-          {
-            name: 'address_line_1',
+            name: 'expire_date',
             type: 'varchar',
           },
           {
-            name: 'address_line_2',
+            name: 'cvv_code',
             type: 'varchar',
-          },
-          {
-            name: 'country',
-            type: 'varchar',
-          },
-          {
-            name: 'state',
-            type: 'varchar',
-          },
-          {
-            name: 'city',
-            type: 'varchar',
-          },
-          {
-            name: 'clothes_size',
-            type: 'varchar',
-          },
-          {
-            name: 'jeans_size',
-            type: 'varchar',
-          },
-          {
-            name: 'shoe_size',
-            type: 'varchar',
-          },
-          {
-            name: 'is_registration_completed',
-            type: 'boolean',
-            default: false,
           },
           {
             name: 'created_at',
@@ -87,7 +47,7 @@ class CreateUserProfilesTable1716809999999 implements MigrationInterface {
         ],
         foreignKeys: [
           {
-            name: 'FK_user_id',
+            name: 'FK_user_id_card',
             columnNames: ['user_id'],
             referencedTableName: 'users',
             referencedColumnNames: ['id'],
@@ -99,8 +59,8 @@ class CreateUserProfilesTable1716809999999 implements MigrationInterface {
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {
-    await queryRunner.dropTable('user_profiles');
+    await queryRunner.dropTable('user_card');
   }
 }
 
-export { CreateUserProfilesTable1716809999999 };
+export { CreateUserCardTable1716810000000 };

@@ -1,17 +1,23 @@
 import { Injectable } from '@nestjs/common';
 import { DataSource, Repository } from 'typeorm';
 
-import { User, UserProfile } from '../../entities';
-import { CreateUserDto } from './dto';
-import { UserProfileUpdateDto } from './dto/user-profile-update.dto';
+import { User, UserProfile, UserCard } from '../../entities';
+import { CreateUserDto, UserCardDto, UserProfileUpdateDto } from './dto';
+import { EncryptService } from '../auth/encrypt.service';
 
 @Injectable()
 export class UsersRepository extends Repository<User> {
   private readonly userProfileRepository: Repository<UserProfile>;
 
-  constructor(dataSource: DataSource) {
+  private readonly userCardRepository: Repository<UserCard>;
+
+  private readonly encryptService: EncryptService;
+
+  constructor(dataSource: DataSource, encryptService: EncryptService) {
     super(User, dataSource.createEntityManager());
     this.userProfileRepository = dataSource.getRepository(UserProfile);
+    this.userCardRepository = dataSource.getRepository(UserCard);
+    this.encryptService = encryptService;
   }
 
   async findById(id: string): Promise<User> {
@@ -19,7 +25,7 @@ export class UsersRepository extends Repository<User> {
       where: {
         id,
       },
-      relations: ['profile'],
+      relations: ['profile', 'card'],
     });
   }
 
@@ -47,13 +53,20 @@ export class UsersRepository extends Repository<User> {
       clothesSize: '',
       jeansSize: '',
       shoeSize: '',
-      cardNumber: '',
-      expireDate: '',
-      cvvCode: '',
       isRegistrationCompleted: false,
     });
 
     await this.userProfileRepository.save(userProfile);
+
+    const userCard: Partial<UserCard> = {
+      user_id: user.id,
+      cardNumber: '',
+      expireDate: '',
+      cvvCode: '',
+    };
+    await this.userCardRepository.save(userCard);
+
+    await this.userCardRepository.save(userCard);
 
     return this.findOne({
       where: { id: user.id },
@@ -70,10 +83,37 @@ export class UsersRepository extends Repository<User> {
     });
   }
 
+  async updateCard(user: User, updateData: UserCardDto): Promise<void> {
+    const encryptedCardNumber = await this.encryptService.encrypt(
+      updateData.cardNumber,
+      user.passwordSalt,
+    );
+    const encryptedCvvCode = await this.encryptService.encrypt(
+      updateData.cvvCode,
+      user.passwordSalt,
+    );
+    const encryptedExpireDate = await this.encryptService.encrypt(
+      updateData.expireDate,
+      user.passwordSalt,
+    );
+
+    await this.userCardRepository.update(
+      { user_id: user.id },
+      {
+        cardNumber: encryptedCardNumber,
+        cvvCode: encryptedCvvCode,
+        expireDate: encryptedExpireDate,
+      },
+    );
+  }
+
   async updateProfile(
     userId: string,
-    patchProfileDto: UserProfileUpdateDto,
+    updateProfileDto: UserProfileUpdateDto,
   ): Promise<void> {
-    await this.userProfileRepository.update(userId, patchProfileDto);
+    await this.userProfileRepository.update(
+      { user_id: userId },
+      updateProfileDto,
+    );
   }
 }

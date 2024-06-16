@@ -3,7 +3,7 @@ import { ApiTags } from '@nestjs/swagger';
 import { UsersService } from './users.service';
 import { GetUser } from '../../common/decorators';
 import { User } from '../../entities';
-import { UserProfileUpdateDto } from './dto/user-profile-update.dto';
+import { UserProfileUpdateDto, UserCardDto } from './dto/index';
 
 @ApiTags('Users')
 @Controller('users')
@@ -24,8 +24,17 @@ export class UsersController {
   @HttpCode(200)
   async updateProfile(
     @GetUser() user: User,
-    @Body() patchProfileDto: UserProfileUpdateDto,
+    @Body() updateProfileDto: UserProfileUpdateDto,
   ): Promise<User> {
-    return this.usersService.updateProfile(user.id, patchProfileDto);
+    return this.usersService.updateProfile(user.id, updateProfileDto);
+  }
+
+  @Patch('update-card')
+  @HttpCode(200)
+  async updateCard(
+    @GetUser() user: User,
+    @Body() updateCardDto: UserCardDto,
+  ): Promise<User> {
+    return this.usersService.updateCard(user.id, updateCardDto);
   }
 }

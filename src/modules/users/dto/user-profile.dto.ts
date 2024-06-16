@@ -50,18 +50,6 @@ class UserProfileDto {
   @IsString()
   shoeSize: string;
 
-  @ApiProperty({ example: '1234-5678-9012-3456' })
-  @IsString()
-  cardNumber: string;
-
-  @ApiProperty({ example: '12/23' })
-  @IsString()
-  expireDate: string;
-
-  @ApiProperty({ example: '123' })
-  @IsString()
-  cvvCode: string;
-
   @ApiProperty({ example: true })
   isRegistrationCompleted: boolean;
 }

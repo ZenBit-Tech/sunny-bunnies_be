@@ -15,7 +15,7 @@ export class UserProfile {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @Column()
+  @Column('uuid')
   user_id: string;
 
   @Column({ type: 'enum', enum: ['buyer', 'vendor', 'admin'], nullable: true })
@@ -50,15 +50,6 @@ export class UserProfile {
 
   @Column()
   shoeSize: string;
-
-  @Column()
-  cardNumber: string;
-
-  @Column()
-  expireDate: string;
-
-  @Column()
-  cvvCode: string;
 
   @Column()
   isRegistrationCompleted: boolean;
