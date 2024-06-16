@@ -24,7 +24,7 @@ export class UsersRepository extends Repository<User> {
       where: {
         id,
       },
-      relations: ['profile', 'card'],
+      relations: ['profile'],
     });
   }
 
