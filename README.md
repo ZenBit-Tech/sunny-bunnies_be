@@ -68,15 +68,23 @@ erDiagram
     varchar clothes_size
     varchar jeans_size
     varchar shoe_size
-    varchar card_number
-    varchar expire_date
-    varchar cvv_code
     boolean registration_completed
     dateTime created_at
     dateTime updated_at
   }
 
-   users  ||--|| user_profiles : user_id
+  user_cards {
+    int id PK
+    int user_id FK
+    varchar card_number
+    varchar expire_date
+    varchar cvv_code
+    dateTime created_at
+    dateTime updated_at
+  }
+
+  users  ||--|| user_profiles : user_id
+  users  ||--|| user_cards : user_id
 
   brands {
     int id PK
