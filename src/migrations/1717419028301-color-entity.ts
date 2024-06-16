@@ -1,6 +1,6 @@
 import { MigrationInterface, QueryRunner, Table } from 'typeorm';
 
-import { DataBaseTables } from '../common/enums/index';
+import { DataBaseTables } from '~/common/enums';
 
 export class ColorEntity1717419028301 implements MigrationInterface {
   public async up(queryRunner: QueryRunner): Promise<void> {

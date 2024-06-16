@@ -1,8 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { DataSource, Repository } from 'typeorm';
-
-import { User, UserProfile, UserCard } from '../../entities';
-import { CreateUserDto, UserCardDto, UserProfileUpdateDto } from './dto';
+import { User, UserProfile, UserCard } from '~/entities';
+import { UserCardDto, UserProfileUpdateDto } from './dto';
 import { EncryptService } from '../auth/encrypt.service';
 
 @Injectable()
@@ -29,8 +28,10 @@ export class UsersRepository extends Repository<User> {
     });
   }
 
-  async createOne(createUserDto: CreateUserDto): Promise<User> {
-    const { name, email, passwordHash, passwordSalt } = createUserDto;
+  async createOne(
+    payload: Pick<User, 'name' | 'email' | 'passwordHash' | 'passwordSalt'>,
+  ): Promise<User> {
+    const { name, email, passwordHash, passwordSalt } = payload;
 
     const user = this.create({
       name,
@@ -115,5 +116,15 @@ export class UsersRepository extends Repository<User> {
       { user_id: userId },
       updateProfileDto,
     );
+  }
+
+  async updateById(
+    id: string,
+    payload: Partial<Omit<User, 'id'>>,
+  ): Promise<User> {
+    return this.save({
+      id,
+      ...payload,
+    });
   }
 }

@@ -4,13 +4,25 @@ import {
   NotFoundException,
   UnauthorizedException,
 } from '@nestjs/common';
+import { MailerService } from '@nestjs-modules/mailer';
 import { UsersService } from '../users/users.service';
 import { EncryptService } from './encrypt.service';
-import { AuthGenerateAccess, AuthSignInDto, AuthSignUpDto } from './dto';
-import { USER_PASSWORD_SALT_ROUNDS } from '../../common/constants/constants';
+import {
+  AuthGenerateAccess,
+  AuthSignInDto,
+  AuthSignUpDto,
+  AuthVerifyEmailDto,
+  AuthVerifyOtpDto,
+} from './dto';
+import { USER_PASSWORD_SALT_ROUNDS } from '~/common/constants/constants';
 import { TokenService } from './token.service';
-import { AuthPayloadToken, AuthResponse, AuthTokens } from '../../common/types';
-import { GoogleAuthSingUpDto } from './dto/google-auth-sing-up.dto';
+import { GoogleAuthSingUpDto } from '~/modules/auth/dto';
+import {
+  AuthPayloadToken,
+  AuthResponse,
+  AuthTokens,
+  OtpCodePayloadToken,
+} from '~/common/types';
 
 @Injectable()
 export class AuthService {
@@ -20,14 +32,18 @@ export class AuthService {
 
   private readonly tokenService: TokenService;
 
+  private readonly mailerService: MailerService;
+
   constructor(
     usersService: UsersService,
     encryptService: EncryptService,
     tokenService: TokenService,
+    mailerService: MailerService,
   ) {
     this.usersService = usersService;
     this.encryptService = encryptService;
     this.tokenService = tokenService;
+    this.mailerService = mailerService;
   }
 
   async signIn(authSignInDto: AuthSignInDto): Promise<AuthResponse> {
@@ -180,6 +196,88 @@ export class AuthService {
     }
 
     return this.generateTokens(userId);
+  }
+
+  async verifyEmail(authVerifyEmailDto: AuthVerifyEmailDto): Promise<void> {
+    const { email } = authVerifyEmailDto;
+
+    const user = await this.usersService.findByEmail(email);
+
+    if (!user) {
+      throw new ConflictException('This email is not associated with any user');
+    }
+
+    if (user.isVerified) {
+      throw new ConflictException('Email is already verified');
+    }
+
+    let otp = '';
+
+    for (let i = 0; i < 6; i += 1) {
+      otp += Math.floor(Math.random() * 10);
+    }
+
+    const expiresIn = '2m';
+
+    await this.mailerService.sendMail({
+      to: user.email,
+      subject: 'Black circle OTP code email verification',
+      template: 'verify-email',
+      context: {
+        name: user.name,
+        userEmail: user.email,
+        code: otp,
+        expiresIn,
+      },
+    });
+
+    const otpToken = await this.tokenService.create<OtpCodePayloadToken>(
+      {
+        code: otp,
+        email,
+      },
+      {
+        expiresIn,
+      },
+    );
+
+    await this.usersService.updateById(user.id, {
+      otpToken,
+    });
+  }
+
+  async verifyOtp(authVerifyOtp: AuthVerifyOtpDto): Promise<void> {
+    const { code: providedCode, email } = authVerifyOtp;
+
+    const user = await this.usersService.findByEmail(email);
+
+    if (!user) {
+      throw new ConflictException('This email is not associated with any user');
+    }
+
+    if (user.isVerified) {
+      throw new ConflictException('Email is already verified');
+    }
+
+    const { code: otpCode, exp } =
+      this.tokenService.decode<OtpCodePayloadToken>(user.otpToken);
+
+    const isValid = providedCode === otpCode;
+
+    if (!isValid) {
+      throw new ConflictException('Invalid code');
+    }
+
+    const isExpired = this.tokenService.isExpired(exp);
+
+    if (isExpired) {
+      throw new ConflictException('Code is expired');
+    }
+
+    await this.usersService.updateById(user.id, {
+      isVerified: true,
+      otpToken: null,
+    });
   }
 
   async generateTokens(userId: string): Promise<AuthTokens> {

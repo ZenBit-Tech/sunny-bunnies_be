@@ -7,11 +7,17 @@ import {
 } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { AuthService } from './auth.service';
-import { AuthGenerateAccess, AuthSignInDto, AuthSignUpDto } from './dto';
-import { AuthResponse, AuthTokens } from '../../common/types';
-import { PublicRoute } from '../../common/decorators';
-import { TransformationInterceptor } from '../../common/interceptors';
-import { GoogleAuthSingUpDto } from './dto/google-auth-sing-up.dto';
+import {
+  AuthGenerateAccess,
+  AuthSignInDto,
+  AuthSignUpDto,
+  AuthVerifyEmailDto,
+  AuthVerifyOtpDto,
+} from './dto';
+import { TransformationInterceptor } from '~/common/interceptors';
+import { GoogleAuthSingUpDto } from '~/modules/auth/dto';
+import { PublicRoute } from '~/common/decorators';
+import { type AuthResponse, type AuthTokens } from '~/common/types';
 
 @ApiTags('Auth')
 @UseInterceptors(TransformationInterceptor)
@@ -55,5 +61,21 @@ export class AuthController {
     @Body() authGenerateAccessDto: AuthGenerateAccess,
   ): Promise<AuthTokens> {
     return this.authService.generateAccess(authGenerateAccessDto);
+  }
+
+  @PublicRoute()
+  @HttpCode(200)
+  @Post('verify-email')
+  async verifyEmail(
+    @Body() authVerifyEmail: AuthVerifyEmailDto,
+  ): Promise<void> {
+    return this.authService.verifyEmail(authVerifyEmail);
+  }
+
+  @PublicRoute()
+  @HttpCode(200)
+  @Post('verify-otp')
+  async verifyOtp(@Body() authVerifyOtpDto: AuthVerifyOtpDto): Promise<void> {
+    return this.authService.verifyOtp(authVerifyOtpDto);
   }
 }
