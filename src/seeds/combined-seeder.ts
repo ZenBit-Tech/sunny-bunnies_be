@@ -10,7 +10,7 @@ import {
   ProductEntity,
   SizeEntity,
   StyleEntity,
-} from '../entities/index';
+} from '~/entities';
 import {
   colorsSeedData,
   categoriesSeedData,

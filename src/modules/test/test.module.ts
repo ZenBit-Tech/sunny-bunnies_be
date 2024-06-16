@@ -3,7 +3,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { TestController } from './test.controller';
 import { TestService } from './test.service';
 import { TestRepository } from './test.repository';
-import { TestEntity } from '../../entities';
+import { TestEntity } from '~/entities';
 
 @Module({
   controllers: [TestController],

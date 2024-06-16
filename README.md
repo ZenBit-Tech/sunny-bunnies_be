@@ -46,6 +46,8 @@ erDiagram
     int id PK
     varchar name
     varchar email
+    boolean is_verified
+    otp_token string "may be null"
     text password_hash
     text password_salt
     dateTime created_at
