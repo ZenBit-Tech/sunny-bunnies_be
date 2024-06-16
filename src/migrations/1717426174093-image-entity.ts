@@ -1,31 +1,38 @@
 import { MigrationInterface, QueryRunner, Table } from 'typeorm';
 
-import { DataBaseTables } from '~/common/enums';
+const TABLE_NAME = 'product_images';
+
+const ColumnName = {
+  ID: 'id',
+  URL: 'url',
+  DESCRIPTION: 'description',
+  CREATED_AT: 'created_at',
+};
 
 export class ProductImagesEntity1717425420610 implements MigrationInterface {
   public async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.createTable(
       new Table({
-        name: DataBaseTables.PRODUCT_IMAGES,
+        name: TABLE_NAME,
         columns: [
           {
-            name: 'id',
+            name: ColumnName.ID,
             type: 'int',
             isPrimary: true,
             isGenerated: true,
             generationStrategy: 'increment',
           },
           {
-            name: 'url',
+            name: ColumnName.URL,
             type: 'text',
           },
           {
-            name: 'description',
+            name: ColumnName.DESCRIPTION,
             type: 'text',
             isNullable: true,
           },
           {
-            name: 'created_at',
+            name: ColumnName.CREATED_AT,
             type: 'timestamp',
             default: 'CURRENT_TIMESTAMP',
           },
@@ -35,6 +42,6 @@ export class ProductImagesEntity1717425420610 implements MigrationInterface {
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {
-    await queryRunner.dropTable(DataBaseTables.PRODUCT_IMAGES);
+    await queryRunner.dropTable(TABLE_NAME);
   }
 }
