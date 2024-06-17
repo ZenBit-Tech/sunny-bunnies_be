@@ -100,7 +100,6 @@ erDiagram
     int id PK
     varchar name
     varchar description
-    int quantity
     gender 
     status 
     decimal priceFrom
@@ -109,14 +108,15 @@ erDiagram
     dateTime updatedAt
   }
 
- products ||--o{ product_images : "has"
-  products ||--o{ sizes : "has"
+  products ||--o{ product_images : "has"
   products ||--o{ categories : "has"
-  products ||--o{ colors : "has"
   products ||--o{ styles : "has"
   products ||--o{ brands : "has"
   products ||--o{ materials : "has"
   products ||--o{ product_variants : "has"
+  products }o--|| users : "belongs to"
+
+  users ||--o{ products : "has"
 
   product_variants }o--|| products : "belongs to"
   product_variants }o--|| sizes : "belongs to"

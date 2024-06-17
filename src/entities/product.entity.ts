@@ -44,13 +44,6 @@ export class ProductEntity {
   description: string;
 
   @ApiProperty({
-    type: Number,
-    description: 'This is the quantity of the product',
-  })
-  @Column({ type: 'int' })
-  quantity: number;
-
-  @ApiProperty({
     type: String,
     enum: Gender,
     description: 'This is the gender of the product',
@@ -85,6 +78,7 @@ export class ProductEntity {
     description: 'Reference to the image entity',
   })
   @OneToMany('ImageEntity', (image: ImageEntity) => image.product, {
+    cascade: true,
     eager: true,
   })
   @JoinColumn({ name: 'product_id' })

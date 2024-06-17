@@ -4,6 +4,7 @@ import { Injectable } from '@nestjs/common';
 
 import {
   PRODUCT_DATE_RANGE_FORMAT,
+  PRODUCTS_LIMIT,
   PRODUCTS_OFFSET,
 } from '~/common/constants/constants';
 import { ProductEntity } from '~/entities';
@@ -104,10 +105,10 @@ export class ProductsRepository extends Repository<ProductEntity> {
       });
     }
 
-    const limit = query.limit || 20;
+    const limit = query.limit || PRODUCTS_LIMIT;
     const offset = query.offset || PRODUCTS_OFFSET;
 
-    qb.limit(limit).offset(offset);
+    qb.take(limit).skip(offset);
 
     return qb.getMany();
   }
