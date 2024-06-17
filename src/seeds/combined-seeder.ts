@@ -11,7 +11,9 @@ import {
   ProductVariantEntity,
   SizeEntity,
   StyleEntity,
+  User,
 } from '../entities';
+
 import {
   colorsSeedData,
   categoriesSeedData,
@@ -21,6 +23,7 @@ import {
   brandsSeedData,
   materialsSeedData,
   productsSeedData,
+  usersSeedData,
 } from './seed-data';
 
 export class CombinedSeeder implements Seeder {
@@ -33,6 +36,7 @@ export class CombinedSeeder implements Seeder {
     await this.seedBrands(dataSource);
     await this.seedImages(dataSource);
     await this.seedMaterials(dataSource);
+    await this.seedUsers(dataSource);
     await this.seedProducts(dataSource);
     await this.enableForeignKeyChecks(dataSource);
   }
@@ -87,6 +91,12 @@ export class CombinedSeeder implements Seeder {
     await repository.insert(brandsSeedData);
   }
 
+  private async seedUsers(dataSource: DataSource): Promise<void> {
+    await dataSource.query('TRUNCATE TABLE users;');
+    const repository = dataSource.getRepository(User);
+    await repository.insert(usersSeedData);
+  }
+
   private async seedProducts(dataSource: DataSource): Promise<void> {
     await dataSource.query('TRUNCATE TABLE products;');
     await dataSource.query('TRUNCATE TABLE product_variants;');
@@ -117,9 +127,17 @@ export class CombinedSeeder implements Seeder {
       const material = dataSource
         .getRepository(MaterialEntity)
         .findOne({ where: { id: product.material_id } });
+      const user = dataSource
+        .getRepository(User)
+        .findOne({ where: { id: product.user_id } });
 
-      const [resolvedCategory, resolvedStyle, resolvedBrand, resolvedMaterial] =
-        await Promise.all([category, style, brand, material]);
+      const [
+        resolvedCategory,
+        resolvedStyle,
+        resolvedBrand,
+        resolvedMaterial,
+        resolvedUser,
+      ] = await Promise.all([category, style, brand, material, user]);
 
       const insertedProduct = await repository.save({
         ...productData,
@@ -127,6 +145,7 @@ export class CombinedSeeder implements Seeder {
         category: resolvedCategory,
         style: resolvedStyle,
         brand: resolvedBrand,
+        user: resolvedUser,
         material: resolvedMaterial,
         minPrice: product.min_price,
         maxPrice: product.max_price,

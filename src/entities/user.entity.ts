@@ -2,11 +2,14 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
+
 import { ApiProperty } from '@nestjs/swagger';
 import { Exclude } from 'class-transformer';
+import { type ProductEntity } from './product.entity';
 
 @Entity({ name: 'users' })
 export class User {
@@ -20,11 +23,11 @@ export class User {
   email: string;
 
   @Exclude()
-  @Column()
+  @Column({ name: 'password_hash' })
   passwordHash: string;
 
   @Exclude()
-  @Column()
+  @Column({ name: 'password_salt' })
   passwordSalt: string;
 
   @Column({ type: 'boolean', default: false, name: 'is_verified' })
@@ -41,4 +44,7 @@ export class User {
   @ApiProperty({ description: 'Updated date of user' })
   @UpdateDateColumn({ name: 'updated_at' })
   updatedAt: Date;
+
+  @OneToMany('ProductEntity', (product: ProductEntity) => product.user)
+  products: ProductEntity[];
 }

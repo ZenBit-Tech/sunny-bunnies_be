@@ -99,6 +99,27 @@ const imageSeedData = [
   },
 ];
 
+const usersSeedData = [
+  {
+    id: 'vendor-1',
+    name: 'Vendor One',
+    email: 'vendor1@example.com',
+    passwordHash: 'hashedpassword1',
+    passwordSalt: 'saltsalt1',
+    created_at: new Date(),
+    updated_at: new Date(),
+  },
+  {
+    id: 'vendor-2',
+    name: 'Vendor Two',
+    email: 'vendor2@example.com',
+    passwordHash: 'hashedpassword2',
+    passwordSalt: 'saltsalt2',
+    created_at: new Date(),
+    updated_at: new Date(),
+  },
+];
+
 const productsSeedData = [
   {
     name: 'Green dress',
@@ -113,6 +134,7 @@ const productsSeedData = [
     style_id: 1,
     brand_id: 1,
     material_id: 1,
+    user_id: 'vendor-1',
     variants: [
       { size_id: 1, color_id: 1, quantity: 5 },
       { size_id: 2, color_id: 1, quantity: 3 },
@@ -134,6 +156,7 @@ const productsSeedData = [
     style_id: 2,
     brand_id: 5,
     material_id: 2,
+    user_id: 'vendor-1',
     variants: [
       { size_id: 1, color_id: 6, quantity: 5 },
       { size_id: 2, color_id: 6, quantity: 3 },
@@ -154,6 +177,7 @@ const productsSeedData = [
     style_id: 2,
     brand_id: 4,
     material_id: 3,
+    user_id: 'vendor-1',
     variants: [
       { size_id: 1, color_id: 8, quantity: 5 },
       { size_id: 2, color_id: 8, quantity: 3 },
@@ -170,11 +194,12 @@ const productsSeedData = [
     status: ProductStatus.BOTH,
     min_price: 150,
     max_price: 170,
-    image_ids: [4],
+    image_ids: [5],
     category_id: 4,
     style_id: 2,
     brand_id: 4,
     material_id: 3,
+    user_id: 'vendor-2',
     variants: [
       { size_id: 1, color_id: 6, quantity: 5 },
       { size_id: 2, color_id: 6, quantity: 3 },
@@ -196,6 +221,7 @@ const productsSeedData = [
     style_id: 3,
     brand_id: 3,
     material_id: 6,
+    user_id: 'vendor-2',
     variants: [{ size_id: 1, color_id: 1, quantity: 5 }],
     created_at: new Date(2024, 7, 25),
     updated_at: new Date(),
@@ -208,11 +234,12 @@ const productsSeedData = [
     status: ProductStatus.FOR_SALE,
     min_price: 50,
     max_price: 70,
-    image_ids: [6],
+    image_ids: [8],
     category_id: 2,
     style_id: 2,
     brand_id: 4,
     material_id: 6,
+    user_id: 'vendor-2',
     variants: [{ size_id: 1, color_id: 8, quantity: 5 }],
     created_at: new Date(2024, 7, 25),
     updated_at: new Date(),
@@ -228,4 +255,5 @@ export {
   productsSeedData,
   sizesSeedData,
   stylesSeedData,
+  usersSeedData,
 };

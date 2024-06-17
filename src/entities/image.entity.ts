@@ -8,7 +8,7 @@ import {
 } from 'typeorm';
 import { ApiProperty } from '@nestjs/swagger';
 
-import { ProductEntity } from './product.entity';
+import { type ProductEntity } from './product.entity';
 
 @Entity({ name: 'product_images' })
 export class ImageEntity {
@@ -33,7 +33,7 @@ export class ImageEntity {
   @Column({ type: 'text' })
   description: string;
 
-  @ManyToOne(() => ProductEntity, (product) => product.images, {
+  @ManyToOne('ProductEntity', (product: ProductEntity) => product.images, {
     onDelete: 'CASCADE',
   })
   @JoinColumn({ name: 'product_id' })

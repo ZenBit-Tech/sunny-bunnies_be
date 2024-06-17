@@ -4,7 +4,6 @@ import { Injectable } from '@nestjs/common';
 
 import {
   PRODUCT_DATE_RANGE_FORMAT,
-  PRODUCTS_LIMIT,
   PRODUCTS_OFFSET,
 } from '~/common/constants/constants';
 import { ProductEntity } from '~/entities';
@@ -25,6 +24,7 @@ export class ProductsRepository extends Repository<ProductEntity> {
       .leftJoinAndSelect('product.brand', 'brand')
       .leftJoinAndSelect('product.material', 'material')
       .leftJoinAndSelect('product.variants', 'variants')
+      .leftJoinAndSelect('product.user', 'user')
       .leftJoinAndSelect('variants.size', 'size')
       .leftJoinAndSelect('variants.color', 'color')
       .where('product.id = :id', { id })
@@ -45,11 +45,6 @@ export class ProductsRepository extends Repository<ProductEntity> {
       .leftJoinAndSelect('product.brand', 'brand')
       .leftJoinAndSelect('product.material', 'material')
       .leftJoinAndSelect('product.variants', 'variants');
-
-    const limit = query.limit || PRODUCTS_LIMIT;
-    const offset = query.offset || PRODUCTS_OFFSET;
-
-    qb.limit(limit).offset(offset);
 
     if (query.category) {
       qb.andWhere('category.name = :categoryName', {
@@ -108,6 +103,12 @@ export class ProductsRepository extends Repository<ProductEntity> {
         materialName: query.material,
       });
     }
+
+    const limit = query.limit || 20;
+    const offset = query.offset || PRODUCTS_OFFSET;
+
+    qb.limit(limit).offset(offset);
+
     return qb.getMany();
   }
 }

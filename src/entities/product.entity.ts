@@ -17,6 +17,7 @@ import {
   type MaterialEntity,
   type ProductVariantEntity,
   type StyleEntity,
+  type User,
 } from './index';
 
 @Entity({ name: 'products' })
@@ -86,6 +87,7 @@ export class ProductEntity {
   @OneToMany('ImageEntity', (image: ImageEntity) => image.product, {
     eager: true,
   })
+  @JoinColumn({ name: 'product_id' })
   images: ImageEntity[];
 
   @OneToMany(
@@ -129,6 +131,14 @@ export class ProductEntity {
   @ManyToOne('MaterialEntity')
   @JoinColumn({ name: 'material_id' })
   material: MaterialEntity;
+
+  @ApiProperty({
+    type: Number,
+    description: 'Reference to the user entity (vendor)',
+  })
+  @ManyToOne('User', (user: User) => user.products)
+  @JoinColumn({ name: 'user_id' })
+  user: User;
 
   @ApiProperty({
     type: Number,
