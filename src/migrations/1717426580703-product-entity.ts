@@ -199,7 +199,6 @@ export class CreateProductTable1717426580703 implements MigrationInterface {
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {
-    await queryRunner.dropForeignKey(TableName.PRODUCTS, 'FK_image_id');
     await queryRunner.dropTable(TableName.PRODUCTS);
   }
 }

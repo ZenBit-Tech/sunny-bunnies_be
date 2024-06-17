@@ -4,7 +4,6 @@ import {
 } from '@nestjs/typeorm';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { SnakeNamingStrategy } from 'typeorm-naming-strategies';
-import { join } from 'node:path';
 
 class TypeOrmConfig {
   static getOrmConfig(configService: ConfigService): TypeOrmModuleOptions {
@@ -15,8 +14,8 @@ class TypeOrmConfig {
       username: configService.get<string>('DATABASE_USERNAME'),
       password: configService.get<string>('DATABASE_PASSWORD'),
       database: configService.get<string>('DATABASE_NAME'),
-      entities: [join(__dirname, '../../entities/*.entity{.ts,.js}')],
-      migrations: [join(__dirname, '../../migrations/*{.ts,.js}')],
+      entities: [`${__dirname}/../../entities/*.entity{.ts,.js}`],
+      migrations: [`${__dirname}/../../migrations/*{.ts,.js}`],
       synchronize: true,
       namingStrategy: new SnakeNamingStrategy(),
     };
