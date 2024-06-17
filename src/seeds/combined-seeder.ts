@@ -12,7 +12,7 @@ import {
   SizeEntity,
   StyleEntity,
   User,
-} from '../entities';
+} from '~/entities';
 
 import {
   colorsSeedData,

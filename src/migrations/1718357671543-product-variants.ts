@@ -1,7 +1,3 @@
-/* eslint-disable implicit-arrow-linebreak */
-/* eslint-disable @typescript-eslint/comma-dangle */
-/* eslint-disable function-paren-newline */
-
 import {
   MigrationInterface,
   QueryRunner,

@@ -1,4 +1,4 @@
-import { Gender, ProductStatus } from '../common/enums';
+import { Gender, ProductStatus } from '~/common/enums';
 
 const colorsSeedData = [
   { name: 'red' },

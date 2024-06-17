@@ -1,9 +1,9 @@
 import { Controller, Get, Param, Query } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 
-import { PublicRoute } from 'src/common/decorators';
-
+import { PublicRoute } from '~/common/decorators';
 import { ProductEntity } from '~/entities';
+
 import { ProductsService } from './products.service';
 import { GetProductsQueryDto } from './dto/get-products-query.dto';
 
