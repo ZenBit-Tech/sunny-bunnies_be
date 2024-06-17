@@ -140,6 +140,16 @@ export class CreateProductTable1717426580703 implements MigrationInterface {
     await queryRunner.createForeignKey(
       TableName.PRODUCTS,
       new TableForeignKey({
+        columnNames: [ColumnName.SIZE_ID],
+        referencedColumnNames: [ColumnName.ID],
+        referencedTableName: TableName.SIZES,
+        onDelete: 'CASCADE',
+      }),
+    );
+
+    await queryRunner.createForeignKey(
+      TableName.PRODUCTS,
+      new TableForeignKey({
         columnNames: [ColumnName.CATEGORY_ID],
         referencedColumnNames: [ColumnName.ID],
         referencedTableName: TableName.CATEGORIES,
