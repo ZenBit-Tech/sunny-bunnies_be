@@ -1,7 +1,7 @@
 export { TestEntity } from './test.entity';
 export { BrandEntity } from './brand.entity';
 export { CategoryEntity } from './category.entity';
-export { ColorEntity } from './colors.entity';
+export { ColorEntity } from './color.entity';
 export { ImageEntity } from './image.entity';
 export { MaterialEntity } from './material.entity';
 export { ProductEntity } from './product.entity';

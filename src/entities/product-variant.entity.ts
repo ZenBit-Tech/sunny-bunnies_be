@@ -6,9 +6,7 @@ import {
   JoinColumn,
 } from 'typeorm';
 
-import { ColorEntity } from './colors.entity';
-import { ProductEntity } from './product.entity';
-import { SizeEntity } from './size.entity';
+import { type ColorEntity, type ProductEntity, type SizeEntity } from './index';
 
 @Entity({ name: 'product_variants' })
 export class ProductVariantEntity {
@@ -18,17 +16,17 @@ export class ProductVariantEntity {
   @Column({ type: 'int' })
   quantity: number;
 
-  @ManyToOne(() => ProductEntity, (product) => product.variants, {
+  @ManyToOne('ProductEntity', (product: ProductEntity) => product.variants, {
     onDelete: 'CASCADE',
   })
   @JoinColumn({ name: 'product_id' })
   product: ProductEntity;
 
-  @ManyToOne(() => SizeEntity, { eager: true })
+  @ManyToOne('SizeEntity', { eager: true })
   @JoinColumn({ name: 'size_id' })
   size: SizeEntity;
 
-  @ManyToOne(() => ColorEntity, { eager: true })
+  @ManyToOne('ColorEntity', { eager: true })
   @JoinColumn({ name: 'color_id' })
   color: ColorEntity;
 }

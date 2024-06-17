@@ -38,11 +38,6 @@ export class ImageEntity {
   })
   @JoinColumn({ name: 'product_id' })
   product: ProductEntity;
-  // @ManyToOne('ProductEntity', 'images', {
-  //   onDelete: 'CASCADE',
-  // })
-  // @JoinColumn({ name: 'product_id' })
-  // product: 'ProductEntity';
 
   @ApiProperty({
     type: String,

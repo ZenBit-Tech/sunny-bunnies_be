@@ -11,6 +11,7 @@ module.exports = {
     'plugin:prettier/recommended',
     'airbnb-base',
     'airbnb-typescript/base',
+    "prettier"
   ],
   rules: {
     'import/prefer-default-export': 'off',
@@ -21,14 +22,6 @@ module.exports = {
     'no-void': 'off',
     'import/extensions': 'off',
   },
-  overrides: [
-    {
-      files: ['**/entities/*.ts'], 
-      rules: {
-        'import/no-cycle': 'off',
-      },
-    },
-  ],
   root: true,
   env: {
     node: true,

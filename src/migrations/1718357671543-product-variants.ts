@@ -9,44 +9,59 @@ import {
   TableForeignKey,
 } from 'typeorm';
 
-import { DataBaseTables } from '../common/enums/index';
+const TableName = {
+  COLORS: 'colors',
+  PRODUCTS: 'products',
+  PRODUCT_VARIANTS: 'product_variants',
+  SIZES: 'sizes',
+};
+
+const ColumnName = {
+  ID: 'id',
+  COLOR_ID: 'color_id',
+  QUANTITY: 'quantity',
+  PRODUCT_ID: 'product_id',
+  SIZE_ID: 'size_id',
+  CREATED_AT: 'created_at',
+  UPDATED_AT: 'updated_at',
+};
 
 export class CreateVariantsTable1717426580704 implements MigrationInterface {
   public async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.createTable(
       new Table({
-        name: DataBaseTables.PRODUCT_VARIANTS,
+        name: TableName.PRODUCT_VARIANTS,
         columns: [
           {
-            name: 'id',
+            name: ColumnName.ID,
             type: 'int',
             isPrimary: true,
             isGenerated: true,
             generationStrategy: 'increment',
           },
           {
-            name: 'product_id',
+            name: ColumnName.PRODUCT_ID,
             type: 'int',
           },
           {
-            name: 'size_id',
+            name: ColumnName.SIZE_ID,
             type: 'int',
           },
           {
-            name: 'color_id',
+            name: ColumnName.COLOR_ID,
             type: 'int',
           },
           {
-            name: 'quantity',
+            name: ColumnName.QUANTITY,
             type: 'int',
           },
           {
-            name: 'created_at',
+            name: ColumnName.CREATED_AT,
             type: 'timestamp',
             default: 'CURRENT_TIMESTAMP',
           },
           {
-            name: 'updated_at',
+            name: ColumnName.UPDATED_AT,
             type: 'timestamp',
             default: 'CURRENT_TIMESTAMP',
           },
@@ -55,52 +70,37 @@ export class CreateVariantsTable1717426580704 implements MigrationInterface {
     );
 
     await queryRunner.createForeignKey(
-      DataBaseTables.PRODUCT_VARIANTS,
+      TableName.PRODUCT_VARIANTS,
       new TableForeignKey({
-        columnNames: ['product_id'],
-        referencedColumnNames: ['id'],
-        referencedTableName: DataBaseTables.PRODUCTS,
+        columnNames: [ColumnName.PRODUCT_ID],
+        referencedColumnNames: [ColumnName.ID],
+        referencedTableName: TableName.PRODUCTS,
         onDelete: 'CASCADE',
       }),
     );
 
     await queryRunner.createForeignKey(
-      DataBaseTables.PRODUCT_VARIANTS,
+      TableName.PRODUCT_VARIANTS,
       new TableForeignKey({
-        columnNames: ['size_id'],
-        referencedColumnNames: ['id'],
-        referencedTableName: DataBaseTables.SIZES,
+        columnNames: [ColumnName.SIZE_ID],
+        referencedColumnNames: [ColumnName.ID],
+        referencedTableName: TableName.SIZES,
         onDelete: 'CASCADE',
       }),
     );
 
     await queryRunner.createForeignKey(
-      DataBaseTables.PRODUCT_VARIANTS,
+      TableName.PRODUCT_VARIANTS,
       new TableForeignKey({
-        columnNames: ['color_id'],
-        referencedColumnNames: ['id'],
-        referencedTableName: DataBaseTables.COLORS,
+        columnNames: [ColumnName.COLOR_ID],
+        referencedColumnNames: [ColumnName.ID],
+        referencedTableName: TableName.COLORS,
         onDelete: 'CASCADE',
       }),
     );
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {
-    const table = await queryRunner.getTable(DataBaseTables.PRODUCT_VARIANTS);
-
-    if (table) {
-      const foreignKeys = table.foreignKeys.filter(
-        (fk) =>
-          fk.columnNames.indexOf('product_id') !== -1 ||
-          fk.columnNames.indexOf('size_id') !== -1 ||
-          fk.columnNames.indexOf('color_id') !== -1,
-      );
-      const dropForeignKeyPromises = foreignKeys.map((foreignKey) =>
-        queryRunner.dropForeignKey(DataBaseTables.PRODUCT_VARIANTS, foreignKey),
-      );
-
-      await Promise.all(dropForeignKeyPromises);
-      await queryRunner.dropTable(DataBaseTables.PRODUCT_VARIANTS);
-    }
+    await queryRunner.dropTable(TableName.PRODUCT_VARIANTS);
   }
 }
