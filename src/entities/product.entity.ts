@@ -9,7 +9,7 @@ import {
 } from 'typeorm';
 import { ApiProperty } from '@nestjs/swagger';
 
-import { Gender, ProductStatus } from '../common/enums';
+import { Gender, ProductStatus } from '~/common/enums';
 import {
   type BrandEntity,
   type CategoryEntity,
