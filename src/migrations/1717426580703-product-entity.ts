@@ -130,8 +130,8 @@ export class CreateProductTable1717426580703 implements MigrationInterface {
     await queryRunner.createForeignKey(
       TableName.PRODUCTS,
       new TableForeignKey({
-        columnNames: ['image_id'],
-        referencedColumnNames: ['id'],
+        columnNames: [ColumnName.IMAGE_ID],
+        referencedColumnNames: [ColumnName.ID],
         referencedTableName: TableName.PRODUCT_IMAGES,
         onDelete: 'CASCADE',
       }),
@@ -140,9 +140,9 @@ export class CreateProductTable1717426580703 implements MigrationInterface {
     await queryRunner.createForeignKey(
       TableName.PRODUCTS,
       new TableForeignKey({
-        columnNames: [ColumnName.IMAGE_ID],
+        columnNames: [ColumnName.SIZE_ID],
         referencedColumnNames: [ColumnName.ID],
-        referencedTableName: TableName.PRODUCT_IMAGES,
+        referencedTableName: TableName.SIZES,
         onDelete: 'CASCADE',
       }),
     );
