@@ -6,11 +6,11 @@ import {
 } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import { TokenService } from '../token.service';
-import { AuthPayloadToken } from '../../../common/types';
+import { AuthPayloadToken } from '~/common/types';
 import { UsersService } from '../../users/users.service';
 
 @Injectable()
-export class JwtAuthGuard implements CanActivate {
+export class AuthGuard implements CanActivate {
   private readonly reflector: Reflector;
 
   private readonly tokenService: TokenService;
@@ -63,6 +63,10 @@ export class JwtAuthGuard implements CanActivate {
     const user = await this.usersService.findById(userId);
     if (!user) {
       throw new UnauthorizedException('Invalid token');
+    }
+
+    if (!user.isVerified) {
+      throw new UnauthorizedException('Email is not verified!');
     }
 
     request.user = user;

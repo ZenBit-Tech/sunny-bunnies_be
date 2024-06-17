@@ -1,7 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { decodeJwt, JWTPayload, SignJWT } from 'jose';
-import { PayloadToken } from '../../common/types';
 
 @Injectable()
 export class TokenService {
@@ -9,6 +8,24 @@ export class TokenService {
 
   public constructor(configService: ConfigService) {
     this.configService = configService;
+  }
+
+  public async create<T extends Record<string, unknown>>(
+    payload: T,
+    config: {
+      expiresIn: number | string | Date;
+    },
+  ): Promise<string> {
+    return new SignJWT(payload)
+      .setProtectedHeader({
+        alg: this.configService.get<string>('AUTH_ALGORITHM'),
+      })
+      .setExpirationTime(config.expiresIn)
+      .sign(
+        new TextEncoder().encode(
+          this.configService.get<string>('JWT_SECRET_KEY'),
+        ),
+      );
   }
 
   public async createRefresh<T extends Record<string, unknown>>(
@@ -51,8 +68,8 @@ export class TokenService {
       );
   }
 
-  public decode<T>(token: string): JWTPayload & T & PayloadToken {
-    return decodeJwt(token) as JWTPayload & T & PayloadToken;
+  public decode<T>(token: string): JWTPayload & T {
+    return decodeJwt(token) as JWTPayload & T;
   }
 
   public isExpired(exp?: number): boolean {

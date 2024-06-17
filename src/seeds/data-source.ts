@@ -1,6 +1,6 @@
 import 'reflect-metadata';
 
-import { dataSource } from '../common/configs/typeorm-data-source.config';
+import { dataSource } from '~/common/configs/typeorm-data-source.config';
 import { CombinedSeeder } from './combined-seeder';
 
 async function runSeeder() {

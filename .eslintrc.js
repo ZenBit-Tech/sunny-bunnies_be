@@ -19,6 +19,7 @@ module.exports = {
     'object-curly-newline': 'off',
     'operator-linebreak': 'off',
     'no-void': 'off',
+    'import/extensions': 'off',
   },
   overrides: [
     {
@@ -33,5 +34,5 @@ module.exports = {
     node: true,
     jest: true,
   },
-  ignorePatterns: ['.eslintrc.js']
+  ignorePatterns: ['.eslintrc.js'],
 };

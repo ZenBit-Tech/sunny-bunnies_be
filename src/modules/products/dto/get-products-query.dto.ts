@@ -1,10 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsOptional, IsString, IsNumber } from 'class-validator';
 
-import {
-  PRODUCTS_LIMIT,
-  PRODUCTS_OFFSET,
-} from '../../../common/constants/constants.js';
+import { PRODUCTS_LIMIT, PRODUCTS_OFFSET } from '~/common/constants/constants';
 
 export class GetProductsQueryDto {
   @ApiProperty({

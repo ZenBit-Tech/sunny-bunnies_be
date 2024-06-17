@@ -11,7 +11,7 @@ import {
   ProductVariantEntity,
   SizeEntity,
   StyleEntity,
-} from '../entities/index';
+} from '~/entities';
 import {
   colorsSeedData,
   categoriesSeedData,

@@ -6,8 +6,8 @@ import {
   PRODUCT_DATE_RANGE_FORMAT,
   PRODUCTS_LIMIT,
   PRODUCTS_OFFSET,
-} from '../../common/constants/constants';
-import { ProductEntity } from '../../entities/index';
+} from '~/common/constants/constants';
+import { ProductEntity } from '~/entities';
 
 import { GetProductsQueryDto } from './dto/get-products-query.dto';
 
