@@ -16,6 +16,14 @@ export class UsersRepository extends Repository<User> {
     });
   }
 
+  async findVendorById(id: string): Promise<User> {
+    return this.findOne({
+      where: {
+        id,
+      },
+    });
+  }
+
   async createOne(
     payload: Pick<User, 'name' | 'email' | 'passwordHash' | 'passwordSalt'>,
   ): Promise<User> {
