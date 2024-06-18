@@ -54,6 +54,38 @@ erDiagram
     dateTime updated_at
   }
 
+  user_profiles {
+    int id PK
+    int user_id FK
+    enum role
+    varchar phone_number
+    varchar profile_photo
+    varchar address_line_1
+    varchar address_line_2
+    varchar country
+    varchar state
+    varchar city
+    varchar clothes_size
+    varchar jeans_size
+    varchar shoe_size
+    boolean registration_completed
+    dateTime created_at
+    dateTime updated_at
+  }
+
+  user_cards {
+    int id PK
+    int user_id FK
+    varchar card_number
+    varchar expire_date
+    varchar cvv_code
+    dateTime created_at
+    dateTime updated_at
+  }
+
+  users  ||--|| user_profiles : user_id
+  users  ||--|| user_cards : user_id
+
   brands {
     int id PK
     varchar name
