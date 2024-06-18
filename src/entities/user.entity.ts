@@ -2,6 +2,8 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  JoinTable,
+  ManyToMany,
   OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
@@ -47,4 +49,21 @@ export class User {
 
   @OneToMany('ProductEntity', (product: ProductEntity) => product.user)
   products: ProductEntity[];
+
+  @ManyToMany('User', (user: User) => user.following)
+  @JoinTable({
+    name: 'user_followers',
+    joinColumn: {
+      name: 'userId',
+      referencedColumnName: 'id',
+    },
+    inverseJoinColumn: {
+      name: 'followerId',
+      referencedColumnName: 'id',
+    },
+  })
+  followers: User[];
+
+  @ManyToMany('User', (user: User) => user.followers)
+  following: User[];
 }

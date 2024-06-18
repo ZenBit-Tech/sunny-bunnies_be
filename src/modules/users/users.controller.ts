@@ -1,7 +1,7 @@
 import { Controller, Get, HttpCode, Param } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { UsersService } from './users.service';
-import { GetUser, PublicRoute } from '~/common/decorators';
+import { GetUser } from '~/common/decorators';
 import { User } from '~/entities';
 
 @ApiTags('Users')
@@ -19,7 +19,6 @@ export class UsersController {
     return user;
   }
 
-  @PublicRoute()
   @Get('vendor/:id')
   @HttpCode(200)
   getVendorById(@Param() param: { id: string }): Promise<User> {

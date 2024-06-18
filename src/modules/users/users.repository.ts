@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { DataSource, Repository } from 'typeorm';
+
 import { User } from '~/entities';
 
 @Injectable()
@@ -21,6 +22,7 @@ export class UsersRepository extends Repository<User> {
       where: {
         id,
       },
+      relations: ['products'],
     });
   }
 
