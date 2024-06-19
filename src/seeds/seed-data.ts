@@ -1,5 +1,9 @@
 import { Gender, ProductStatus } from '~/common/enums';
 
+enum UserRole {
+  VENDOR = 'vendor',
+}
+
 const colorsSeedData = [
   { name: 'red' },
   { name: 'orange' },
@@ -96,6 +100,64 @@ const imageSeedData = [
     url: 'https://thumbs.dreamstime.com/z/colorful-makeup-hair-accessories-beauty-girl-portrait-32449784.jpg?ct=jpeg',
     description: 'accessory',
     created_at: new Date(2024, 4, 25),
+  },
+];
+
+const reviewsSeedData = [
+  {
+    id: 7,
+    review: 'Great service!',
+    review_user_id: 'vendor-1',
+    reviewed_user_id: 'vendor-2',
+    createdAt: new Date(),
+    updatedAt: new Date(),
+  },
+  {
+    id: 8,
+    review: 'Excellent products!',
+    review_user_id: 'vendor-2',
+    reviewed_user_id: 'vendor-1',
+    createdAt: new Date(),
+    updatedAt: new Date(),
+  },
+];
+
+const profilesSeedData = [
+  {
+    user_id: 'vendor-1',
+    role: UserRole.VENDOR,
+    phoneNumber: '123456789',
+    profilePhoto:
+      'https://thumbs.dreamstime.com/z/red-smiley-face-1839222.jpg?ct=jpeg',
+    addressLineOne: '123 Vendor Street',
+    addressLineTwo: '',
+    country: 'Country',
+    state: 'State',
+    city: 'City',
+    clothesSize: 'XL',
+    jeansSize: '34',
+    shoeSize: '10',
+    isRegistrationCompleted: true,
+    createdAt: new Date(),
+    updatedAt: new Date(),
+  },
+  {
+    user_id: 'vendor-2',
+    role: UserRole.VENDOR,
+    phoneNumber: '987654321',
+    profilePhoto:
+      'https://thumbs.dreamstime.com/z/beautiful-pleased-smiling-cartoon-brunette-girl-dark-chocolate-hair-portrait-isolated-white-background-beautiful-pleased-188685252.jpg?ct=jpeg',
+    addressLineOne: '456 Vendor Avenue',
+    addressLineTwo: 'Apt 200',
+    country: 'Country',
+    state: 'State',
+    city: 'City',
+    clothesSize: 'L',
+    jeansSize: '32',
+    shoeSize: '9',
+    isRegistrationCompleted: true,
+    createdAt: new Date(),
+    updatedAt: new Date(),
   },
 ];
 
@@ -252,8 +314,10 @@ export {
   categoriesSeedData,
   imageSeedData,
   materialsSeedData,
+  profilesSeedData,
   productsSeedData,
   sizesSeedData,
   stylesSeedData,
+  reviewsSeedData,
   usersSeedData,
 };
