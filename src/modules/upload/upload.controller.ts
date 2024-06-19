@@ -7,17 +7,14 @@ import {
   UseInterceptors,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { UploadService } from './upload.service';
-import { UsersService } from '../users/users.service';
 import { GetUser } from '~/common/decorators';
 import { User } from '~/entities';
 
+import { UploadService } from './upload.service';
+
 @Controller('upload')
 export class UploadController {
-  constructor(
-    private readonly uploadService: UploadService,
-    private readonly usersService: UsersService,
-  ) {}
+  constructor(private readonly uploadService: UploadService) {}
 
   @Post()
   @UseInterceptors(FileInterceptor('file'))
@@ -30,10 +27,6 @@ export class UploadController {
     )
     file: Express.Multer.File,
   ) {
-    const fileUrl = await this.uploadService.upload(
-      file.originalname,
-      file.buffer,
-    );
-    await this.usersService.updateProfilePhoto(user.id, fileUrl);
+    await this.uploadService.upload(file.originalname, file.buffer);
   }
 }

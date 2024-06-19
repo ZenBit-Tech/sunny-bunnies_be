@@ -66,7 +66,7 @@ export class UsersService {
     return this.usersRepository.findById(userId);
   }
 
-  async updateProfilePhoto(userId: string, photoUrl: string): Promise<void> {
+  async updateProfilePhoto(userId: string, photoUrl: string): Promise<User> {
     const user = await this.usersRepository.findById(userId);
 
     if (!user) {
@@ -76,5 +76,7 @@ export class UsersService {
     await this.usersRepository.updateProfile(user.id, {
       profilePhoto: photoUrl,
     });
+
+    return this.usersRepository.findById(userId);
   }
 }
