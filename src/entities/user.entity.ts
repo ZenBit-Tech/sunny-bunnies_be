@@ -4,9 +4,12 @@ import {
   Entity,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
+  OneToOne,
 } from 'typeorm';
 import { ApiProperty } from '@nestjs/swagger';
 import { Exclude } from 'class-transformer';
+import { type UserProfile } from './user-profile.entity';
+import { type UserCard } from './card.entity';
 
 @Entity({ name: 'users' })
 export class User {
@@ -41,4 +44,14 @@ export class User {
   @ApiProperty({ description: 'Updated date of user' })
   @UpdateDateColumn({ name: 'updated_at' })
   updatedAt: Date;
+
+  @OneToOne('UserCard', (card: UserCard) => card.user, {
+    cascade: true,
+  })
+  card: UserCard;
+
+  @OneToOne('UserProfile', (profile: UserProfile) => profile.user, {
+    cascade: true,
+  })
+  profile: UserProfile;
 }

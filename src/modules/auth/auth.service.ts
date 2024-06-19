@@ -112,16 +112,16 @@ export class AuthService {
 
     const existedUser = await this.usersService.findByEmail(email);
 
-    const { refreshToken, accessToken } = await this.generateTokens(email);
-
     if (existedUser) {
+      const { refreshToken, accessToken } = await this.generateTokens(
+        existedUser.id,
+      );
       return {
         user: existedUser,
         accessToken,
         refreshToken,
       };
     }
-
     const passwordSalt = await this.encryptService.generateSalt(
       USER_PASSWORD_SALT_ROUNDS,
     );
@@ -137,6 +137,8 @@ export class AuthService {
       passwordSalt,
       passwordHash,
     });
+
+    const { refreshToken, accessToken } = await this.generateTokens(user.id);
 
     return {
       user,
