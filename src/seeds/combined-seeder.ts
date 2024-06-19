@@ -8,9 +8,12 @@ import {
   ImageEntity,
   MaterialEntity,
   ProductEntity,
+  ProductVariantEntity,
   SizeEntity,
   StyleEntity,
+  User,
 } from '~/entities';
+
 import {
   colorsSeedData,
   categoriesSeedData,
@@ -20,6 +23,7 @@ import {
   brandsSeedData,
   materialsSeedData,
   productsSeedData,
+  usersSeedData,
 } from './seed-data';
 
 export class CombinedSeeder implements Seeder {
@@ -32,6 +36,7 @@ export class CombinedSeeder implements Seeder {
     await this.seedBrands(dataSource);
     await this.seedImages(dataSource);
     await this.seedMaterials(dataSource);
+    await this.seedUsers(dataSource);
     await this.seedProducts(dataSource);
     await this.enableForeignKeyChecks(dataSource);
   }
@@ -86,63 +91,83 @@ export class CombinedSeeder implements Seeder {
     await repository.insert(brandsSeedData);
   }
 
+  private async seedUsers(dataSource: DataSource): Promise<void> {
+    await dataSource.query('TRUNCATE TABLE users;');
+    const repository = dataSource.getRepository(User);
+    await repository.insert(usersSeedData);
+  }
+
   private async seedProducts(dataSource: DataSource): Promise<void> {
     await dataSource.query('TRUNCATE TABLE products;');
+    await dataSource.query('TRUNCATE TABLE product_variants;');
     const repository = dataSource.getRepository(ProductEntity);
+    const imageRepository = dataSource.getRepository(ImageEntity);
+    const variantRepository = dataSource.getRepository(ProductVariantEntity);
 
     const seedOperations = productsSeedData.map(async (product) => {
-      const image = dataSource
-        .getRepository(ImageEntity)
-        .findOneBy({ id: product.image_id });
-      const size = dataSource
-        .getRepository(SizeEntity)
-        .findOneBy({ id: product.size_id });
+      const { variants, image_ids: imageIds, ...productData } = product;
+
+      async function fetchImageById(
+        imageId: number,
+      ): Promise<ImageEntity | null> {
+        return imageRepository.findOne({ where: { id: imageId } });
+      }
+
+      const images = await Promise.all(imageIds.map(fetchImageById));
+
       const category = dataSource
         .getRepository(CategoryEntity)
-        .findOneBy({ id: product.category_id });
-      const color = dataSource
-        .getRepository(ColorEntity)
-        .findOneBy({ id: product.color_id });
+        .findOne({ where: { id: product.category_id } });
       const style = dataSource
         .getRepository(StyleEntity)
-        .findOneBy({ id: product.style_id });
+        .findOne({ where: { id: product.style_id } });
       const brand = dataSource
         .getRepository(BrandEntity)
-        .findOneBy({ id: product.brand_id });
+        .findOne({ where: { id: product.brand_id } });
       const material = dataSource
         .getRepository(MaterialEntity)
-        .findOneBy({ id: product.material_id });
+        .findOne({ where: { id: product.material_id } });
+      const user = dataSource
+        .getRepository(User)
+        .findOne({ where: { id: product.user_id } });
 
       const [
-        resolvedImage,
-        resolvedSize,
         resolvedCategory,
-        resolvedColor,
         resolvedStyle,
         resolvedBrand,
         resolvedMaterial,
-      ] = await Promise.all([
-        image,
-        size,
-        category,
-        color,
-        style,
-        brand,
-        material,
-      ]);
+        resolvedUser,
+      ] = await Promise.all([category, style, brand, material, user]);
 
-      await repository.insert({
-        ...product,
-        image: resolvedImage,
-        size: resolvedSize,
+      const insertedProduct = await repository.save({
+        ...productData,
+        images,
         category: resolvedCategory,
-        color: resolvedColor,
         style: resolvedStyle,
         brand: resolvedBrand,
+        user: resolvedUser,
         material: resolvedMaterial,
         minPrice: product.min_price,
         maxPrice: product.max_price,
       });
+
+      const variantOperations = variants.map(async (variant) => {
+        const size = await dataSource
+          .getRepository(SizeEntity)
+          .findOne({ where: { id: variant.size_id } });
+        const color = await dataSource
+          .getRepository(ColorEntity)
+          .findOne({ where: { id: variant.color_id } });
+
+        return variantRepository.save({
+          product: insertedProduct,
+          size,
+          color,
+          quantity: variant.quantity,
+        });
+      });
+
+      await Promise.all(variantOperations);
     });
 
     await Promise.all(seedOperations);

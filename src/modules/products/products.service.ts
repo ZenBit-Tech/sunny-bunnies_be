@@ -15,4 +15,8 @@ export class ProductsService {
   async findAll(query: GetProductsQueryDto): Promise<ProductEntity[]> {
     return this.productsRepository.findAll(query);
   }
+
+  async findById(id: number): Promise<ProductEntity> {
+    return this.productsRepository.findById(id);
+  }
 }
