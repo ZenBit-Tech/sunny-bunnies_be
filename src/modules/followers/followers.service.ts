@@ -10,19 +10,15 @@ export class FollowersService {
     this.followersRepository = followersRepository;
   }
 
+  async checkFollowStatus(userId: string, targetId: string): Promise<boolean> {
+    return this.followersRepository.checkFollowStatus(userId, targetId);
+  }
+
   async follow(userId: string, targetId: string): Promise<User> {
     return this.followersRepository.follow(userId, targetId);
   }
 
   async unFollow(userId: string, targetId: string): Promise<User> {
     return this.followersRepository.unFollow(userId, targetId);
-  }
-
-  async getFollowers(userId: string): Promise<User[]> {
-    return this.followersRepository.getFollowers(userId);
-  }
-
-  async getFollowing(userId: string): Promise<User[]> {
-    return this.followersRepository.getFollowing(userId);
   }
 }

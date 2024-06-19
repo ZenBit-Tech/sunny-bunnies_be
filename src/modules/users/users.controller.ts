@@ -16,8 +16,8 @@ export class UsersController {
 
   @Get('current')
   @HttpCode(200)
-  getCurrent(@GetUser() user: User): User {
-    return user;
+  getCurrent(@GetUser() user: User): Promise<User> {
+    return this.usersService.findById(user.id);
   }
 
   @Get('vendor/:id')

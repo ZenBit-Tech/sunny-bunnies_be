@@ -1,11 +1,11 @@
 import { Controller, Delete, Get, HttpCode, Param, Post } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { FollowersService } from './followers.service';
-import { GetUser, PublicRoute } from '~/common/decorators';
+import { GetUser } from '~/common/decorators';
 import { User } from '~/entities';
 
 @ApiTags('Followers')
-@Controller('followers')
+@Controller('users')
 export class FollowersController {
   private readonly followersService: FollowersService;
 
@@ -13,37 +13,30 @@ export class FollowersController {
     this.followersService = followersService;
   }
 
-  @PublicRoute()
-  @Post('follow/:targetId')
+  @Get('check-follow-status/:userId')
+  @HttpCode(200)
+  async checkFollowStatus(
+    @GetUser() currentUser: User,
+    @Param('userId') userId: string,
+  ): Promise<boolean> {
+    return this.followersService.checkFollowStatus(currentUser.id, userId);
+  }
+
+  @Post('follow/:userId')
   @HttpCode(200)
   async follow(
     @GetUser() currentUser: User,
-    @Param('targetId') targetId: string,
+    @Param('userId') userId: string,
   ): Promise<User> {
-    return this.followersService.follow(currentUser.id, targetId);
+    return this.followersService.follow(currentUser.id, userId);
   }
 
-  @PublicRoute()
   @HttpCode(200)
-  @Delete('unfollow/:targetId')
+  @Delete('follow/:userId')
   async unFollow(
     @GetUser() currentUser: User,
-    @Param('targetId') targetId: string,
+    @Param('userId') userId: string,
   ): Promise<User> {
-    return this.followersService.unFollow(currentUser.id, targetId);
-  }
-
-  @PublicRoute()
-  @Get('followers')
-  @HttpCode(200)
-  async getFollowers(@GetUser() currentUser: User): Promise<User[]> {
-    return this.followersService.getFollowers(currentUser.id);
-  }
-
-  @PublicRoute()
-  @Get('following')
-  @HttpCode(200)
-  async getFollowing(@GetUser() currentUser: User): Promise<User[]> {
-    return this.followersService.getFollowing(currentUser.id);
+    return this.followersService.unFollow(currentUser.id, userId);
   }
 }

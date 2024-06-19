@@ -8,6 +8,7 @@ import { AuthModule } from './modules/auth/auth.module';
 import { AuthGuard } from './modules/auth/guards';
 import { ProductsModule } from './modules/products/products.module';
 import { UsersModule } from './modules/users/users.module';
+import { FollowersModule } from './modules/followers/followers.module';
 
 @Module({
   imports: [
@@ -22,6 +23,7 @@ import { UsersModule } from './modules/users/users.module';
       inject: [ConfigService],
     }),
     TestModule,
+    FollowersModule,
     ProductsModule,
     AuthModule,
     UsersModule,
