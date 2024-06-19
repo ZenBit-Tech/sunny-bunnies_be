@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { DataSource, Repository } from 'typeorm';
 
-import { User, UserProfile, UserCard } from '~/entities';
+import { User, UserProfile, UserCard, UsersRating } from '~/entities';
 import { UserCardDto, UserProfileUpdateDto } from './dto';
 import { EncryptService } from '../auth/encrypt.service';
 
@@ -29,13 +29,40 @@ export class UsersRepository extends Repository<User> {
     });
   }
 
-  async findVendorById(id: string): Promise<User> {
-    return this.findOne({
-      where: {
-        id,
-      },
-      relations: ['products'],
-    });
+  async findVendorById(
+    id: string,
+  ): Promise<(User & { averageRating: number }) | null> {
+    const vendor = await this.createQueryBuilder('user')
+      .leftJoinAndSelect('user.products', 'products')
+      .leftJoinAndSelect('products.images', 'images')
+      .leftJoinAndSelect('user.reviewsReceived', 'reviewsReceived')
+      .leftJoinAndSelect('reviewsReceived.reviewUser', 'reviewUser')
+      .leftJoinAndSelect('reviewUser.profile', 'reviewUserProfile')
+      .leftJoinAndMapOne(
+        'reviewsReceived.rating',
+        UsersRating,
+        'rating',
+        'rating.ratingUser = reviewsReceived.reviewUser AND rating.ratedUser = reviewsReceived.reviewedUser',
+      )
+      .addSelect(['reviewUserProfile.profilePhoto'])
+      .leftJoinAndSelect('user.profile', 'profile')
+      .where('user.id = :id', { id })
+      .getOne();
+
+    if (vendor) {
+      const averageRating = await this.createQueryBuilder()
+        .select('AVG(rating.rating)', 'averageRating')
+        .from(UsersRating, 'rating')
+        .where('rating.ratedUser.id = :id', { id })
+        .getRawOne();
+
+      return {
+        ...vendor,
+        averageRating: averageRating.averageRating,
+      };
+    }
+
+    return null;
   }
 
   async createOne(
