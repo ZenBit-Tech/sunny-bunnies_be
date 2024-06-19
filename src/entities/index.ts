@@ -1,3 +1,4 @@
+export { UserProfile } from './user-profile.entity';
 export { TestEntity } from './test.entity';
 export { BrandEntity } from './brand.entity';
 export { CategoryEntity } from './category.entity';
@@ -9,3 +10,4 @@ export { ProductVariantEntity } from './product-variant.entity';
 export { SizeEntity } from './size.entity';
 export { StyleEntity } from './style.entity';
 export { User } from './user.entity';
+export { UserCard } from './card.entity';

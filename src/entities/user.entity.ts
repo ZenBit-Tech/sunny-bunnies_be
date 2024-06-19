@@ -5,11 +5,14 @@ import {
   OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
+  OneToOne,
 } from 'typeorm';
 
 import { ApiProperty } from '@nestjs/swagger';
 import { Exclude } from 'class-transformer';
 import { type ProductEntity } from './product.entity';
+import { type UserProfile } from './user-profile.entity';
+import { type UserCard } from './card.entity';
 
 @Entity({ name: 'users' })
 export class User {
@@ -47,4 +50,14 @@ export class User {
 
   @OneToMany('ProductEntity', (product: ProductEntity) => product.user)
   products: ProductEntity[];
+
+  @OneToOne('UserCard', (card: UserCard) => card.user, {
+    cascade: true,
+  })
+  card: UserCard;
+
+  @OneToOne('UserProfile', (profile: UserProfile) => profile.user, {
+    cascade: true,
+  })
+  profile: UserProfile;
 }
