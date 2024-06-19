@@ -9,12 +9,14 @@ import {
   UpdateDateColumn,
   OneToOne,
 } from 'typeorm';
-
 import { ApiProperty } from '@nestjs/swagger';
 import { Exclude } from 'class-transformer';
-import { type ProductEntity } from './product.entity';
-import { type UserProfile } from './user-profile.entity';
+
 import { type UserCard } from './card.entity';
+import { type ProductEntity } from './product.entity';
+import { type UsersRating } from './users-rating.entity';
+import { type UsersReview } from './users-review.entity';
+import { type UserProfile } from './user-profile.entity';
 
 @Entity({ name: 'users' })
 export class User {
@@ -79,4 +81,16 @@ export class User {
     cascade: true,
   })
   profile: UserProfile;
+
+  @OneToMany('UsersRating', (rating: UsersRating) => rating.ratedUser)
+  ratingsReceived: UsersRating[];
+
+  @OneToMany('UsersRating', (rating: UsersRating) => rating.ratingUser)
+  ratingsGiven: UsersRating[];
+
+  @OneToMany('UsersReview', (review: UsersReview) => review.reviewedUser)
+  reviewsReceived: UsersReview[];
+
+  @OneToMany('UsersReview', (review: UsersReview) => review.reviewUser)
+  reviewsGiven: UsersReview[];
 }
