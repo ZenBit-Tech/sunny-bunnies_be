@@ -8,6 +8,7 @@ import { AuthModule } from './modules/auth/auth.module';
 import { AuthGuard } from './modules/auth/guards';
 import { ProductsModule } from './modules/products/products.module';
 import { UsersModule } from './modules/users/users.module';
+import { FiltersModule } from './modules/filters/filters.module';
 import { FollowersModule } from './modules/followers/followers.module';
 
 @Module({
@@ -27,6 +28,7 @@ import { FollowersModule } from './modules/followers/followers.module';
     ProductsModule,
     AuthModule,
     UsersModule,
+    FiltersModule,
   ],
   controllers: [],
   providers: [

@@ -68,7 +68,7 @@ export class ProductsRepository extends Repository<ProductEntity> {
     }
 
     if (query.minPrice) {
-      qb.andWhere('product.min_price >= :min_price', {
+      qb.andWhere('product.min_price >= :minPrice', {
         minPrice: query.minPrice,
       });
     }
