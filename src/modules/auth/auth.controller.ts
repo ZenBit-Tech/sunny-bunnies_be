@@ -9,6 +9,8 @@ import { ApiTags } from '@nestjs/swagger';
 import { AuthService } from './auth.service';
 import {
   AuthGenerateAccess,
+  AuthResetPasswordDto,
+  AuthRestorePasswordDto,
   AuthSignInDto,
   AuthSignUpDto,
   AuthVerifyEmailDto,
@@ -77,5 +79,23 @@ export class AuthController {
   @Post('verify-otp')
   async verifyOtp(@Body() authVerifyOtpDto: AuthVerifyOtpDto): Promise<void> {
     return this.authService.verifyOtp(authVerifyOtpDto);
+  }
+
+  @PublicRoute()
+  @HttpCode(200)
+  @Post('restore-password')
+  async restorePassword(
+    @Body() authRestorePasswordOtpCode: AuthRestorePasswordDto,
+  ): Promise<void> {
+    return this.authService.restorePassword(authRestorePasswordOtpCode);
+  }
+
+  @PublicRoute()
+  @HttpCode(200)
+  @Post('reset-password')
+  async resetPassword(
+    @Body() authResetPasswordDto: AuthResetPasswordDto,
+  ): Promise<void> {
+    return this.authService.resetPassword(authResetPasswordDto);
   }
 }

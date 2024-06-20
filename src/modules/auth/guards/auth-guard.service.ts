@@ -5,7 +5,7 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
-import { TokenService } from '../token.service';
+import { Token } from '~/utils';
 import { AuthPayloadToken } from '~/common/types';
 import { UsersService } from '../../users/users.service';
 
@@ -13,13 +13,13 @@ import { UsersService } from '../../users/users.service';
 export class AuthGuard implements CanActivate {
   private readonly reflector: Reflector;
 
-  private readonly tokenService: TokenService;
+  private readonly tokenService: Token;
 
   private readonly usersService: UsersService;
 
   constructor(
     reflector: Reflector,
-    tokenService: TokenService,
+    tokenService: Token,
     usersService: UsersService,
   ) {
     this.reflector = reflector;
