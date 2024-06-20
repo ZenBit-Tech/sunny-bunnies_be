@@ -33,7 +33,12 @@ export class UsersRepository extends Repository<User> {
     id: string,
   ): Promise<(User & { averageRating: number }) | null> {
     const vendor = await this.createQueryBuilder('user')
-      .leftJoinAndSelect('user.products', 'products')
+      .leftJoinAndSelect(
+        'user.products',
+        'products',
+        'products.activityStatus = :activeStatus',
+        { activeStatus: 'active' },
+      )
       .leftJoinAndSelect('products.images', 'images')
       .leftJoinAndSelect('user.reviewsReceived', 'reviewsReceived')
       .leftJoinAndSelect('reviewsReceived.reviewUser', 'reviewUser')

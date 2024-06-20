@@ -102,8 +102,8 @@ erDiagram
   }
 
   user_followers {
-    int user_id PK FK
-    int follower_id PK FK
+    int user_id PK,FK
+    int follower_id PK,FK
   }
 
   users  ||--|| user_profiles : user_id
@@ -161,8 +161,9 @@ erDiagram
     int id PK
     varchar name
     varchar description
-    gender 
-    status 
+    enum gender 
+    enum  status
+    enum activityStatus
     decimal priceFrom
     decimal priceTo
     dateTime createdAt

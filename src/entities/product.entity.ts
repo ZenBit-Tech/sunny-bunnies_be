@@ -9,7 +9,7 @@ import {
 } from 'typeorm';
 import { ApiProperty } from '@nestjs/swagger';
 
-import { Gender, ProductStatus } from '~/common/enums';
+import { Gender, ProductActivityStatus, ProductStatus } from '~/common/enums';
 import {
   type BrandEntity,
   type CategoryEntity,
@@ -59,6 +59,19 @@ export class ProductEntity {
   })
   @Column({ type: 'enum', enum: ProductStatus })
   status: ProductStatus;
+
+  @ApiProperty({
+    type: String,
+    enum: ProductActivityStatus,
+    description:
+      'This is the activity status of the product (active, inactive, rejected)',
+  })
+  @Column({
+    name: 'activity_status',
+    type: 'enum',
+    enum: ProductActivityStatus,
+  })
+  activityStatus: ProductActivityStatus;
 
   @ApiProperty({
     type: Number,

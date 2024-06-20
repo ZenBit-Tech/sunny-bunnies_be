@@ -1,4 +1,4 @@
-import { Gender, ProductStatus } from '~/common/enums';
+import { Gender, ProductActivityStatus, ProductStatus } from '~/common/enums';
 
 enum UserRole {
   VENDOR = 'vendor',
@@ -106,7 +106,8 @@ const imageSeedData = [
 const reviewsSeedData = [
   {
     id: 7,
-    review: 'Great service!',
+    review:
+      'This vendor provides outstanding service and high-quality products. I am thoroughly impressed with their professionalism and attention to detail. From start to finish, my experience with them has been nothing short of exceptional. I highly recommend their services to anyone looking for reliability and top-notch performance.',
     review_user_id: 'vendor-1',
     reviewed_user_id: 'vendor-2',
     createdAt: new Date(),
@@ -114,7 +115,39 @@ const reviewsSeedData = [
   },
   {
     id: 8,
-    review: 'Excellent products!',
+    review: `I have been consistently amazed by the excellent products offered by this vendor. Their attention to quality and customer satisfaction is truly commendable. Each time I order from them, I am met with products that exceed my expectations. I can confidently say that choosing this vendor was one of the best decisions I've made for my business.`,
+    review_user_id: 'vendor-2',
+    reviewed_user_id: 'vendor-1',
+    createdAt: new Date(),
+    updatedAt: new Date(),
+  },
+  {
+    id: 9,
+    review: `Great customer service and fast delivery. Their products are exactly as described and of excellent quality. I will definitely be ordering from them again!`,
+    review_user_id: 'vendor-2',
+    reviewed_user_id: 'vendor-1',
+    createdAt: new Date(),
+    updatedAt: new Date(),
+  },
+  {
+    id: 10,
+    review: `I am very pleased with my purchase. The vendor was responsive and helpful throughout the transaction. The product arrived on time and in perfect condition. Highly recommended!`,
+    review_user_id: 'vendor-2',
+    reviewed_user_id: 'vendor-1',
+    createdAt: new Date(),
+    updatedAt: new Date(),
+  },
+  {
+    id: 11,
+    review: `Top-notch service! The vendor exceeded my expectations with their prompt communication and high-quality products. I will definitely be a returning customer.`,
+    review_user_id: 'vendor-2',
+    reviewed_user_id: 'vendor-1',
+    createdAt: new Date(),
+    updatedAt: new Date(),
+  },
+  {
+    id: 12,
+    review: `Excellent products!`,
     review_user_id: 'vendor-2',
     reviewed_user_id: 'vendor-1',
     createdAt: new Date(),
@@ -164,7 +197,7 @@ const profilesSeedData = [
 const usersSeedData = [
   {
     id: 'vendor-1',
-    name: 'Vendor One',
+    name: 'Joe Dou',
     email: 'vendor1@example.com',
     passwordHash: 'hashedpassword1',
     passwordSalt: 'saltsalt1',
@@ -173,7 +206,7 @@ const usersSeedData = [
   },
   {
     id: 'vendor-2',
-    name: 'Vendor Two',
+    name: 'Ben Gran',
     email: 'vendor2@example.com',
     passwordHash: 'hashedpassword2',
     passwordSalt: 'saltsalt2',
@@ -189,6 +222,7 @@ const productsSeedData = [
     quantity: 10,
     gender: Gender.FEMALE,
     status: ProductStatus.BOTH,
+    activity_status: ProductActivityStatus.ACTIVE,
     min_price: 100,
     max_price: 150,
     image_ids: [1],
@@ -211,6 +245,7 @@ const productsSeedData = [
     quantity: 2,
     gender: Gender.MALE,
     status: ProductStatus.BOTH,
+    activity_status: ProductActivityStatus.ACTIVE,
     min_price: 200,
     max_price: 250,
     image_ids: [2],
@@ -232,6 +267,7 @@ const productsSeedData = [
     quantity: 4,
     gender: Gender.FEMALE,
     status: ProductStatus.BOTH,
+    activity_status: ProductActivityStatus.ACTIVE,
     min_price: 200,
     max_price: 220,
     image_ids: [3, 4, 5],
@@ -254,9 +290,10 @@ const productsSeedData = [
     quantity: 2,
     gender: Gender.MALE,
     status: ProductStatus.BOTH,
+    activity_status: ProductActivityStatus.ACTIVE,
     min_price: 150,
     max_price: 170,
-    image_ids: [5],
+    image_ids: [6],
     category_id: 4,
     style_id: 2,
     brand_id: 4,
@@ -276,6 +313,7 @@ const productsSeedData = [
     quantity: 2,
     gender: Gender.FEMALE,
     status: ProductStatus.FOR_RENT,
+    activity_status: ProductActivityStatus.ACTIVE,
     min_price: 250,
     max_price: 270,
     image_ids: [7],
@@ -294,6 +332,7 @@ const productsSeedData = [
     quantity: 2,
     gender: Gender.FEMALE,
     status: ProductStatus.FOR_SALE,
+    activity_status: ProductActivityStatus.ACTIVE,
     min_price: 50,
     max_price: 70,
     image_ids: [8],
