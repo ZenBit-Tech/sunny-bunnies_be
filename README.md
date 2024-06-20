@@ -54,6 +54,38 @@ erDiagram
     dateTime updated_at
   }
 
+  user_profiles {
+    int id PK
+    int user_id FK
+    enum role
+    varchar phone_number
+    varchar profile_photo
+    varchar address_line_1
+    varchar address_line_2
+    varchar country
+    varchar state
+    varchar city
+    varchar clothes_size
+    varchar jeans_size
+    varchar shoe_size
+    boolean registration_completed
+    dateTime created_at
+    dateTime updated_at
+  }
+
+  user_cards {
+    int id PK
+    int user_id FK
+    varchar card_number
+    varchar expire_date
+    varchar cvv_code
+    dateTime created_at
+    dateTime updated_at
+  }
+
+  users  ||--|| user_profiles : user_id
+  users  ||--|| user_cards : user_id
+
   brands {
     int id PK
     varchar name
@@ -91,24 +123,35 @@ erDiagram
     varchar category
   }
 
+  product_variants {
+    int id PK
+    int quantity
+  }
+
   PRODUCTS {
     int id PK
     varchar name
     varchar description
     int quantity
-    gender 
-    status 
+    gender
+    status
     decimal priceFrom
     decimal priceTo
     dateTime createdAt
     dateTime updatedAt
   }
 
-  PRODUCTS ||--o{ PRODUCT_IMAGES : "has"
-  PRODUCTS ||--o{ SIZES : "has"
-  PRODUCTS ||--o{ CATEGORIES : "has"
-  PRODUCTS ||--o{ COLORS : "has"
-  PRODUCTS ||--o{ STYLES : "has"
-  PRODUCTS ||--o{ BRANDS : "has"
-  PRODUCTS ||--o{ MATERIALS : "has"
+  products ||--o{ product_images : "has"
+  products ||--o{ categories : "has"
+  products ||--o{ styles : "has"
+  products ||--o{ brands : "has"
+  products ||--o{ materials : "has"
+  products ||--o{ product_variants : "has"
+  products }o--|| users : "belongs to"
+
+  users ||--o{ products : "has"
+
+  product_variants }o--|| products : "belongs to"
+  product_variants }o--|| sizes : "belongs to"
+  product_variants }o--|| colors : "belongs to"
 ```

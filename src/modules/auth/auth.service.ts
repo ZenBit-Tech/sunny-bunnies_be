@@ -126,9 +126,10 @@ export class AuthService {
 
     const existedUser = await this.usersService.findByEmail(email);
 
-    const { refreshToken, accessToken } = await this.generateTokens(email);
-
     if (existedUser) {
+      const { refreshToken, accessToken } = await this.generateTokens(
+        existedUser.id,
+      );
       return {
         user: existedUser,
         accessToken,
@@ -144,6 +145,8 @@ export class AuthService {
       email,
       password: userRandomPassword,
     });
+
+    const { refreshToken, accessToken } = await this.generateTokens(user.id);
 
     return {
       user,

@@ -1,10 +1,16 @@
-import { ConflictException, Injectable } from '@nestjs/common';
+import {
+  ConflictException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { UsersRepository } from './users.repository';
 import { User } from '~/entities';
 import {
   UserCreateRequestDto,
   UpdateUserDto,
   UserUpdatePasswordRequestDto,
+  UserCardDto,
+  UserProfileUpdateDto,
 } from './dto';
 import { USER_PASSWORD_SALT_ROUNDS } from '~/common/constants/constants';
 import { Encrypt } from '~/utils/encrypt.package';
@@ -85,5 +91,32 @@ export class UsersService {
       passwordSalt,
       passwordHash,
     });
+  }
+
+  async updateCard(userId: string, updateData: UserCardDto): Promise<User> {
+    const user = await this.usersRepository.findById(userId);
+
+    if (!user) {
+      throw new NotFoundException('User not found');
+    }
+
+    await this.usersRepository.updateCard(user, updateData);
+
+    return this.usersRepository.findById(userId);
+  }
+
+  async updateProfile(
+    userId: string,
+    updateProfileDto: UserProfileUpdateDto,
+  ): Promise<User> {
+    const user = await this.usersRepository.findById(userId);
+
+    if (!user) {
+      throw new NotFoundException('User not found');
+    }
+
+    await this.usersRepository.updateProfile(user.id, updateProfileDto);
+
+    return this.usersRepository.findById(userId);
   }
 }

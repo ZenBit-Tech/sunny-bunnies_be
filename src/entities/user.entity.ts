@@ -2,11 +2,17 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
+  OneToOne,
 } from 'typeorm';
+
 import { ApiProperty } from '@nestjs/swagger';
 import { Exclude } from 'class-transformer';
+import { type ProductEntity } from './product.entity';
+import { type UserProfile } from './user-profile.entity';
+import { type UserCard } from './card.entity';
 
 @Entity({ name: 'users' })
 export class User {
@@ -20,11 +26,11 @@ export class User {
   email: string;
 
   @Exclude()
-  @Column()
+  @Column({ name: 'password_hash' })
   passwordHash: string;
 
   @Exclude()
-  @Column()
+  @Column({ name: 'password_salt' })
   passwordSalt: string;
 
   @Column({ type: 'boolean', default: false, name: 'is_verified' })
@@ -41,4 +47,17 @@ export class User {
   @ApiProperty({ description: 'Updated date of user' })
   @UpdateDateColumn({ name: 'updated_at' })
   updatedAt: Date;
+
+  @OneToMany('ProductEntity', (product: ProductEntity) => product.user)
+  products: ProductEntity[];
+
+  @OneToOne('UserCard', (card: UserCard) => card.user, {
+    cascade: true,
+  })
+  card: UserCard;
+
+  @OneToOne('UserProfile', (profile: UserProfile) => profile.user, {
+    cascade: true,
+  })
+  profile: UserProfile;
 }
