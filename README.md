@@ -60,8 +60,8 @@ erDiagram
     enum role
     varchar phone_number
     varchar profile_photo
-    varchar address_line_1
-    varchar address_line_2
+    varchar address_line_one
+    varchar address_line_two
     varchar country
     varchar state
     varchar city

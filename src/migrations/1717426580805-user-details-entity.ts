@@ -7,7 +7,7 @@ class CreateUserProfilesTable1716809999999 implements MigrationInterface {
         name: 'user_profiles',
         columns: [
           {
-            name: 'profile_id',
+            name: 'id',
             type: 'varchar',
             isPrimary: true,
           },
@@ -31,11 +31,11 @@ class CreateUserProfilesTable1716809999999 implements MigrationInterface {
             isNullable: true,
           },
           {
-            name: 'address_line_1',
+            name: 'address_line_one',
             type: 'varchar',
           },
           {
-            name: 'address_line_2',
+            name: 'address_line_two',
             type: 'varchar',
           },
           {

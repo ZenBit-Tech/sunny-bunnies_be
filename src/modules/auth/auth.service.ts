@@ -34,6 +34,8 @@ export class AuthService {
 
   private readonly mailerService: MailerService;
 
+  private readonly adminRole = 'admin';
+
   constructor(
     usersService: UsersService,
     encryptService: EncryptService,
@@ -51,8 +53,8 @@ export class AuthService {
 
     const user = await this.usersService.findByEmail(email);
 
-    if (!user) {
-      throw new ConflictException('User with this email does not exist');
+    if (!user || user.profile.role === this.adminRole) {
+      throw new ConflictException('Invalid email or password');
     }
 
     const hasSamePassword = await this.encryptService.compare({
@@ -62,7 +64,35 @@ export class AuthService {
     });
 
     if (!hasSamePassword) {
-      throw new ConflictException('Password is not correct');
+      throw new ConflictException('Invalid email or password');
+    }
+
+    const { refreshToken, accessToken } = await this.generateTokens(user.id);
+
+    return {
+      user,
+      accessToken,
+      refreshToken,
+    };
+  }
+
+  async adminSignIn(authSignInDto: AuthSignInDto): Promise<AuthResponse> {
+    const { email, password } = authSignInDto;
+
+    const user = await this.usersService.findByEmail(email);
+
+    if (!user || user.profile.role !== this.adminRole) {
+      throw new ConflictException('Invalid email or password');
+    }
+
+    const hasSamePassword = await this.encryptService.compare({
+      data: password,
+      salt: user.passwordSalt,
+      passwordHash: user.passwordHash,
+    });
+
+    if (!hasSamePassword) {
+      throw new ConflictException('Invalid email or password');
     }
 
     const { refreshToken, accessToken } = await this.generateTokens(user.id);
