@@ -4,6 +4,7 @@ import {
   Get,
   HttpCode,
   MaxFileSizeValidator,
+  Param,
   ParseFilePipe,
   Patch,
   Post,
@@ -13,7 +14,7 @@ import {
 import { ApiTags } from '@nestjs/swagger';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { UsersService } from './users.service';
-import { GetUser } from '~/common/decorators';
+import { GetUser, PublicRoute } from '~/common/decorators';
 import { User } from '~/entities';
 import { UserProfileUpdateDto, UserCardDto } from './dto/index';
 import { UploadService } from '../upload/upload.service';
@@ -32,8 +33,15 @@ export class UsersController {
 
   @Get('current')
   @HttpCode(200)
-  getCurrent(@GetUser() user: User): User {
-    return user;
+  getCurrent(@GetUser() user: User): Promise<User> {
+    return this.usersService.findById(user.id);
+  }
+
+  @PublicRoute()
+  @Get('vendor/:id')
+  @HttpCode(200)
+  getVendorById(@Param() param: { id: string }): Promise<User> {
+    return this.usersService.findVendorById(param.id);
   }
 
   @Patch('update')

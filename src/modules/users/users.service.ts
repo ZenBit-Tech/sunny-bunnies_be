@@ -20,6 +20,10 @@ export class UsersService {
     return this.usersRepository.findById(userId);
   }
 
+  async findVendorById(userId: string): Promise<User> {
+    return this.usersRepository.findVendorById(userId);
+  }
+
   async createOne(createUserDto: CreateUserDto): Promise<User> {
     const { name, email, passwordHash, passwordSalt } = createUserDto;
 
