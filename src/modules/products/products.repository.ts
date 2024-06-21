@@ -17,35 +17,35 @@ export class ProductsRepository extends Repository<ProductEntity> {
     super(ProductEntity, dataSource.createEntityManager());
   }
 
-  async findAll(query: GetProductsQueryDto): Promise<ProductEntity[]> {
-    const qb = this.createQueryBuilder('product')
-      .leftJoinAndSelect('product.image', 'image')
-      .leftJoinAndSelect('product.size', 'size')
+  async findById(id: number): Promise<ProductEntity> {
+    const product = await this.createQueryBuilder('product')
+      .leftJoinAndSelect('product.images', 'images')
       .leftJoinAndSelect('product.category', 'category')
-      .leftJoinAndSelect('product.color', 'color')
       .leftJoinAndSelect('product.style', 'style')
       .leftJoinAndSelect('product.brand', 'brand')
       .leftJoinAndSelect('product.material', 'material')
-      .select([
-        'product.id as id',
-        'product.name as name',
-        'product.min_price as minPrice',
-        'product.max_price as maxPrice',
-        'product.created_at as createdAt',
-        'image.url as imageUrl',
-        'size.name as sizeName',
-        'category.name as categoryName',
-        'color.name as colorName',
-        'style.name as styleName',
-        'brand.name as brandName',
-        'material.name as materialName',
-        'product.gender as gender',
-      ]);
+      .leftJoinAndSelect('product.variants', 'variants')
+      .leftJoinAndSelect('product.user', 'user')
+      .leftJoinAndSelect('variants.size', 'size')
+      .leftJoinAndSelect('variants.color', 'color')
+      .where('product.id = :id', { id })
+      .getOne();
 
-    const limit = query.limit || PRODUCTS_LIMIT;
-    const offset = query.offset || PRODUCTS_OFFSET;
+    if (!product) {
+      throw new Error('Product not found');
+    }
 
-    qb.limit(limit).offset(offset);
+    return product;
+  }
+
+  async findAll(query: GetProductsQueryDto): Promise<ProductEntity[]> {
+    const qb = this.createQueryBuilder('product')
+      .leftJoinAndSelect('product.images', 'images')
+      .leftJoinAndSelect('product.category', 'category')
+      .leftJoinAndSelect('product.style', 'style')
+      .leftJoinAndSelect('product.brand', 'brand')
+      .leftJoinAndSelect('product.material', 'material')
+      .leftJoinAndSelect('product.variants', 'variants');
 
     if (query.category) {
       qb.andWhere('category.name = :categoryName', {
@@ -68,7 +68,7 @@ export class ProductsRepository extends Repository<ProductEntity> {
     }
 
     if (query.minPrice) {
-      qb.andWhere('product.min_price >= :min_price', {
+      qb.andWhere('product.min_price >= :minPrice', {
         minPrice: query.minPrice,
       });
     }
@@ -105,6 +105,11 @@ export class ProductsRepository extends Repository<ProductEntity> {
       });
     }
 
-    return qb.getRawMany();
+    const limit = query.limit || PRODUCTS_LIMIT;
+    const offset = query.offset || PRODUCTS_OFFSET;
+
+    qb.take(limit).skip(offset);
+
+    return qb.getMany();
   }
 }

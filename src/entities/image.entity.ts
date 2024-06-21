@@ -1,10 +1,14 @@
 import {
   Column,
   Entity,
+  JoinColumn,
+  ManyToOne,
   PrimaryGeneratedColumn,
   CreateDateColumn,
 } from 'typeorm';
 import { ApiProperty } from '@nestjs/swagger';
+
+import { type ProductEntity } from './product.entity';
 
 @Entity({ name: 'product_images' })
 export class ImageEntity {
@@ -28,6 +32,12 @@ export class ImageEntity {
   })
   @Column({ type: 'text' })
   description: string;
+
+  @ManyToOne('ProductEntity', (product: ProductEntity) => product.images, {
+    onDelete: 'CASCADE',
+  })
+  @JoinColumn({ name: 'product_id' })
+  product: ProductEntity;
 
   @ApiProperty({
     type: String,
