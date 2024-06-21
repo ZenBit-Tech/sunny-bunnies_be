@@ -8,7 +8,7 @@ export class FollowersRepository extends Repository<User> {
     super(User, dataSource.createEntityManager());
   }
 
-  async checkFollowStatus(userId: string, targetId: string): Promise<boolean> {
+  async isFollower(userId: string, targetId: string): Promise<boolean> {
     const user = await this.findOne({
       where: { id: userId },
       relations: ['following'],

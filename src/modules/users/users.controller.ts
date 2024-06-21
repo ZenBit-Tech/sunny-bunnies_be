@@ -1,7 +1,7 @@
 import { Body, Controller, Get, HttpCode, Param, Patch } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { UsersService } from './users.service';
-import { GetUser } from '~/common/decorators';
+import { GetUser, PublicRoute } from '~/common/decorators';
 import { User } from '~/entities';
 import { UserProfileUpdateDto, UserCardDto } from './dto/index';
 
@@ -20,6 +20,7 @@ export class UsersController {
     return this.usersService.findById(user.id);
   }
 
+  @PublicRoute()
   @Get('vendor/:id')
   @HttpCode(200)
   getVendorById(@Param() param: { id: string }): Promise<User> {

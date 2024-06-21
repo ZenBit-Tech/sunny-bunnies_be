@@ -11,7 +11,7 @@ export class FollowersService {
   }
 
   async checkFollowStatus(userId: string, targetId: string): Promise<boolean> {
-    return this.followersRepository.checkFollowStatus(userId, targetId);
+    return this.followersRepository.isFollower(userId, targetId);
   }
 
   async follow(userId: string, targetId: string): Promise<User> {
