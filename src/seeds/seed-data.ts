@@ -12,7 +12,6 @@ const colorsSeedData = [
   { name: 'blue' },
   { name: 'white' },
   { name: 'black' },
-  { name: 'Other' },
 ];
 
 const categoriesSeedData = [
@@ -25,12 +24,11 @@ const categoriesSeedData = [
 ];
 
 const sizesSeedData = [
-  { name: 'xs' },
-  { name: 's' },
-  { name: 'm' },
-  { name: 'l' },
-  { name: 'xl' },
-  { name: 'other' },
+  { name: 'XS' },
+  { name: 'S' },
+  { name: 'M' },
+  { name: 'L' },
+  { name: 'XL' },
 ];
 
 const stylesSeedData = [
@@ -233,8 +231,8 @@ const productsSeedData = [
     user_id: 'vendor-1',
     variants: [
       { size_id: 1, color_id: 1, quantity: 5 },
-      { size_id: 2, color_id: 1, quantity: 3 },
-      { size_id: 3, color_id: 1, quantity: 2 },
+      { size_id: 2, color_id: 2, quantity: 3 },
+      { size_id: 3, color_id: 3, quantity: 2 },
     ],
     created_at: new Date(2024, 4, 25),
     updated_at: new Date(),
@@ -256,7 +254,7 @@ const productsSeedData = [
     user_id: 'vendor-1',
     variants: [
       { size_id: 1, color_id: 6, quantity: 5 },
-      { size_id: 2, color_id: 6, quantity: 3 },
+      { size_id: 2, color_id: 5, quantity: 3 },
     ],
     created_at: new Date(2024, 5, 25),
     updated_at: new Date(),
@@ -277,9 +275,9 @@ const productsSeedData = [
     material_id: 3,
     user_id: 'vendor-1',
     variants: [
-      { size_id: 1, color_id: 8, quantity: 5 },
-      { size_id: 2, color_id: 8, quantity: 3 },
-      { size_id: 4, color_id: 8, quantity: 3 },
+      { size_id: 1, color_id: 1, quantity: 5 },
+      { size_id: 2, color_id: 2, quantity: 3 },
+      { size_id: 4, color_id: 3, quantity: 3 },
     ],
     created_at: new Date(2024, 6, 25),
     updated_at: new Date(),
@@ -301,8 +299,8 @@ const productsSeedData = [
     user_id: 'vendor-2',
     variants: [
       { size_id: 1, color_id: 6, quantity: 5 },
-      { size_id: 2, color_id: 6, quantity: 3 },
-      { size_id: 3, color_id: 6, quantity: 3 },
+      { size_id: 2, color_id: 4, quantity: 3 },
+      { size_id: 3, color_id: 2, quantity: 3 },
     ],
     created_at: new Date(2024, 7, 25),
     updated_at: new Date(),
@@ -341,7 +339,7 @@ const productsSeedData = [
     brand_id: 4,
     material_id: 6,
     user_id: 'vendor-2',
-    variants: [{ size_id: 1, color_id: 8, quantity: 5 }],
+    variants: [{ size_id: 1, color_id: 6, quantity: 5 }],
     created_at: new Date(2024, 7, 25),
     updated_at: new Date(),
   },
