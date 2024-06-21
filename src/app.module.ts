@@ -8,6 +8,8 @@ import { AuthModule } from './modules/auth/auth.module';
 import { AuthGuard } from './modules/auth/guards';
 import { ProductsModule } from './modules/products/products.module';
 import { UsersModule } from './modules/users/users.module';
+import { FiltersModule } from './modules/filters/filters.module';
+import { UploadModule } from './modules/upload/upload.module';
 
 @Module({
   imports: [
@@ -25,6 +27,8 @@ import { UsersModule } from './modules/users/users.module';
     ProductsModule,
     AuthModule,
     UsersModule,
+    FiltersModule,
+    UploadModule,
   ],
   controllers: [],
   providers: [

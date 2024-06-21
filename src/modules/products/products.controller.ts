@@ -1,9 +1,9 @@
-import { Controller, Get, Query } from '@nestjs/common';
+import { Controller, Get, Param, Query } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 
-import { PublicRoute } from 'src/common/decorators';
-
+import { PublicRoute } from '~/common/decorators';
 import { ProductEntity } from '~/entities';
+
 import { ProductsService } from './products.service';
 import { GetProductsQueryDto } from './dto/get-products-query.dto';
 
@@ -20,5 +20,11 @@ export class ProductsController {
   @Get()
   async findAll(@Query() query: GetProductsQueryDto): Promise<ProductEntity[]> {
     return this.productsService.findAll(query);
+  }
+
+  @PublicRoute()
+  @Get('/:id')
+  async findById(@Param() param: { id: number }): Promise<ProductEntity> {
+    return this.productsService.findById(param.id);
   }
 }
