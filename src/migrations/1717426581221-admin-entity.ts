@@ -25,7 +25,7 @@ class CreateAdminUser1717160000000 implements MigrationInterface {
     const isRegistrationCompleted = true;
     const createdAt = new Date().toISOString().slice(0, 19).replace('T', ' ');
     const updatedAt = createdAt;
-    const isVerified = true;
+    const isVerified = 1;
 
     await queryRunner.query(`
       INSERT INTO users (id, name, email, password_hash, password_salt, created_at, updated_at, is_verified)
@@ -46,10 +46,11 @@ class CreateAdminUser1717160000000 implements MigrationInterface {
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {
+    const email = process.env.ADMIN_EMAIL;
     const role = 'admin';
 
     await queryRunner.query(`
-      DELETE FROM users WHERE email = '${process.env.ADMIN_EMAIL}' AND role = '${role}'
+      DELETE FROM users WHERE email = '${email}' AND role = '${role}'
     `);
 
     await queryRunner.query(`
