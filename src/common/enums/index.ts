@@ -12,7 +12,6 @@ enum ProductStatus {
 enum ProductActivityStatus {
   ACTIVE = 'active',
   INACTIVE = 'inactive',
-  PUBLISHED = 'published',
   REJECTED = 'rejected',
 }
 
