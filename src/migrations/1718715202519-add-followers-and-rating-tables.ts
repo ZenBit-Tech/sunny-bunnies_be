@@ -30,12 +30,12 @@ export class AddUserFollowers1718715202519 implements MigrationInterface {
         columns: [
           {
             name: ColumnName.USER_ID,
-            type: 'uuid',
+            type: 'varchar',
             isPrimary: true,
           },
           {
             name: ColumnName.FOLLOWER_ID,
-            type: 'uuid',
+            type: 'varchar',
             isPrimary: true,
           },
         ],
@@ -60,11 +60,11 @@ export class AddUserFollowers1718715202519 implements MigrationInterface {
           },
           {
             name: ColumnName.RATED_USER_ID,
-            type: 'uuid',
+            type: 'varchar',
           },
           {
             name: ColumnName.RATING_USER_ID,
-            type: 'uuid',
+            type: 'varchar',
           },
           {
             name: ColumnName.CREATED_AT,

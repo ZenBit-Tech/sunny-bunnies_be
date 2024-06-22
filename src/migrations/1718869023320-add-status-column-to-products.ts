@@ -17,8 +17,7 @@ export class AddActivityStatusToProducts1718869023320
       new TableColumn({
         name: ColumnName.ACTIVITY_STATUS,
         type: 'enum',
-        enum: ['active', 'inactive', 'published', 'rejected'],
-        default: 'published',
+        enum: ['active', 'inactive', 'rejected'],
       }),
     );
   }

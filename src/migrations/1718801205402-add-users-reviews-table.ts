@@ -20,7 +20,7 @@ const ColumnName = {
   UPDATED_AT: 'updated_at',
 };
 
-export class AddUserFollowers1718715202519 implements MigrationInterface {
+export class AddUsersReviewsTable1718801205402 implements MigrationInterface {
   public async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.createTable(
       new Table({
@@ -39,11 +39,11 @@ export class AddUserFollowers1718715202519 implements MigrationInterface {
           },
           {
             name: ColumnName.REVIEW_USER_ID,
-            type: 'uuid',
+            type: 'varchar',
           },
           {
             name: ColumnName.REVIEWED_USER_ID,
-            type: 'uuid',
+            type: 'varchar',
           },
           {
             name: ColumnName.CREATED_AT,
