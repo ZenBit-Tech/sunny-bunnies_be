@@ -26,34 +26,6 @@ export class AddUserFollowers1718715202519 implements MigrationInterface {
   public async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.createTable(
       new Table({
-        name: TableName.USER_FOLLOWERS,
-        columns: [
-          {
-            name: ColumnName.ID,
-            type: 'int',
-            isPrimary: true,
-            isGenerated: true,
-            generationStrategy: 'increment',
-          },
-          {
-            name: ColumnName.USER_ID,
-            type: 'varchar',
-          },
-          {
-            name: ColumnName.FOLLOWER_ID,
-            type: 'varchar',
-          },
-        ],
-        uniques: [
-          {
-            columnNames: [ColumnName.USER_ID, ColumnName.FOLLOWER_ID],
-          },
-        ],
-      }),
-    );
-
-    await queryRunner.createTable(
-      new Table({
         name: TableName.USER_RATINGS,
         columns: [
           {
@@ -91,26 +63,6 @@ export class AddUserFollowers1718715202519 implements MigrationInterface {
     );
 
     await queryRunner.createForeignKey(
-      TableName.USER_FOLLOWERS,
-      new TableForeignKey({
-        columnNames: [ColumnName.USER_ID],
-        referencedColumnNames: [ColumnName.ID],
-        referencedTableName: TableName.USERS,
-        onDelete: 'CASCADE',
-      }),
-    );
-
-    await queryRunner.createForeignKey(
-      TableName.USER_FOLLOWERS,
-      new TableForeignKey({
-        columnNames: [ColumnName.FOLLOWER_ID],
-        referencedColumnNames: [ColumnName.ID],
-        referencedTableName: TableName.USERS,
-        onDelete: 'CASCADE',
-      }),
-    );
-
-    await queryRunner.createForeignKey(
       TableName.USER_RATINGS,
       new TableForeignKey({
         columnNames: [ColumnName.RATED_USER_ID],
@@ -132,7 +84,6 @@ export class AddUserFollowers1718715202519 implements MigrationInterface {
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {
-    await queryRunner.dropTable(TableName.USER_FOLLOWERS);
     await queryRunner.dropTable(TableName.USER_RATINGS);
   }
 }
