@@ -29,6 +29,13 @@ export class AddUserFollowers1718715202519 implements MigrationInterface {
         name: TableName.USER_FOLLOWERS,
         columns: [
           {
+            name: ColumnName.ID,
+            type: 'int',
+            isPrimary: true,
+            isGenerated: true,
+            generationStrategy: 'increment',
+          },
+          {
             name: ColumnName.USER_ID,
             type: 'varchar',
             isPrimary: true,
