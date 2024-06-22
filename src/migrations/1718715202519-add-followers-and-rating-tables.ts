@@ -38,12 +38,15 @@ export class AddUserFollowers1718715202519 implements MigrationInterface {
           {
             name: ColumnName.USER_ID,
             type: 'varchar',
-            isPrimary: true,
           },
           {
             name: ColumnName.FOLLOWER_ID,
             type: 'varchar',
-            isPrimary: true,
+          },
+        ],
+        uniques: [
+          {
+            columnNames: [ColumnName.USER_ID, ColumnName.FOLLOWER_ID],
           },
         ],
       }),
