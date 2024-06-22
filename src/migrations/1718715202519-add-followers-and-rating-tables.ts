@@ -69,12 +69,12 @@ export class AddUserFollowers1718715202519 implements MigrationInterface {
           {
             name: ColumnName.CREATED_AT,
             type: 'timestamp',
-            default: 'now()',
+            default: 'CURRENT_TIMESTAMP',
           },
           {
             name: ColumnName.UPDATED_AT,
             type: 'timestamp',
-            default: 'now()',
+            default: 'CURRENT_TIMESTAMP',
           },
         ],
       }),
@@ -122,6 +122,55 @@ export class AddUserFollowers1718715202519 implements MigrationInterface {
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {
+    const tableUserFollowers = await queryRunner.getTable(
+      TableName.USER_FOLLOWERS,
+    );
+    const tableUserRatings = await queryRunner.getTable(TableName.USER_RATINGS);
+
+    const foreignKeyUserFollowersUser = tableUserFollowers.foreignKeys.find(
+      (fk) => fk.columnNames.indexOf(ColumnName.USER_ID) !== -1,
+    );
+
+    const foreignKeyUserFollowersFollower = tableUserFollowers.foreignKeys.find(
+      (fk) => fk.columnNames.indexOf(ColumnName.FOLLOWER_ID) !== -1,
+    );
+
+    const foreignKeyUserRatingsRatedUser = tableUserRatings.foreignKeys.find(
+      (fk) => fk.columnNames.indexOf(ColumnName.RATED_USER_ID) !== -1,
+    );
+
+    const foreignKeyUserRatingsRatingUser = tableUserRatings.foreignKeys.find(
+      (fk) => fk.columnNames.indexOf(ColumnName.RATING_USER_ID) !== -1,
+    );
+
+    if (foreignKeyUserFollowersUser) {
+      await queryRunner.dropForeignKey(
+        TableName.USER_FOLLOWERS,
+        foreignKeyUserFollowersUser,
+      );
+    }
+
+    if (foreignKeyUserFollowersFollower) {
+      await queryRunner.dropForeignKey(
+        TableName.USER_FOLLOWERS,
+        foreignKeyUserFollowersFollower,
+      );
+    }
+
+    if (foreignKeyUserRatingsRatedUser) {
+      await queryRunner.dropForeignKey(
+        TableName.USER_RATINGS,
+        foreignKeyUserRatingsRatedUser,
+      );
+    }
+
+    if (foreignKeyUserRatingsRatingUser) {
+      await queryRunner.dropForeignKey(
+        TableName.USER_RATINGS,
+        foreignKeyUserRatingsRatingUser,
+      );
+    }
+
     await queryRunner.dropTable(TableName.USER_FOLLOWERS);
     await queryRunner.dropTable(TableName.USER_RATINGS);
   }

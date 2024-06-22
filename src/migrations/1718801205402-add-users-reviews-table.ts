@@ -48,12 +48,12 @@ export class AddUsersReviewsTable1718801205402 implements MigrationInterface {
           {
             name: ColumnName.CREATED_AT,
             type: 'timestamp',
-            default: 'now()',
+            default: 'CURRENT_TIMESTAMP',
           },
           {
             name: ColumnName.UPDATED_AT,
             type: 'timestamp',
-            default: 'now()',
+            default: 'CURRENT_TIMESTAMP',
           },
         ],
       }),
