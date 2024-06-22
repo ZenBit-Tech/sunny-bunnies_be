@@ -55,21 +55,21 @@ export class User {
   @OneToMany('ProductEntity', (product: ProductEntity) => product.user)
   products: ProductEntity[];
 
-  @ManyToMany('User', (user: User) => user.following)
+  @ManyToMany(() => User, (user) => user.followers)
   @JoinTable({
     name: 'user_followers',
     joinColumn: {
-      name: 'userId',
+      name: 'user_id',
       referencedColumnName: 'id',
     },
     inverseJoinColumn: {
-      name: 'followerId',
+      name: 'follower_id',
       referencedColumnName: 'id',
     },
   })
   followers: User[];
 
-  @ManyToMany('User', (user: User) => user.followers)
+  @ManyToMany(() => User, (user) => user.following)
   following: User[];
 
   @OneToOne('UserCard', (card: UserCard) => card.user, {

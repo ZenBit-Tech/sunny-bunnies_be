@@ -38,12 +38,12 @@ export class CombinedSeeder implements Seeder {
     await this.seedCategories(dataSource);
     await this.seedSizes(dataSource);
     await this.seedStyles(dataSource);
-    await this.seedBrands(dataSource);
-    await this.seedImages(dataSource);
     await this.seedMaterials(dataSource);
+    await this.seedBrands(dataSource);
     await this.seedUsers(dataSource);
     await this.seedProfiles(dataSource);
     await this.seedProducts(dataSource);
+    await this.seedImages(dataSource);
     await this.seedReviews(dataSource);
     await this.enableForeignKeyChecks(dataSource);
   }
@@ -57,7 +57,6 @@ export class CombinedSeeder implements Seeder {
   }
 
   private async truncateTables(dataSource: DataSource): Promise<void> {
-    await dataSource.query('TRUNCATE TABLE product_images;');
     await dataSource.query('TRUNCATE TABLE products;');
     await dataSource.query('TRUNCATE TABLE product_variants;');
     await dataSource.query('TRUNCATE TABLE user_profiles;');
@@ -69,6 +68,7 @@ export class CombinedSeeder implements Seeder {
     await dataSource.query('TRUNCATE TABLE brands;');
     await dataSource.query('TRUNCATE TABLE materials;');
     await dataSource.query('TRUNCATE TABLE users_reviews;');
+    await dataSource.query('TRUNCATE TABLE product_images;');
   }
 
   private async seedColors(dataSource: DataSource): Promise<void> {
@@ -91,11 +91,6 @@ export class CombinedSeeder implements Seeder {
     await repository.insert(stylesSeedData);
   }
 
-  private async seedImages(dataSource: DataSource): Promise<void> {
-    const repository = dataSource.getRepository(ImageEntity);
-    await repository.insert(imageSeedData);
-  }
-
   private async seedMaterials(dataSource: DataSource): Promise<void> {
     const repository = dataSource.getRepository(MaterialEntity);
     await repository.insert(materialsSeedData);
@@ -109,30 +104,6 @@ export class CombinedSeeder implements Seeder {
   private async seedUsers(dataSource: DataSource): Promise<void> {
     const repository = dataSource.getRepository(User);
     await repository.insert(usersSeedData);
-  }
-
-  private async seedReviews(dataSource: DataSource): Promise<void> {
-    const userRepository = dataSource.getRepository(User);
-    const reviewsRepository = dataSource.getRepository(UsersReview);
-
-    const seedOperations = reviewsSeedData.map(async (reviewData) => {
-      const reviewUser = await userRepository.findOneOrFail({
-        where: { id: reviewData.review_user_id },
-      });
-      const reviewedUser = await userRepository.findOneOrFail({
-        where: { id: reviewData.reviewed_user_id },
-      });
-
-      const reviewEntity = reviewsRepository.create({
-        ...reviewData,
-        reviewUser,
-        reviewedUser,
-      });
-
-      await reviewsRepository.save(reviewEntity);
-    });
-
-    await Promise.all(seedOperations);
   }
 
   private async seedProfiles(dataSource: DataSource): Promise<void> {
@@ -157,19 +128,10 @@ export class CombinedSeeder implements Seeder {
 
   private async seedProducts(dataSource: DataSource): Promise<void> {
     const repository = dataSource.getRepository(ProductEntity);
-    const imageRepository = dataSource.getRepository(ImageEntity);
     const variantRepository = dataSource.getRepository(ProductVariantEntity);
 
     const seedOperations = productsSeedData.map(async (product) => {
-      const { variants, image_ids: imageIds, ...productData } = product;
-
-      async function fetchImageById(
-        imageId: number,
-      ): Promise<ImageEntity | null> {
-        return imageRepository.findOne({ where: { id: imageId } });
-      }
-
-      const images = await Promise.all(imageIds.map(fetchImageById));
+      const { variants, ...productData } = product;
 
       const category = dataSource
         .getRepository(CategoryEntity)
@@ -197,7 +159,6 @@ export class CombinedSeeder implements Seeder {
 
       const insertedProduct = await repository.save({
         ...productData,
-        images,
         category: resolvedCategory,
         style: resolvedStyle,
         brand: resolvedBrand,
@@ -224,6 +185,52 @@ export class CombinedSeeder implements Seeder {
       });
 
       await Promise.all(variantOperations);
+    });
+
+    await Promise.all(seedOperations);
+  }
+
+  private async seedImages(dataSource: DataSource): Promise<void> {
+    const repository = dataSource.getRepository(ImageEntity);
+    const productRepository = dataSource.getRepository(ProductEntity);
+
+    const seedOperations = imageSeedData.map(async (imageData) => {
+      const product = await productRepository.findOne({
+        where: { id: imageData.product_id },
+      });
+
+      const imageEntity = repository.create({
+        url: imageData.url,
+        description: imageData.description,
+        createdAt: imageData.created_at,
+        product,
+      });
+
+      await repository.save(imageEntity);
+    });
+
+    await Promise.all(seedOperations);
+  }
+
+  private async seedReviews(dataSource: DataSource): Promise<void> {
+    const userRepository = dataSource.getRepository(User);
+    const reviewsRepository = dataSource.getRepository(UsersReview);
+
+    const seedOperations = reviewsSeedData.map(async (reviewData) => {
+      const reviewUser = await userRepository.findOneOrFail({
+        where: { id: reviewData.review_user_id },
+      });
+      const reviewedUser = await userRepository.findOneOrFail({
+        where: { id: reviewData.reviewed_user_id },
+      });
+
+      const reviewEntity = reviewsRepository.create({
+        ...reviewData,
+        reviewUser,
+        reviewedUser,
+      });
+
+      await reviewsRepository.save(reviewEntity);
     });
 
     await Promise.all(seedOperations);

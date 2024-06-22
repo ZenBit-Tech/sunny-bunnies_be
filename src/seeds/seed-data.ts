@@ -63,41 +63,49 @@ const imageSeedData = [
     url: 'https://thumbs.dreamstime.com/z/photography-woman-wearing-green-dress-114378751.jpg',
     description: 'green dress',
     created_at: new Date(2024, 2, 15),
+    product_id: 1,
   },
   {
     url: 'https://thumbs.dreamstime.com/z/leather-shoes-26612971.jpg?ct=jpeg',
     description: 'shoes',
     created_at: new Date(2024, 3, 15),
+    product_id: 2,
   },
   {
     url: 'https://thumbs.dreamstime.com/z/chino-pants-24575402.jpg?ct=jpeg',
     description: 'pants',
     created_at: new Date(2024, 2, 6),
+    product_id: 3,
   },
   {
     url: 'https://thumbs.dreamstime.com/z/long-pants-10608909.jpg?w=576',
     description: 'pants',
     created_at: new Date(2024, 2, 6),
+    product_id: 3,
   },
   {
     url: 'https://thumbs.dreamstime.com/z/mens-pants-isolated-white-background-dress-trousers-against-98716291.jpg?ct=jpeg',
     description: 'pants',
     created_at: new Date(2024, 2, 6),
+    product_id: 3,
   },
   {
     url: 'https://thumbs.dreamstime.com/b/nike-sport-shoes-18343734.jpg?w=768',
     description: 'nike',
     created_at: new Date(2024, 2, 25),
+    product_id: 4,
   },
   {
     url: 'https://thumbs.dreamstime.com/z/portrait-glamorous-lady-fashion-accessories-watches-red-cl-clutch-blue-background-48621018.jpg?ct=jpeg',
     description: 'red bag',
     created_at: new Date(2024, 4, 25),
+    product_id: 5,
   },
   {
     url: 'https://thumbs.dreamstime.com/z/colorful-makeup-hair-accessories-beauty-girl-portrait-32449784.jpg?ct=jpeg',
     description: 'accessory',
     created_at: new Date(2024, 4, 25),
+    product_id: 6,
   },
 ];
 
@@ -215,6 +223,7 @@ const usersSeedData = [
 
 const productsSeedData = [
   {
+    id: 1,
     name: 'Green dress',
     description: 'Long green dress',
     quantity: 10,
@@ -223,7 +232,7 @@ const productsSeedData = [
     activity_status: ProductActivityStatus.ACTIVE,
     min_price: 100,
     max_price: 150,
-    image_ids: [1],
+    // image_ids: [1],
     category_id: 1,
     style_id: 1,
     brand_id: 1,
@@ -238,6 +247,7 @@ const productsSeedData = [
     updated_at: new Date(),
   },
   {
+    id: 2,
     name: 'Shoes',
     description: 'Shoes',
     quantity: 2,
@@ -246,7 +256,7 @@ const productsSeedData = [
     activity_status: ProductActivityStatus.ACTIVE,
     min_price: 200,
     max_price: 250,
-    image_ids: [2],
+    // image_ids: [2],
     category_id: 4,
     style_id: 2,
     brand_id: 5,
@@ -260,6 +270,7 @@ const productsSeedData = [
     updated_at: new Date(),
   },
   {
+    id: 3,
     name: 'Pants',
     description: 'pants',
     quantity: 4,
@@ -268,7 +279,7 @@ const productsSeedData = [
     activity_status: ProductActivityStatus.ACTIVE,
     min_price: 200,
     max_price: 220,
-    image_ids: [3, 4, 5],
+    // image_ids: [3, 4, 5],
     category_id: 1,
     style_id: 2,
     brand_id: 4,
@@ -283,6 +294,7 @@ const productsSeedData = [
     updated_at: new Date(),
   },
   {
+    id: 4,
     name: 'Shoes',
     description: 'Shoes nike',
     quantity: 2,
@@ -291,7 +303,7 @@ const productsSeedData = [
     activity_status: ProductActivityStatus.ACTIVE,
     min_price: 150,
     max_price: 170,
-    image_ids: [6],
+    // image_ids: [6],
     category_id: 4,
     style_id: 2,
     brand_id: 4,
@@ -306,6 +318,7 @@ const productsSeedData = [
     updated_at: new Date(),
   },
   {
+    id: 5,
     name: 'Red bag',
     description: 'Red bag',
     quantity: 2,
@@ -314,7 +327,7 @@ const productsSeedData = [
     activity_status: ProductActivityStatus.ACTIVE,
     min_price: 250,
     max_price: 270,
-    image_ids: [7],
+    // image_ids: [7],
     category_id: 3,
     style_id: 3,
     brand_id: 3,
@@ -325,6 +338,7 @@ const productsSeedData = [
     updated_at: new Date(),
   },
   {
+    id: 6,
     name: 'Accessory',
     description: 'Accessory',
     quantity: 2,
@@ -333,7 +347,7 @@ const productsSeedData = [
     activity_status: ProductActivityStatus.ACTIVE,
     min_price: 50,
     max_price: 70,
-    image_ids: [8],
+    // image_ids: [8],
     category_id: 2,
     style_id: 2,
     brand_id: 4,

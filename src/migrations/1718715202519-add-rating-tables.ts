@@ -26,24 +26,6 @@ export class AddUserFollowers1718715202519 implements MigrationInterface {
   public async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.createTable(
       new Table({
-        name: TableName.USER_FOLLOWERS,
-        columns: [
-          {
-            name: ColumnName.USER_ID,
-            type: 'uuid',
-            isPrimary: true,
-          },
-          {
-            name: ColumnName.FOLLOWER_ID,
-            type: 'uuid',
-            isPrimary: true,
-          },
-        ],
-      }),
-    );
-
-    await queryRunner.createTable(
-      new Table({
         name: TableName.USER_RATINGS,
         columns: [
           {
@@ -60,43 +42,23 @@ export class AddUserFollowers1718715202519 implements MigrationInterface {
           },
           {
             name: ColumnName.RATED_USER_ID,
-            type: 'uuid',
+            type: 'varchar',
           },
           {
             name: ColumnName.RATING_USER_ID,
-            type: 'uuid',
+            type: 'varchar',
           },
           {
             name: ColumnName.CREATED_AT,
             type: 'timestamp',
-            default: 'now()',
+            default: 'CURRENT_TIMESTAMP',
           },
           {
             name: ColumnName.UPDATED_AT,
             type: 'timestamp',
-            default: 'now()',
+            default: 'CURRENT_TIMESTAMP',
           },
         ],
-      }),
-    );
-
-    await queryRunner.createForeignKey(
-      TableName.USER_FOLLOWERS,
-      new TableForeignKey({
-        columnNames: [ColumnName.USER_ID],
-        referencedColumnNames: [ColumnName.ID],
-        referencedTableName: TableName.USERS,
-        onDelete: 'CASCADE',
-      }),
-    );
-
-    await queryRunner.createForeignKey(
-      TableName.USER_FOLLOWERS,
-      new TableForeignKey({
-        columnNames: [ColumnName.FOLLOWER_ID],
-        referencedColumnNames: [ColumnName.ID],
-        referencedTableName: TableName.USERS,
-        onDelete: 'CASCADE',
       }),
     );
 
@@ -122,7 +84,6 @@ export class AddUserFollowers1718715202519 implements MigrationInterface {
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {
-    await queryRunner.dropTable(TableName.USER_FOLLOWERS);
     await queryRunner.dropTable(TableName.USER_RATINGS);
   }
 }
