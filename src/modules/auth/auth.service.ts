@@ -239,8 +239,8 @@ export class AuthService {
       },
     );
 
-    await this.tokenService.createOne({
-      token: otpToken,
+    await this.usersService.updateById(user.id, {
+      otpToken,
     });
   }
 
