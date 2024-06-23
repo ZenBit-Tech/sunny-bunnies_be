@@ -23,8 +23,9 @@ import {
   AuthTokens,
   OtpCodePayloadToken,
 } from '~/common/types';
-import { Encrypt, Token, Otp } from '~/utils';
+import { Encrypt, Otp } from '~/utils';
 import { TokenService } from '~/modules/token/token.service';
+import { Token } from '~/modules/token/token.package';
 
 @Injectable()
 export class AuthService {
