@@ -231,7 +231,6 @@ const productsSeedData = [
     name: 'Green dress',
     description:
       'Elegant and flowing long green dress, perfect for formal occasions or a night out. Made from high-quality fabric that drapes beautifully, providing both comfort and style. Available in multiple sizes and colors.',
-    quantity: 10,
     gender: Gender.FEMALE,
     status: ProductStatus.BOTH,
     activity_status: ProductActivityStatus.ACTIVE,
@@ -255,7 +254,6 @@ const productsSeedData = [
     name: 'Shoes',
     description:
       'High-quality shoes designed for both comfort and style. Ideal for everyday wear or special occasions. Available in various sizes and colors to suit different preferences. Durable and stylish footwear for men.',
-    quantity: 2,
     gender: Gender.MALE,
     status: ProductStatus.BOTH,
     activity_status: ProductActivityStatus.ACTIVE,
@@ -278,7 +276,6 @@ const productsSeedData = [
     name: 'Pants',
     description:
       'Stylish and comfortable pants for women. Perfect for both casual and formal settings. Made from premium materials that offer durability and a great fit. Available in multiple sizes and colors to match your wardrobe.',
-    quantity: 4,
     gender: Gender.FEMALE,
     status: ProductStatus.BOTH,
     activity_status: ProductActivityStatus.ACTIVE,
@@ -302,7 +299,6 @@ const productsSeedData = [
     name: 'Shoes',
     description:
       'Stylish and comfortable pants for women. Perfect for both casual and formal settings. Made from premium materials that offer durability and a great fit. Available in multiple sizes and colors to match your wardrobe.',
-    quantity: 2,
     gender: Gender.MALE,
     status: ProductStatus.BOTH,
     activity_status: ProductActivityStatus.ACTIVE,
@@ -326,7 +322,6 @@ const productsSeedData = [
     name: 'Red bag',
     description:
       'Chic and stylish red bag perfect for adding a pop of color to any outfit. Spacious and functional, ideal for daily use or special events. Made from high-quality materials, ensuring durability and a sleek look.',
-    quantity: 2,
     gender: Gender.FEMALE,
     status: ProductStatus.FOR_RENT,
     activity_status: ProductActivityStatus.ACTIVE,
@@ -346,7 +341,6 @@ const productsSeedData = [
     name: 'Accessory',
     description:
       'Elegant and versatile accessory to complement any outfit. Perfect for adding a touch of sophistication to your look. Available in various styles and colors to suit your personal taste. Made with high-quality materials for lasting use.',
-    quantity: 2,
     gender: Gender.FEMALE,
     status: ProductStatus.FOR_SALE,
     activity_status: ProductActivityStatus.ACTIVE,
