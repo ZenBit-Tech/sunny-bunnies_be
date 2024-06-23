@@ -23,6 +23,7 @@ import {
   AuthTokens,
   OtpCodePayloadToken,
 } from '~/common/types';
+import { User } from '~/entities';
 
 @Injectable()
 export class AuthService {
@@ -276,7 +277,7 @@ export class AuthService {
     });
   }
 
-  async verifyOtp(authVerifyOtp: AuthVerifyOtpDto): Promise<void> {
+  async verifyOtp(authVerifyOtp: AuthVerifyOtpDto): Promise<User> {
     const { code: providedCode, email } = authVerifyOtp;
 
     const user = await this.usersService.findByEmail(email);
@@ -308,6 +309,8 @@ export class AuthService {
       isVerified: true,
       otpToken: null,
     });
+
+    return this.usersService.findByEmail(email);
   }
 
   async generateTokens(userId: string): Promise<AuthTokens> {

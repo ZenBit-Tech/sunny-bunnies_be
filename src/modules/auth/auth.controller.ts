@@ -18,6 +18,7 @@ import { TransformationInterceptor } from '~/common/interceptors';
 import { GoogleAuthSingUpDto } from '~/modules/auth/dto';
 import { PublicRoute } from '~/common/decorators';
 import { type AuthResponse, type AuthTokens } from '~/common/types';
+import { User } from '~/entities';
 
 @ApiTags('Auth')
 @UseInterceptors(TransformationInterceptor)
@@ -84,7 +85,7 @@ export class AuthController {
   @PublicRoute()
   @HttpCode(200)
   @Post('verify-otp')
-  async verifyOtp(@Body() authVerifyOtpDto: AuthVerifyOtpDto): Promise<void> {
+  async verifyOtp(@Body() authVerifyOtpDto: AuthVerifyOtpDto): Promise<User> {
     return this.authService.verifyOtp(authVerifyOtpDto);
   }
 }
