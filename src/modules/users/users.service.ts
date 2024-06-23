@@ -20,8 +20,14 @@ export class UsersService {
     return this.usersRepository.findById(userId);
   }
 
-  async findVendorById(userId: string): Promise<User> {
-    return this.usersRepository.findVendorById(userId);
+  async findVendorById(userId: string): Promise<User | null> {
+    const vendor = await this.usersRepository.findVendorById(userId);
+
+    if (!vendor) {
+      throw new NotFoundException('Vendor with this id was not found');
+    }
+
+    return vendor;
   }
 
   async createOne(createUserDto: CreateUserDto): Promise<User> {
