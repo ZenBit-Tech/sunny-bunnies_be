@@ -54,6 +54,10 @@ export class CreateProductTable1717426580703 implements MigrationInterface {
             type: 'text',
           },
           {
+            name: ColumnName.QUANTITY,
+            type: 'int',
+          },
+          {
             name: ColumnName.DESCRIPTION,
             type: 'text',
           },
