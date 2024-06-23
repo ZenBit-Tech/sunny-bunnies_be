@@ -216,7 +216,9 @@ export class AuthService {
     }
 
     const otp = this.otp.generateCode({ length: 6 });
-    const expiresIn = '2m';
+    const expiresIn = this.configService.get<string>(
+      'MAIL_VERIFY_OTP_EXPIRATION_TIME',
+    );
 
     await this.mailerService.sendMail({
       to: user.email,
@@ -290,7 +292,9 @@ export class AuthService {
     if (!user) {
       throw new ConflictException('This email is not associated with any user');
     }
-    const expiresIn = '5m';
+    const expiresIn = this.configService.get<string>(
+      'MAIL_RESET_PASSWORD_EXPIRATION_TIME',
+    );
 
     const token = await this.token.generate<AuthPayloadToken>(
       {
