@@ -21,16 +21,16 @@ export class UserProfile {
   @Column({ type: 'enum', enum: ['buyer', 'vendor', 'admin'], nullable: true })
   role: 'buyer' | 'vendor' | 'admin' | null;
 
-  @Column()
+  @Column({ name: 'phone_number' })
   phoneNumber: string;
 
-  @Column({ nullable: true })
+  @Column({ name: 'profile_photo', nullable: true })
   profilePhoto: string | null;
 
-  @Column()
+  @Column({ name: 'address_line_one' })
   addressLineOne: string;
 
-  @Column()
+  @Column({ name: 'address_line_two' })
   addressLineTwo: string;
 
   @Column()
@@ -42,19 +42,19 @@ export class UserProfile {
   @Column()
   city: string;
 
-  @Column()
+  @Column({ name: 'clothes_size' })
   clothesSize: string;
 
-  @Column()
+  @Column({ name: 'jeans_size' })
   jeansSize: string;
 
-  @Column()
+  @Column({ name: 'shoe_size' })
   shoeSize: string;
 
-  @Column()
+  @Column({ name: 'is_registration_completed' })
   isRegistrationCompleted: boolean;
 
-  @OneToOne(() => User, (user) => user.profile)
+  @OneToOne(() => User, (user) => user.profile, { eager: false })
   @JoinColumn({ name: 'user_id' })
   user: User;
 

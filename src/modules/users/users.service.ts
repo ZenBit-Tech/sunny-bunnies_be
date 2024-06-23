@@ -30,6 +30,10 @@ export class UsersService {
     return this.usersRepository.findById(userId);
   }
 
+  async findVendorById(userId: string): Promise<User> {
+    return this.usersRepository.findVendorById(userId);
+  }
+
   async createOne(
     userCreateOneRequestDto: UserCreateRequestDto,
   ): Promise<User> {
@@ -116,6 +120,20 @@ export class UsersService {
     }
 
     await this.usersRepository.updateProfile(user.id, updateProfileDto);
+
+    return this.usersRepository.findById(userId);
+  }
+
+  async updateProfilePhoto(userId: string, photoUrl: string): Promise<User> {
+    const user = await this.usersRepository.findById(userId);
+
+    if (!user) {
+      throw new NotFoundException('User not found');
+    }
+
+    await this.usersRepository.updateProfile(user.id, {
+      profilePhoto: photoUrl,
+    });
 
     return this.usersRepository.findById(userId);
   }

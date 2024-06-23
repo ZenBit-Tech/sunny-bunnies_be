@@ -60,8 +60,8 @@ erDiagram
     enum role
     varchar phone_number
     varchar profile_photo
-    varchar address_line_1
-    varchar address_line_2
+    varchar address_line_one
+    varchar address_line_two
     varchar country
     varchar state
     varchar city
@@ -83,8 +83,37 @@ erDiagram
     dateTime updated_at
   }
 
+  ratings {
+    int id PK
+    int rating
+    int rated_user_id FK
+    int rating_user_id FK
+    dateTime created_at
+    dateTime updated_at
+  }
+
+  reviews {
+    int id PK
+    text review
+    int reviewed_user_id FK
+    int review_user_id FK
+    dateTime created_at
+    dateTime updated_at
+  }
+
+  user_followers {
+    int user_id PK,FK
+    int follower_id PK,FK
+  }
+
   users  ||--|| user_profiles : user_id
   users  ||--|| user_cards : user_id
+  users  ||--o{ ratings : "rated_by"
+  users  }o--|| ratings : "rated_user"
+  users  ||--o{ reviews : "reviewed_by"
+  users  }o--|| reviews : "reviewed_user"
+  users  ||--o{ user_followers : "is_followed_by"
+  users  }o--|| user_followers : "following"
 
   brands {
     int id PK
@@ -132,9 +161,9 @@ erDiagram
     int id PK
     varchar name
     varchar description
-    int quantity
-    gender
-    status
+    enum gender 
+    enum  status
+    enum activityStatus
     decimal priceFrom
     decimal priceTo
     dateTime createdAt

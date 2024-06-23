@@ -42,6 +42,8 @@ export class AuthService {
 
   private readonly token: Token;
 
+  private readonly adminRole = 'admin';
+
   constructor(
     usersService: UsersService,
     encryptService: Encrypt,
@@ -65,8 +67,8 @@ export class AuthService {
 
     const user = await this.usersService.findByEmail(email);
 
-    if (!user) {
-      throw new ConflictException('User with this email does not exist');
+    if (!user || user.profile.role === this.adminRole) {
+      throw new ConflictException('Invalid email or password');
     }
 
     const hasSamePassword = await this.encrypt.compare({
@@ -76,7 +78,7 @@ export class AuthService {
     });
 
     if (!hasSamePassword) {
-      throw new ConflictException('Password is not correct');
+      throw new ConflictException('Invalid email or password');
     }
 
     const { refreshToken, accessToken } = await this.generateTokens(user.id);
@@ -88,23 +90,26 @@ export class AuthService {
     };
   }
 
-  async signInGoogle(body: GoogleAuthSingUpDto): Promise<AuthResponse> {
-    const { email, name } = this.token.decode(body.credential) as {
-      email: string;
-      name: string;
-    };
-
-    if (!email || !name) {
-      throw new NotFoundException("Can't find your google account.");
-    }
+  async adminSignIn(authSignInDto: AuthSignInDto): Promise<AuthResponse> {
+    const { email, password } = authSignInDto;
 
     const user = await this.usersService.findByEmail(email);
 
-    if (!user) {
-      throw new NotFoundException("Can't find user with this credential");
+    if (!user || user.profile.role !== this.adminRole) {
+      throw new ConflictException('Invalid email or password');
     }
 
-    const { refreshToken, accessToken } = await this.generateTokens(email);
+    const hasSamePassword = await this.encrypt.compare({
+      data: password,
+      salt: user.passwordSalt,
+      passwordHash: user.passwordHash,
+    });
+
+    if (!hasSamePassword) {
+      throw new ConflictException('Invalid email or password');
+    }
+
+    const { refreshToken, accessToken } = await this.generateTokens(user.id);
 
     return {
       user,

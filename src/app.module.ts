@@ -9,6 +9,8 @@ import { AuthGuard } from './modules/auth/guards';
 import { ProductsModule } from './modules/products/products.module';
 import { UsersModule } from './modules/users/users.module';
 import { FiltersModule } from './modules/filters/filters.module';
+import { FollowersModule } from './modules/followers/followers.module';
+import { UploadModule } from './modules/upload/upload.module';
 import { TokenModule } from '~/modules/token/token.module';
 
 @Module({
@@ -24,10 +26,12 @@ import { TokenModule } from '~/modules/token/token.module';
       inject: [ConfigService],
     }),
     TestModule,
+    FollowersModule,
     ProductsModule,
     AuthModule,
     UsersModule,
     FiltersModule,
+    UploadModule,
     TokenModule,
   ],
   controllers: [],

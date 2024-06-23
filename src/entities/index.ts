@@ -7,6 +7,8 @@ export { ImageEntity } from './image.entity';
 export { MaterialEntity } from './material.entity';
 export { ProductEntity } from './product.entity';
 export { ProductVariantEntity } from './product-variant.entity';
+export { UsersRating } from './users-rating.entity';
+export { UsersReview } from './users-review.entity';
 export { SizeEntity } from './size.entity';
 export { StyleEntity } from './style.entity';
 export { User } from './user.entity';

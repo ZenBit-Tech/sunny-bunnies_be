@@ -9,4 +9,10 @@ enum ProductStatus {
   BOTH = 'both',
 }
 
-export { Gender, ProductStatus };
+enum ProductActivityStatus {
+  ACTIVE = 'active',
+  INACTIVE = 'inactive',
+  REJECTED = 'rejected',
+}
+
+export { Gender, ProductActivityStatus, ProductStatus };

@@ -19,6 +19,15 @@ export class RemoveImageIdFromProductsTable1717426580704
   implements MigrationInterface
 {
   public async up(queryRunner: QueryRunner): Promise<void> {
+    const table = await queryRunner.getTable(TableName.PRODUCTS);
+    const foreignKey = table?.foreignKeys.find(
+      (fk) => fk.columnNames.indexOf(ColumnName.IMAGE_ID) !== -1,
+    );
+
+    if (foreignKey) {
+      await queryRunner.dropForeignKey(TableName.PRODUCTS, foreignKey.name);
+    }
+
     await queryRunner.dropColumn(TableName.PRODUCTS, ColumnName.IMAGE_ID);
   }
 
