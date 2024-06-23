@@ -229,7 +229,8 @@ const productsSeedData = [
   {
     id: 1,
     name: 'Green dress',
-    description: 'Long green dress',
+    description:
+      'Elegant and flowing long green dress, perfect for formal occasions or a night out. Made from high-quality fabric that drapes beautifully, providing both comfort and style. Available in multiple sizes and colors.',
     quantity: 10,
     gender: Gender.FEMALE,
     status: ProductStatus.BOTH,
@@ -240,7 +241,7 @@ const productsSeedData = [
     style_id: 1,
     brand_id: 1,
     material_id: 1,
-    user_id: 'vendor-1',
+    user_id: usersSeedData[0].id,
     variants: [
       { size_id: 1, color_id: 1, quantity: 5 },
       { size_id: 2, color_id: 2, quantity: 3 },
@@ -252,7 +253,8 @@ const productsSeedData = [
   {
     id: 2,
     name: 'Shoes',
-    description: 'Shoes',
+    description:
+      'High-quality shoes designed for both comfort and style. Ideal for everyday wear or special occasions. Available in various sizes and colors to suit different preferences. Durable and stylish footwear for men.',
     quantity: 2,
     gender: Gender.MALE,
     status: ProductStatus.BOTH,
@@ -263,7 +265,7 @@ const productsSeedData = [
     style_id: 2,
     brand_id: 5,
     material_id: 2,
-    user_id: 'vendor-1',
+    user_id: usersSeedData[0].id,
     variants: [
       { size_id: 1, color_id: 6, quantity: 5 },
       { size_id: 2, color_id: 5, quantity: 3 },
@@ -274,7 +276,8 @@ const productsSeedData = [
   {
     id: 3,
     name: 'Pants',
-    description: 'pants',
+    description:
+      'Stylish and comfortable pants for women. Perfect for both casual and formal settings. Made from premium materials that offer durability and a great fit. Available in multiple sizes and colors to match your wardrobe.',
     quantity: 4,
     gender: Gender.FEMALE,
     status: ProductStatus.BOTH,
@@ -285,7 +288,7 @@ const productsSeedData = [
     style_id: 2,
     brand_id: 4,
     material_id: 3,
-    user_id: 'vendor-1',
+    user_id: usersSeedData[0].id,
     variants: [
       { size_id: 1, color_id: 1, quantity: 5 },
       { size_id: 2, color_id: 2, quantity: 3 },
@@ -297,7 +300,8 @@ const productsSeedData = [
   {
     id: 4,
     name: 'Shoes',
-    description: 'Shoes nike',
+    description:
+      'Stylish and comfortable pants for women. Perfect for both casual and formal settings. Made from premium materials that offer durability and a great fit. Available in multiple sizes and colors to match your wardrobe.',
     quantity: 2,
     gender: Gender.MALE,
     status: ProductStatus.BOTH,
@@ -308,7 +312,7 @@ const productsSeedData = [
     style_id: 2,
     brand_id: 4,
     material_id: 3,
-    user_id: 'vendor-2',
+    user_id: usersSeedData[1].id,
     variants: [
       { size_id: 1, color_id: 6, quantity: 5 },
       { size_id: 2, color_id: 4, quantity: 3 },
@@ -320,7 +324,8 @@ const productsSeedData = [
   {
     id: 5,
     name: 'Red bag',
-    description: 'Red bag',
+    description:
+      'Chic and stylish red bag perfect for adding a pop of color to any outfit. Spacious and functional, ideal for daily use or special events. Made from high-quality materials, ensuring durability and a sleek look.',
     quantity: 2,
     gender: Gender.FEMALE,
     status: ProductStatus.FOR_RENT,
@@ -331,7 +336,7 @@ const productsSeedData = [
     style_id: 3,
     brand_id: 3,
     material_id: 6,
-    user_id: 'vendor-2',
+    user_id: usersSeedData[1].id,
     variants: [{ size_id: 1, color_id: 1, quantity: 5 }],
     created_at: new Date(2024, 7, 25),
     updated_at: new Date(),
@@ -339,7 +344,8 @@ const productsSeedData = [
   {
     id: 6,
     name: 'Accessory',
-    description: 'Accessory',
+    description:
+      'Elegant and versatile accessory to complement any outfit. Perfect for adding a touch of sophistication to your look. Available in various styles and colors to suit your personal taste. Made with high-quality materials for lasting use.',
     quantity: 2,
     gender: Gender.FEMALE,
     status: ProductStatus.FOR_SALE,
@@ -350,7 +356,7 @@ const productsSeedData = [
     style_id: 2,
     brand_id: 4,
     material_id: 6,
-    user_id: 'vendor-2',
+    user_id: usersSeedData[1].id,
     variants: [{ size_id: 1, color_id: 6, quantity: 5 }],
     created_at: new Date(2024, 7, 25),
     updated_at: new Date(),
