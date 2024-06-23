@@ -6,9 +6,9 @@ import {
 import { UsersRepository } from './users.repository';
 import { User } from '~/entities';
 import {
-  UserCreateRequestDto,
+  UserCreateDto,
   UpdateUserDto,
-  UserUpdatePasswordRequestDto,
+  UserUpdatePasswordDto,
   UserCardDto,
   UserProfileUpdateDto,
 } from './dto';
@@ -34,10 +34,8 @@ export class UsersService {
     return this.usersRepository.findVendorById(userId);
   }
 
-  async createOne(
-    userCreateOneRequestDto: UserCreateRequestDto,
-  ): Promise<User> {
-    const { name, email, password } = userCreateOneRequestDto;
+  async createOne(userCreateDto: UserCreateDto): Promise<User> {
+    const { name, email, password } = userCreateDto;
 
     const passwordSalt = await this.encryptService.generateSalt(
       USER_PASSWORD_SALT_ROUNDS,
@@ -66,9 +64,9 @@ export class UsersService {
 
   async updatePassword(
     id: string,
-    updateUserPasswordDto: UserUpdatePasswordRequestDto,
+    userUpdatePasswordDto: UserUpdatePasswordDto,
   ): Promise<User> {
-    const { password } = updateUserPasswordDto;
+    const { password } = userUpdatePasswordDto;
 
     const user = await this.findById(id);
 
