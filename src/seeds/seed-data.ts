@@ -1,4 +1,4 @@
-import { v4 as uuidv4 } from 'uuid';
+import { randomUUID } from 'crypto';
 
 import { Gender, ProductActivityStatus, ProductStatus } from '~/common/enums';
 
@@ -113,7 +113,7 @@ const imageSeedData = [
 
 const usersSeedData = [
   {
-    id: uuidv4(),
+    id: randomUUID(),
     name: 'Joe Dou',
     email: 'vendor1@example.com',
     passwordHash: 'hashedpassword1',
@@ -122,7 +122,7 @@ const usersSeedData = [
     updated_at: new Date(),
   },
   {
-    id: uuidv4(),
+    id: randomUUID(),
     name: 'Ben Gran',
     email: 'vendor2@example.com',
     passwordHash: 'hashedpassword2',
@@ -134,7 +134,7 @@ const usersSeedData = [
 
 const profilesSeedData = [
   {
-    id: uuidv4(),
+    id: randomUUID(),
     user_id: usersSeedData[0].id,
     role: UserRole.VENDOR,
     phoneNumber: '123456789',
@@ -153,7 +153,7 @@ const profilesSeedData = [
     updatedAt: new Date(),
   },
   {
-    id: uuidv4(),
+    id: randomUUID(),
     user_id: usersSeedData[1].id,
     role: UserRole.VENDOR,
     phoneNumber: '987654321',
