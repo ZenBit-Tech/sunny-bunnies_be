@@ -58,10 +58,6 @@ export class CreateProductTable1717426580703 implements MigrationInterface {
             type: 'text',
           },
           {
-            name: ColumnName.QUANTITY,
-            type: 'int',
-          },
-          {
             name: ColumnName.GENDER,
             type: 'enum',
             enum: ['male', 'female'],
@@ -90,15 +86,7 @@ export class CreateProductTable1717426580703 implements MigrationInterface {
             type: 'int',
           },
           {
-            name: ColumnName.SIZE_ID,
-            type: 'int',
-          },
-          {
             name: ColumnName.CATEGORY_ID,
-            type: 'int',
-          },
-          {
-            name: ColumnName.COLOR_ID,
             type: 'int',
           },
           {
@@ -140,29 +128,9 @@ export class CreateProductTable1717426580703 implements MigrationInterface {
     await queryRunner.createForeignKey(
       TableName.PRODUCTS,
       new TableForeignKey({
-        columnNames: [ColumnName.SIZE_ID],
-        referencedColumnNames: [ColumnName.ID],
-        referencedTableName: TableName.SIZES,
-        onDelete: 'CASCADE',
-      }),
-    );
-
-    await queryRunner.createForeignKey(
-      TableName.PRODUCTS,
-      new TableForeignKey({
         columnNames: [ColumnName.CATEGORY_ID],
         referencedColumnNames: [ColumnName.ID],
         referencedTableName: TableName.CATEGORIES,
-        onDelete: 'CASCADE',
-      }),
-    );
-
-    await queryRunner.createForeignKey(
-      TableName.PRODUCTS,
-      new TableForeignKey({
-        columnNames: [ColumnName.COLOR_ID],
-        referencedColumnNames: [ColumnName.ID],
-        referencedTableName: TableName.COLORS,
         onDelete: 'CASCADE',
       }),
     );
