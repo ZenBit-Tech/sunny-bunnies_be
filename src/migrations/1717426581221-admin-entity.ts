@@ -47,14 +47,17 @@ class CreateAdminUser1717160000000 implements MigrationInterface {
 
   public async down(queryRunner: QueryRunner): Promise<void> {
     const email = process.env.ADMIN_EMAIL;
-    const role = 'admin';
+    const user = await queryRunner.query(`
+      SELECT id FROM users WHERE email = '${email}'
+    `);
+    const userId = user[0]?.id;
 
     await queryRunner.query(`
-      DELETE FROM users WHERE email = '${email}' AND role = '${role}'
+      DELETE FROM user_profiles WHERE user_id = '${userId}'
     `);
 
     await queryRunner.query(`
-      DELETE FROM user_profiles WHERE role = '${role}'
+      DELETE FROM users WHERE id = '${userId}'
     `);
   }
 }
