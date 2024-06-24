@@ -10,6 +10,7 @@ class CreateUserProfilesTable1716809999999 implements MigrationInterface {
             name: 'id',
             type: 'varchar',
             isPrimary: true,
+            length: '36',
           },
           {
             name: 'user_id',

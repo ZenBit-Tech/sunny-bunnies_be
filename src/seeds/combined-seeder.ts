@@ -33,7 +33,6 @@ import {
 export class CombinedSeeder implements Seeder {
   public async run(dataSource: DataSource): Promise<void> {
     await this.disableForeignKeyChecks(dataSource);
-    await this.truncateTables(dataSource);
     await this.seedColors(dataSource);
     await this.seedCategories(dataSource);
     await this.seedSizes(dataSource);
@@ -54,21 +53,6 @@ export class CombinedSeeder implements Seeder {
 
   private async enableForeignKeyChecks(dataSource: DataSource): Promise<void> {
     await dataSource.query('SET FOREIGN_KEY_CHECKS = 1;');
-  }
-
-  private async truncateTables(dataSource: DataSource): Promise<void> {
-    await dataSource.query('TRUNCATE TABLE products;');
-    await dataSource.query('TRUNCATE TABLE product_variants;');
-    await dataSource.query('TRUNCATE TABLE user_profiles;');
-    await dataSource.query('TRUNCATE TABLE users;');
-    await dataSource.query('TRUNCATE TABLE colors;');
-    await dataSource.query('TRUNCATE TABLE categories;');
-    await dataSource.query('TRUNCATE TABLE sizes;');
-    await dataSource.query('TRUNCATE TABLE styles;');
-    await dataSource.query('TRUNCATE TABLE brands;');
-    await dataSource.query('TRUNCATE TABLE materials;');
-    await dataSource.query('TRUNCATE TABLE users_reviews;');
-    await dataSource.query('TRUNCATE TABLE product_images;');
   }
 
   private async seedColors(dataSource: DataSource): Promise<void> {
