@@ -53,7 +53,7 @@ class CreateAdminUser1717160000000 implements MigrationInterface {
     const userId = user[0]?.id;
 
     await queryRunner.query(`
-      DELETE FROM user_profiles WHERE user_id = '${userId}'
+       DELETE FROM user_profiles WHERE user_id = '${userId}'
     `);
 
     await queryRunner.query(`
