@@ -16,7 +16,7 @@ class TypeOrmConfig {
       database: configService.get<string>('DATABASE_NAME'),
       entities: [`${__dirname}/../../entities/*.entity{.ts,.js}`],
       migrations: [`${__dirname}/../../migrations/*{.ts,.js}`],
-      synchronize: false,
+      synchronize: true,
       namingStrategy: new SnakeNamingStrategy(),
     };
   }
