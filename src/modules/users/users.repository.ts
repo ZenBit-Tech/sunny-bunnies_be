@@ -169,4 +169,32 @@ export class UsersRepository extends Repository<User> {
       ...payload,
     });
   }
+
+  async findAndSortUsers(
+    order: 'ASC' | 'DESC',
+    sortField: string,
+    role: string,
+    searchQuery: string,
+  ): Promise<User[]> {
+    if (sortField === 'addressLineOne') {
+      const query = this.createQueryBuilder('user')
+        .leftJoinAndSelect('user.profile', 'profile')
+        .where('profile.role = :role', { role })
+        .andWhere(`profile.${sortField} LIKE :searchQuery`, {
+          searchQuery: `%${searchQuery}%`,
+        })
+        .orderBy(`profile.${sortField}`, order);
+
+      return query.getMany();
+    }
+    const query = this.createQueryBuilder('user')
+      .leftJoinAndSelect('user.profile', 'profile')
+      .where('profile.role = :role', { role })
+      .andWhere(`user.${sortField} LIKE :searchQuery`, {
+        searchQuery: `%${searchQuery}%`,
+      })
+      .orderBy(`user.${sortField}`, order);
+
+    return query.getMany();
+  }
 }

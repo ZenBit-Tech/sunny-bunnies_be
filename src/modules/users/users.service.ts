@@ -89,4 +89,18 @@ export class UsersService {
 
     return this.usersRepository.findById(userId);
   }
+
+  async findAndSortUsers(
+    order: 'ASC' | 'DESC',
+    sortField: string,
+    role: string,
+    searchQuery: string,
+  ): Promise<User[]> {
+    return this.usersRepository.findAndSortUsers(
+      order,
+      sortField,
+      role,
+      searchQuery,
+    );
+  }
 }
