@@ -7,7 +7,7 @@ import {
 import { Reflector } from '@nestjs/core';
 import { AuthPayloadToken } from '~/common/types';
 import { UsersService } from '../../users/users.service';
-import { Token } from '~/modules/token/token.package';
+import { Token } from '~/utils/token.package';
 
 @Injectable()
 export class AuthGuard implements CanActivate {

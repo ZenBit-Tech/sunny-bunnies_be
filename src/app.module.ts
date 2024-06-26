@@ -11,7 +11,6 @@ import { UsersModule } from './modules/users/users.module';
 import { FiltersModule } from './modules/filters/filters.module';
 import { FollowersModule } from './modules/followers/followers.module';
 import { UploadModule } from './modules/upload/upload.module';
-import { TokenModule } from '~/modules/token/token.module';
 
 @Module({
   imports: [
@@ -32,7 +31,6 @@ import { TokenModule } from '~/modules/token/token.module';
     UsersModule,
     FiltersModule,
     UploadModule,
-    TokenModule,
   ],
   controllers: [],
   providers: [

@@ -24,16 +24,13 @@ import {
   OtpCodePayloadToken,
 } from '~/common/types';
 import { Encrypt, Otp } from '~/utils';
-import { TokenService } from '~/modules/token/token.service';
-import { Token } from '~/modules/token/token.package';
+import { Token } from '~/utils/token.package';
 
 @Injectable()
 export class AuthService {
   private readonly usersService: UsersService;
 
   private readonly encrypt: Encrypt;
-
-  private readonly tokenService: TokenService;
 
   private readonly mailerService: MailerService;
 
@@ -48,7 +45,7 @@ export class AuthService {
   constructor(
     usersService: UsersService,
     encryptService: Encrypt,
-    tokenService: TokenService,
+
     mailerService: MailerService,
     otp: Otp,
     configService: ConfigService,
@@ -56,7 +53,7 @@ export class AuthService {
   ) {
     this.usersService = usersService;
     this.encrypt = encryptService;
-    this.tokenService = tokenService;
+
     this.mailerService = mailerService;
     this.otp = otp;
     this.configService = configService;
@@ -322,31 +319,18 @@ export class AuthService {
         expiresIn,
       },
     });
-
-    await this.tokenService.createOne({
-      token,
-    });
   }
 
   async resetPassword(authResetPasswordDto: AuthResetPasswordDto) {
     const { token, password } = authResetPasswordDto;
 
     const { userId, exp } = this.token.decode<AuthPayloadToken>(token);
-
     if (!userId) {
       throw new ConflictException('Invalid token');
     }
 
     const isExpired = this.token.isExpired(exp);
-
     if (isExpired) {
-      throw new UnauthorizedException('Session expired');
-    }
-
-    const storedToken = await this.tokenService.findByToken(token);
-    const isTokenStored = Boolean(storedToken);
-
-    if (!isTokenStored) {
       throw new UnauthorizedException('Session expired');
     }
 
@@ -359,8 +343,6 @@ export class AuthService {
     await this.usersService.updatePassword(user.id, {
       password,
     });
-
-    await this.tokenService.deleteOne(storedToken.id);
   }
 
   async generateTokens(userId: string): Promise<AuthTokens> {
