@@ -1,3 +1,5 @@
+import { randomUUID } from 'crypto';
+
 import { Gender, ProductActivityStatus, ProductStatus } from '~/common/enums';
 
 enum UserRole {
@@ -109,61 +111,31 @@ const imageSeedData = [
   },
 ];
 
-const reviewsSeedData = [
+const usersSeedData = [
   {
-    id: 7,
-    review:
-      'This vendor provides outstanding service and high-quality products. I am thoroughly impressed with their professionalism and attention to detail. From start to finish, my experience with them has been nothing short of exceptional. I highly recommend their services to anyone looking for reliability and top-notch performance.',
-    review_user_id: 'vendor-1',
-    reviewed_user_id: 'vendor-2',
-    createdAt: new Date(),
-    updatedAt: new Date(),
+    id: randomUUID(),
+    name: 'Joe Dou',
+    email: 'vendor1@example.com',
+    passwordHash: 'hashedpassword1',
+    passwordSalt: 'saltsalt1',
+    created_at: new Date(),
+    updated_at: new Date(),
   },
   {
-    id: 8,
-    review: `I have been consistently amazed by the excellent products offered by this vendor. Their attention to quality and customer satisfaction is truly commendable. Each time I order from them, I am met with products that exceed my expectations. I can confidently say that choosing this vendor was one of the best decisions I've made for my business.`,
-    review_user_id: 'vendor-2',
-    reviewed_user_id: 'vendor-1',
-    createdAt: new Date(),
-    updatedAt: new Date(),
-  },
-  {
-    id: 9,
-    review: `Great customer service and fast delivery. Their products are exactly as described and of excellent quality. I will definitely be ordering from them again!`,
-    review_user_id: 'vendor-2',
-    reviewed_user_id: 'vendor-1',
-    createdAt: new Date(),
-    updatedAt: new Date(),
-  },
-  {
-    id: 10,
-    review: `I am very pleased with my purchase. The vendor was responsive and helpful throughout the transaction. The product arrived on time and in perfect condition. Highly recommended!`,
-    review_user_id: 'vendor-2',
-    reviewed_user_id: 'vendor-1',
-    createdAt: new Date(),
-    updatedAt: new Date(),
-  },
-  {
-    id: 11,
-    review: `Top-notch service! The vendor exceeded my expectations with their prompt communication and high-quality products. I will definitely be a returning customer.`,
-    review_user_id: 'vendor-2',
-    reviewed_user_id: 'vendor-1',
-    createdAt: new Date(),
-    updatedAt: new Date(),
-  },
-  {
-    id: 12,
-    review: `Excellent products!`,
-    review_user_id: 'vendor-2',
-    reviewed_user_id: 'vendor-1',
-    createdAt: new Date(),
-    updatedAt: new Date(),
+    id: randomUUID(),
+    name: 'Ben Gran',
+    email: 'vendor2@example.com',
+    passwordHash: 'hashedpassword2',
+    passwordSalt: 'saltsalt2',
+    created_at: new Date(),
+    updated_at: new Date(),
   },
 ];
 
 const profilesSeedData = [
   {
-    user_id: 'vendor-1',
+    id: randomUUID(),
+    user_id: usersSeedData[0].id,
     role: UserRole.VENDOR,
     phoneNumber: '123456789',
     profilePhoto:
@@ -181,7 +153,8 @@ const profilesSeedData = [
     updatedAt: new Date(),
   },
   {
-    user_id: 'vendor-2',
+    id: randomUUID(),
+    user_id: usersSeedData[1].id,
     role: UserRole.VENDOR,
     phoneNumber: '987654321',
     profilePhoto:
@@ -200,24 +173,55 @@ const profilesSeedData = [
   },
 ];
 
-const usersSeedData = [
+const reviewsSeedData = [
   {
-    id: 'vendor-1',
-    name: 'Joe Dou',
-    email: 'vendor1@example.com',
-    passwordHash: 'hashedpassword1',
-    passwordSalt: 'saltsalt1',
-    created_at: new Date(),
-    updated_at: new Date(),
+    id: 7,
+    review:
+      'This vendor provides outstanding service and high-quality products. I am thoroughly impressed with their professionalism and attention to detail. From start to finish, my experience with them has been nothing short of exceptional. I highly recommend their services to anyone looking for reliability and top-notch performance.',
+    review_user_id: usersSeedData[0].id,
+    reviewed_user_id: usersSeedData[1].id,
+    createdAt: new Date(),
+    updatedAt: new Date(),
   },
   {
-    id: 'vendor-2',
-    name: 'Ben Gran',
-    email: 'vendor2@example.com',
-    passwordHash: 'hashedpassword2',
-    passwordSalt: 'saltsalt2',
-    created_at: new Date(),
-    updated_at: new Date(),
+    id: 8,
+    review: `I have been consistently amazed by the excellent products offered by this vendor. Their attention to quality and customer satisfaction is truly commendable. Each time I order from them, I am met with products that exceed my expectations. I can confidently say that choosing this vendor was one of the best decisions I've made for my business.`,
+    review_user_id: usersSeedData[0].id,
+    reviewed_user_id: usersSeedData[1].id,
+    createdAt: new Date(),
+    updatedAt: new Date(),
+  },
+  {
+    id: 9,
+    review: `Great customer service and fast delivery. Their products are exactly as described and of excellent quality. I will definitely be ordering from them again!`,
+    review_user_id: usersSeedData[0].id,
+    reviewed_user_id: usersSeedData[1].id,
+    createdAt: new Date(),
+    updatedAt: new Date(),
+  },
+  {
+    id: 10,
+    review: `I am very pleased with my purchase. The vendor was responsive and helpful throughout the transaction. The product arrived on time and in perfect condition. Highly recommended!`,
+    review_user_id: usersSeedData[0].id,
+    reviewed_user_id: usersSeedData[1].id,
+    createdAt: new Date(),
+    updatedAt: new Date(),
+  },
+  {
+    id: 11,
+    review: `Top-notch service! The vendor exceeded my expectations with their prompt communication and high-quality products. I will definitely be a returning customer.`,
+    review_user_id: usersSeedData[0].id,
+    reviewed_user_id: usersSeedData[1].id,
+    createdAt: new Date(),
+    updatedAt: new Date(),
+  },
+  {
+    id: 12,
+    review: `Excellent products!`,
+    review_user_id: usersSeedData[0].id,
+    reviewed_user_id: usersSeedData[1].id,
+    createdAt: new Date(),
+    updatedAt: new Date(),
   },
 ];
 
@@ -225,19 +229,18 @@ const productsSeedData = [
   {
     id: 1,
     name: 'Green dress',
-    description: 'Long green dress',
-    quantity: 10,
+    description:
+      'Elegant and flowing long green dress, perfect for formal occasions or a night out. Made from high-quality fabric that drapes beautifully, providing both comfort and style. Available in multiple sizes and colors.',
     gender: Gender.FEMALE,
     status: ProductStatus.BOTH,
     activity_status: ProductActivityStatus.ACTIVE,
     min_price: 100,
     max_price: 150,
-    // image_ids: [1],
     category_id: 1,
     style_id: 1,
     brand_id: 1,
     material_id: 1,
-    user_id: 'vendor-1',
+    user_id: usersSeedData[0].id,
     variants: [
       { size_id: 1, color_id: 1, quantity: 5 },
       { size_id: 2, color_id: 2, quantity: 3 },
@@ -249,19 +252,18 @@ const productsSeedData = [
   {
     id: 2,
     name: 'Shoes',
-    description: 'Shoes',
-    quantity: 2,
+    description:
+      'High-quality shoes designed for both comfort and style. Ideal for everyday wear or special occasions. Available in various sizes and colors to suit different preferences. Durable and stylish footwear for men.',
     gender: Gender.MALE,
     status: ProductStatus.BOTH,
     activity_status: ProductActivityStatus.ACTIVE,
     min_price: 200,
     max_price: 250,
-    // image_ids: [2],
     category_id: 4,
     style_id: 2,
     brand_id: 5,
     material_id: 2,
-    user_id: 'vendor-1',
+    user_id: usersSeedData[0].id,
     variants: [
       { size_id: 1, color_id: 6, quantity: 5 },
       { size_id: 2, color_id: 5, quantity: 3 },
@@ -272,19 +274,18 @@ const productsSeedData = [
   {
     id: 3,
     name: 'Pants',
-    description: 'pants',
-    quantity: 4,
+    description:
+      'Stylish and comfortable pants for women. Perfect for both casual and formal settings. Made from premium materials that offer durability and a great fit. Available in multiple sizes and colors to match your wardrobe.',
     gender: Gender.FEMALE,
     status: ProductStatus.BOTH,
     activity_status: ProductActivityStatus.ACTIVE,
     min_price: 200,
     max_price: 220,
-    // image_ids: [3, 4, 5],
     category_id: 1,
     style_id: 2,
     brand_id: 4,
     material_id: 3,
-    user_id: 'vendor-1',
+    user_id: usersSeedData[0].id,
     variants: [
       { size_id: 1, color_id: 1, quantity: 5 },
       { size_id: 2, color_id: 2, quantity: 3 },
@@ -296,19 +297,18 @@ const productsSeedData = [
   {
     id: 4,
     name: 'Shoes',
-    description: 'Shoes nike',
-    quantity: 2,
+    description:
+      'Stylish and comfortable pants for women. Perfect for both casual and formal settings. Made from premium materials that offer durability and a great fit. Available in multiple sizes and colors to match your wardrobe.',
     gender: Gender.MALE,
     status: ProductStatus.BOTH,
     activity_status: ProductActivityStatus.ACTIVE,
     min_price: 150,
     max_price: 170,
-    // image_ids: [6],
     category_id: 4,
     style_id: 2,
     brand_id: 4,
     material_id: 3,
-    user_id: 'vendor-2',
+    user_id: usersSeedData[1].id,
     variants: [
       { size_id: 1, color_id: 6, quantity: 5 },
       { size_id: 2, color_id: 4, quantity: 3 },
@@ -320,19 +320,18 @@ const productsSeedData = [
   {
     id: 5,
     name: 'Red bag',
-    description: 'Red bag',
-    quantity: 2,
+    description:
+      'Chic and stylish red bag perfect for adding a pop of color to any outfit. Spacious and functional, ideal for daily use or special events. Made from high-quality materials, ensuring durability and a sleek look.',
     gender: Gender.FEMALE,
     status: ProductStatus.FOR_RENT,
     activity_status: ProductActivityStatus.ACTIVE,
     min_price: 250,
     max_price: 270,
-    // image_ids: [7],
     category_id: 3,
     style_id: 3,
     brand_id: 3,
     material_id: 6,
-    user_id: 'vendor-2',
+    user_id: usersSeedData[1].id,
     variants: [{ size_id: 1, color_id: 1, quantity: 5 }],
     created_at: new Date(2024, 7, 25),
     updated_at: new Date(),
@@ -340,19 +339,18 @@ const productsSeedData = [
   {
     id: 6,
     name: 'Accessory',
-    description: 'Accessory',
-    quantity: 2,
+    description:
+      'Elegant and versatile accessory to complement any outfit. Perfect for adding a touch of sophistication to your look. Available in various styles and colors to suit your personal taste. Made with high-quality materials for lasting use.',
     gender: Gender.FEMALE,
     status: ProductStatus.FOR_SALE,
     activity_status: ProductActivityStatus.ACTIVE,
     min_price: 50,
     max_price: 70,
-    // image_ids: [8],
     category_id: 2,
     style_id: 2,
     brand_id: 4,
     material_id: 6,
-    user_id: 'vendor-2',
+    user_id: usersSeedData[1].id,
     variants: [{ size_id: 1, color_id: 6, quantity: 5 }],
     created_at: new Date(2024, 7, 25),
     updated_at: new Date(),

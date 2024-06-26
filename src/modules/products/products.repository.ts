@@ -45,7 +45,9 @@ export class ProductsRepository extends Repository<ProductEntity> {
       .leftJoinAndSelect('product.style', 'style')
       .leftJoinAndSelect('product.brand', 'brand')
       .leftJoinAndSelect('product.material', 'material')
-      .leftJoinAndSelect('product.variants', 'variants');
+      .leftJoinAndSelect('product.variants', 'variants')
+      .leftJoinAndSelect('variants.color', 'color')
+      .leftJoinAndSelect('variants.size', 'size');
 
     if (query.category) {
       qb.andWhere('category.name = :categoryName', {

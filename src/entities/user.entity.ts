@@ -55,7 +55,7 @@ export class User {
   @OneToMany('ProductEntity', (product: ProductEntity) => product.user)
   products: ProductEntity[];
 
-  @ManyToMany(() => User, (user) => user.followers)
+  @ManyToMany(() => User, (user) => user.following)
   @JoinTable({
     name: 'user_followers',
     joinColumn: {
@@ -69,7 +69,7 @@ export class User {
   })
   followers: User[];
 
-  @ManyToMany(() => User, (user) => user.following)
+  @ManyToMany(() => User, (user) => user.followers)
   following: User[];
 
   @OneToOne('UserCard', (card: UserCard) => card.user, {
