@@ -16,7 +16,6 @@ import {
   AuthVerifyEmailDto,
   AuthVerifyOtpDto,
 } from './dto';
-import { GoogleAuthSingUpDto } from '~/modules/auth/dto';
 import {
   AuthPayloadToken,
   AuthResponse,
@@ -116,8 +115,8 @@ export class AuthService {
     };
   }
 
-  async signUpGoogle(body: GoogleAuthSingUpDto): Promise<AuthResponse> {
-    const { email, name, jti } = this.token.decode(body.credential) as {
+  async signUpGoogle(token: string): Promise<AuthResponse> {
+    const { email, name, jti } = this.token.decode(token) as {
       email: string;
       name: string;
       jti: string;
@@ -321,7 +320,9 @@ export class AuthService {
     });
   }
 
-  async resetPassword(authResetPasswordDto: AuthResetPasswordDto) {
+  async resetPassword(
+    authResetPasswordDto: AuthResetPasswordDto,
+  ): Promise<void> {
     const { token, password } = authResetPasswordDto;
 
     const { userId, exp } = this.token.decode<AuthPayloadToken>(token);

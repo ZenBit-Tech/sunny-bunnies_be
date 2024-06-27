@@ -50,7 +50,9 @@ export class AuthController {
   @PublicRoute()
   @Post('google')
   async signUpGoogle(@Body() body: GoogleAuthSingUpDto): Promise<AuthResponse> {
-    return this.authService.signUpGoogle(body);
+    const token = body.credential;
+
+    return this.authService.signUpGoogle(token);
   }
 
   @PublicRoute()

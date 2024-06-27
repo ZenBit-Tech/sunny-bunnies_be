@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { DataSource } from 'typeorm';
+import { DataSource, Repository } from 'typeorm';
 import {
   BrandEntity,
   CategoryEntity,
@@ -15,7 +15,7 @@ import { FiltersResponse } from './types/filters-response.type';
 export class FiltersRepository {
   constructor(private readonly dataSource: DataSource) {}
 
-  private getRepository<Entity>(entity: new () => Entity) {
+  private getRepository<Entity>(entity: new () => Entity): Repository<Entity> {
     return this.dataSource.getRepository(entity);
   }
 
