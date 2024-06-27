@@ -27,6 +27,23 @@ export class UploadController {
     )
     file: Express.Multer.File,
   ) {
-    await this.uploadService.upload(file.originalname, file.buffer);
+    return this.uploadService.upload(file.originalname, file.buffer);
+  }
+
+  @Post('/product-image')
+  @UseInterceptors(FileInterceptor('file'))
+  async uploadProductImage(
+    @UploadedFile(
+      new ParseFilePipe({
+        validators: [new MaxFileSizeValidator({ maxSize: 1000000 })],
+      }),
+    )
+    file: Express.Multer.File,
+  ): Promise<{ url: string }> {
+    const response = await this.uploadService.upload(
+      file.originalname,
+      file.buffer,
+    );
+    return { url: response };
   }
 }
