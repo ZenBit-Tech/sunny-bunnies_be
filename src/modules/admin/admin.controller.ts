@@ -1,4 +1,4 @@
-import { Controller, UseGuards, Get, Query } from '@nestjs/common';
+import { Controller, UseGuards, Get, Query, Param } from '@nestjs/common';
 import { RolesGuard } from './guard/roles.guard';
 import { UsersService } from '../users/users.service';
 import {
@@ -11,6 +11,11 @@ import {
 @UseGuards(RolesGuard)
 export class AdminController {
   constructor(private readonly usersService: UsersService) {}
+
+  @Get('user/:id')
+  async getUserById(@Param('id') id: string) {
+    return this.usersService.findById(id);
+  }
 
   @Get('users')
   async findAllUsers(
