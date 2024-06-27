@@ -93,14 +93,14 @@ export class UsersService {
 
   async updateUserAndProfile(
     userId: string,
-    updateUerAndProfileDto: UpdateUserAndProfileDto,
+    updateUserAndProfileDto: UpdateUserAndProfileDto,
   ): Promise<User> {
     const user = await this.usersRepository.findById(userId);
     if (!user) {
       throw new NotFoundException('User not found');
     }
 
-    const { profile, ...updateUserDto } = updateUerAndProfileDto;
+    const { profile, ...updateUserDto } = updateUserAndProfileDto;
 
     await this.usersRepository.updateById(userId, updateUserDto);
 
