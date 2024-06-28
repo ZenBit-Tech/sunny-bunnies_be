@@ -11,6 +11,7 @@ import { UsersModule } from './modules/users/users.module';
 import { FiltersModule } from './modules/filters/filters.module';
 import { FollowersModule } from './modules/followers/followers.module';
 import { UploadModule } from './modules/upload/upload.module';
+import { AdminModule } from './modules/admin/admin.module';
 
 @Module({
   imports: [
@@ -31,6 +32,7 @@ import { UploadModule } from './modules/upload/upload.module';
     UsersModule,
     FiltersModule,
     UploadModule,
+    AdminModule,
   ],
   controllers: [],
   providers: [

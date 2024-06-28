@@ -1,9 +1,10 @@
 import { Injectable } from '@nestjs/common';
-import { DataSource, Repository } from 'typeorm';
+import { DataSource, IsNull, Repository } from 'typeorm';
 
 import { User, UserProfile, UserCard, UsersRating } from '~/entities';
 import { UserCardDto, UserProfileUpdateDto } from './dto';
 import { EncryptService } from '../auth/encrypt.service';
+import { UpdateStatusDto } from '../admin/dto';
 
 @Injectable()
 export class UsersRepository extends Repository<User> {
@@ -24,6 +25,7 @@ export class UsersRepository extends Repository<User> {
     return this.findOne({
       where: {
         id,
+        deletedAt: IsNull(),
       },
       relations: ['profile'],
     });
@@ -160,6 +162,13 @@ export class UsersRepository extends Repository<User> {
     );
   }
 
+  async updateStatus(
+    userId: string,
+    updateStatus: UpdateStatusDto,
+  ): Promise<void> {
+    await this.update(userId, { status: updateStatus.status });
+  }
+
   async updateById(
     id: string,
     payload: Partial<Omit<User, 'id'>>,
@@ -168,5 +177,33 @@ export class UsersRepository extends Repository<User> {
       id,
       ...payload,
     });
+  }
+
+  async findAndSortUsers(
+    order: 'ASC' | 'DESC',
+    sortField: string,
+    role: string,
+    searchQuery: string,
+  ): Promise<User[]> {
+    const baseQuery = this.createQueryBuilder('user')
+      .leftJoinAndSelect('user.profile', 'profile')
+      .where('profile.role = :role', { role })
+      .andWhere('user.deletedAt IS NULL');
+
+    if (sortField === 'addressLineOne') {
+      baseQuery
+        .andWhere(`profile.${sortField} LIKE :searchQuery`, {
+          searchQuery: `%${searchQuery}%`,
+        })
+        .orderBy(`profile.${sortField}`, order);
+    } else {
+      baseQuery
+        .andWhere(`user.${sortField} LIKE :searchQuery`, {
+          searchQuery: `%${searchQuery}%`,
+        })
+        .orderBy(`user.${sortField}`, order);
+    }
+
+    return baseQuery.getMany();
   }
 }

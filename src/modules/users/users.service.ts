@@ -7,6 +7,7 @@ import {
   UserProfileUpdateDto,
   UpdateUserDto,
 } from './dto';
+import { UpdateStatusDto } from '../admin/dto';
 
 @Injectable()
 export class UsersService {
@@ -17,7 +18,13 @@ export class UsersService {
   }
 
   async findById(userId: string): Promise<User> {
-    return this.usersRepository.findById(userId);
+    const user = await this.usersRepository.findById(userId);
+
+    if (!user) {
+      throw new NotFoundException('User not found');
+    }
+
+    return user;
   }
 
   async findVendorById(userId: string): Promise<User | null> {
@@ -88,5 +95,45 @@ export class UsersService {
     });
 
     return this.usersRepository.findById(userId);
+  }
+
+  async updateStatus(
+    userId: string,
+    updateStatus: UpdateStatusDto,
+  ): Promise<User> {
+    const user = await this.usersRepository.findById(userId);
+
+    if (!user) {
+      throw new NotFoundException('User not found');
+    }
+
+    await this.usersRepository.updateStatus(userId, updateStatus);
+
+    return this.usersRepository.findById(userId);
+  }
+
+  async findAndSortUsers(
+    order: 'ASC' | 'DESC',
+    sortField: string,
+    role: string,
+    searchQuery: string,
+  ): Promise<User[]> {
+    return this.usersRepository.findAndSortUsers(
+      order,
+      sortField,
+      role,
+      searchQuery,
+    );
+  }
+
+  async softDeleteUser(userId: string): Promise<void> {
+    const user = await this.findById(userId);
+
+    if (!user) {
+      throw new NotFoundException('User not found');
+    }
+
+    user.deletedAt = new Date();
+    await this.usersRepository.save(user);
   }
 }

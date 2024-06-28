@@ -21,6 +21,7 @@ import { type AuthResponse, type AuthTokens } from '~/common/types';
 
 @ApiTags('Auth')
 @UseInterceptors(TransformationInterceptor)
+@PublicRoute()
 @Controller('auth')
 export class AuthController {
   private readonly authService: AuthService;
@@ -29,14 +30,12 @@ export class AuthController {
     this.authService = authService;
   }
 
-  @PublicRoute()
   @Post('sign-in')
   @HttpCode(200)
   async signIn(@Body() authSignInDto: AuthSignInDto): Promise<AuthResponse> {
     return this.authService.signIn(authSignInDto);
   }
 
-  @PublicRoute()
   @Post('admin-sign-in')
   @HttpCode(200)
   async adminSignIn(
@@ -45,20 +44,17 @@ export class AuthController {
     return this.authService.adminSignIn(authSignInDto);
   }
 
-  @PublicRoute()
   @Post('google')
   async signUpGoogle(@Body() body: GoogleAuthSingUpDto): Promise<AuthResponse> {
     return this.authService.signUpGoogle(body);
   }
 
-  @PublicRoute()
   @Post('sign-up')
   @HttpCode(201)
   async signUp(@Body() authSignUpDto: AuthSignUpDto): Promise<AuthResponse> {
     return this.authService.signUp(authSignUpDto);
   }
 
-  @PublicRoute()
   @Post('generate-access')
   async generateAccess(
     @Body() authGenerateAccessDto: AuthGenerateAccess,
@@ -66,7 +62,6 @@ export class AuthController {
     return this.authService.generateAccess(authGenerateAccessDto);
   }
 
-  @PublicRoute()
   @HttpCode(200)
   @Post('verify-email')
   async verifyEmail(
@@ -75,7 +70,6 @@ export class AuthController {
     return this.authService.verifyEmail(authVerifyEmail);
   }
 
-  @PublicRoute()
   @HttpCode(200)
   @Post('verify-otp')
   async verifyOtp(@Body() authVerifyOtpDto: AuthVerifyOtpDto): Promise<void> {

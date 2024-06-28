@@ -44,13 +44,12 @@ export class User {
   @Column({ name: 'otp_token', nullable: true })
   otpToken: string | null;
 
-  @ApiProperty({ description: 'Created date of user' })
-  @CreateDateColumn({ name: 'created_at' })
-  createdAt: Date;
-
-  @ApiProperty({ description: 'Updated date of user' })
-  @UpdateDateColumn({ name: 'updated_at' })
-  updatedAt: Date;
+  @Column({
+    type: 'enum',
+    enum: ['active', 'inactive'],
+    default: 'active',
+  })
+  status: 'active' | 'inactive';
 
   @OneToMany('ProductEntity', (product: ProductEntity) => product.user)
   products: ProductEntity[];
@@ -93,4 +92,15 @@ export class User {
 
   @OneToMany('UsersReview', (review: UsersReview) => review.reviewUser)
   reviewsGiven: UsersReview[];
+
+  @Column({ type: 'timestamp', nullable: true, name: 'deleted_at' })
+  deletedAt: Date | null;
+
+  @ApiProperty({ description: 'Created date of user' })
+  @CreateDateColumn({ name: 'created_at' })
+  createdAt: Date;
+
+  @ApiProperty({ description: 'Updated date of user' })
+  @UpdateDateColumn({ name: 'updated_at' })
+  updatedAt: Date;
 }

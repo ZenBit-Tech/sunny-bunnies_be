@@ -11,6 +11,9 @@ export const nodemailerConfigFactory = async (
       user: configService.get<string>('AUTH_EMAIL'),
       pass: configService.get<string>('AUTH_EMAIL_PASSWORD'),
     },
+    tls: {
+      rejectUnauthorized: false,
+    },
   },
   defaults: {
     from: configService.get<string>('AUTH_EMAIL'),
