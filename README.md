@@ -50,8 +50,10 @@ erDiagram
     otp_token string "may be null"
     text password_hash
     text password_salt
+    enum status
     dateTime created_at
     dateTime updated_at
+    dateTime deleted_at "may be null"
   }
 
   user_profiles {
@@ -161,7 +163,7 @@ erDiagram
     int id PK
     varchar name
     varchar description
-    enum gender 
+    enum gender
     enum  status
     enum activityStatus
     decimal priceFrom
