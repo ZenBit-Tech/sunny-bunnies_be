@@ -28,10 +28,9 @@ export class AuthGuard implements CanActivate {
   }
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
-    const isPublic = this.reflector.get<boolean>(
-      'isPublic',
-      context.getHandler(),
-    );
+    const isPublic =
+      this.reflector.get<boolean>('isPublic', context.getHandler()) ||
+      this.reflector.get<boolean>('isPublic', context.getClass());
 
     if (isPublic) return true;
 

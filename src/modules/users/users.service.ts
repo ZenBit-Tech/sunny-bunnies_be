@@ -68,21 +68,6 @@ export class UsersService {
     return this.usersRepository.findById(userId);
   }
 
-  async updateStatus(
-    userId: string,
-    updateStatus: UpdateStatusDto,
-  ): Promise<User> {
-    const user = await this.usersRepository.findById(userId);
-
-    if (!user) {
-      throw new NotFoundException('User not found');
-    }
-
-    await this.usersRepository.updateStatus(userId, updateStatus);
-
-    return this.usersRepository.findById(userId);
-  }
-
   async updateProfile(
     userId: string,
     updateProfileDto: UserProfileUpdateDto,
@@ -108,6 +93,21 @@ export class UsersService {
     await this.usersRepository.updateProfile(user.id, {
       profilePhoto: photoUrl,
     });
+
+    return this.usersRepository.findById(userId);
+  }
+
+  async updateStatus(
+    userId: string,
+    updateStatus: UpdateStatusDto,
+  ): Promise<User> {
+    const user = await this.usersRepository.findById(userId);
+
+    if (!user) {
+      throw new NotFoundException('User not found');
+    }
+
+    await this.usersRepository.updateStatus(userId, updateStatus);
 
     return this.usersRepository.findById(userId);
   }

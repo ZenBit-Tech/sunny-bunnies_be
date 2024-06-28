@@ -1,6 +1,6 @@
 import { IsEnum } from 'class-validator';
 
-enum UserStatus {
+export enum UserStatus {
   ACTIVE = 'active',
   INACTIVE = 'inactive',
 }
