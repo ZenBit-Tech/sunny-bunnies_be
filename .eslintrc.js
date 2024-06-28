@@ -22,6 +22,17 @@ module.exports = {
     'no-void': 'off',
     'import/extensions': 'off',
   },
+  overrides: [
+    {
+      files: [
+        'src/modules/**/*.service.ts',
+        'src/modules/**/*.repository.ts'
+      ],
+      rules: {
+        '@typescript-eslint/explicit-function-return-type': ['error'],
+      },
+    },
+  ],
   root: true,
   env: {
     node: true,
