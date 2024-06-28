@@ -1,5 +1,13 @@
-import { Injectable } from '@nestjs/common';
-import { PutObjectCommand, S3Client } from '@aws-sdk/client-s3';
+import {
+  BadRequestException,
+  Injectable,
+  InternalServerErrorException,
+} from '@nestjs/common';
+import {
+  DeleteObjectCommand,
+  PutObjectCommand,
+  S3Client,
+} from '@aws-sdk/client-s3';
 import { ConfigService } from '@nestjs/config';
 import { randomUUID } from 'crypto';
 import { extname } from 'path';
@@ -30,5 +38,27 @@ export class UploadService {
     const uniqueId = randomUUID();
     const extension = extname(fileName);
     return `${uniqueId}${extension}`;
+  }
+
+  async delete(imageUrl: string): Promise<boolean> {
+    const bucketName = this.configService.getOrThrow('AWS_S3_BUCKET_NAME');
+    const key = imageUrl.split('.amazonaws.com/')[1];
+
+    if (!key) {
+      throw new BadRequestException('Failed to delete image from S3');
+    }
+
+    const command = new DeleteObjectCommand({
+      Bucket: bucketName,
+      Key: key,
+    });
+
+    try {
+      await this.s3Client.send(command);
+
+      return true;
+    } catch (error) {
+      throw new InternalServerErrorException('Failed to delete image from S3');
+    }
   }
 }

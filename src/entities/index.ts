@@ -11,5 +11,6 @@ export { UsersRating } from './users-rating.entity';
 export { UsersReview } from './users-review.entity';
 export { SizeEntity } from './size.entity';
 export { StyleEntity } from './style.entity';
+export { TypeEntity } from './type.entity';
 export { User } from './user.entity';
 export { UserCard } from './card.entity';

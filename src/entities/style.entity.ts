@@ -16,4 +16,11 @@ export class StyleEntity {
   })
   @Column({ type: 'text' })
   name: string;
+
+  @ApiProperty({
+    type: Number,
+    description: 'This is the id of the category to which the style belongs',
+  })
+  @Column()
+  category_id: number;
 }

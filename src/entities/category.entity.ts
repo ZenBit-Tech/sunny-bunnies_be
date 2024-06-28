@@ -1,5 +1,7 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { ApiProperty } from '@nestjs/swagger';
+
+import { type TypeEntity } from './index';
 
 @Entity({ name: 'categories' })
 export class CategoryEntity {
@@ -16,4 +18,7 @@ export class CategoryEntity {
   })
   @Column({ type: 'text' })
   name: string;
+
+  @OneToMany('TypeEntity', (type: TypeEntity) => type.category)
+  types: TypeEntity[];
 }
