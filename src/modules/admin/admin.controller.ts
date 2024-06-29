@@ -26,7 +26,7 @@ export class AdminController {
   constructor(private readonly usersService: UsersService) {}
 
   @Get('user/:id')
-  async getUserById(@Param('id') id: string) {
+  async getUserById(@Param('id') id: string): Promise<User> {
     return this.usersService.findById(id);
   }
 
@@ -51,7 +51,7 @@ export class AdminController {
     @Query('sortField') sortField: SortableField,
     @Query('role') role: SortableRole,
     @Query('searchQuery') searchQuery?: string,
-  ) {
+  ): Promise<User[]> {
     return this.usersService.findAndSortUsers(
       order,
       sortField,
