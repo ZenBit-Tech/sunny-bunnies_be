@@ -26,7 +26,8 @@ module.exports = {
     {
       files: [
         'src/modules/**/*.service.ts',
-        'src/modules/**/*.repository.ts'
+        'src/modules/**/*.repository.ts',
+        'src/modules/**/*.controller.ts'
       ],
       rules: {
         '@typescript-eslint/explicit-function-return-type': ['error'],
