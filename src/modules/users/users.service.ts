@@ -1,4 +1,5 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
+import { MailerService } from '@nestjs-modules/mailer';
 import { UsersRepository } from './users.repository';
 import { User } from '~/entities';
 import {
@@ -13,8 +14,11 @@ import { UpdateStatusDto } from '../admin/dto';
 export class UsersService {
   private readonly usersRepository: UsersRepository;
 
-  constructor(usersRepository: UsersRepository) {
+  private readonly mailerService: MailerService;
+
+  constructor(usersRepository: UsersRepository, mailerService: MailerService) {
     this.usersRepository = usersRepository;
+    this.mailerService = mailerService;
   }
 
   async findById(userId: string): Promise<User> {
@@ -102,12 +106,25 @@ export class UsersService {
     updateStatus: UpdateStatusDto,
   ): Promise<User> {
     const user = await this.usersRepository.findById(userId);
+    const active = 'active';
 
     if (!user) {
       throw new NotFoundException('User not found');
     }
 
     await this.usersRepository.updateStatus(userId, updateStatus);
+
+    if (user.status === active) {
+      await this.mailerService.sendMail({
+        to: user.email,
+        subject: 'Black circle your account has been blocked',
+        template: 'bloak-user',
+        context: {
+          name: user.name,
+          userEmail: user.email,
+        },
+      });
+    }
 
     return this.usersRepository.findById(userId);
   }

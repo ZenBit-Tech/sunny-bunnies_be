@@ -36,6 +36,8 @@ export class AuthService {
 
   private readonly adminRole = 'admin';
 
+  private readonly blocked = 'inactive';
+
   constructor(
     usersService: UsersService,
     encryptService: EncryptService,
@@ -52,9 +54,13 @@ export class AuthService {
     const { email, password } = authSignInDto;
 
     const user = await this.usersService.findByEmail(email);
+    const isValidAccount =
+      !user ||
+      user.profile.role === this.adminRole ||
+      user.status === this.blocked;
 
-    if (!user || user.profile.role === this.adminRole) {
-      throw new ConflictException('Invalid email or password');
+    if (isValidAccount) {
+      throw new ConflictException('Invalid username or password');
     }
 
     const hasSamePassword = await this.encryptService.compare({
@@ -64,7 +70,7 @@ export class AuthService {
     });
 
     if (!hasSamePassword) {
-      throw new ConflictException('Invalid email or password');
+      throw new ConflictException('Invalid username or password');
     }
 
     const { refreshToken, accessToken } = await this.generateTokens(user.id);
@@ -82,7 +88,7 @@ export class AuthService {
     const user = await this.usersService.findByEmail(email);
 
     if (!user || user.profile.role !== this.adminRole) {
-      throw new ConflictException('Invalid email or password');
+      throw new ConflictException('Invalid username or password');
     }
 
     const hasSamePassword = await this.encryptService.compare({
@@ -92,7 +98,7 @@ export class AuthService {
     });
 
     if (!hasSamePassword) {
-      throw new ConflictException('Invalid email or password');
+      throw new ConflictException('Invalid username or password');
     }
 
     const { refreshToken, accessToken } = await this.generateTokens(user.id);
@@ -116,6 +122,14 @@ export class AuthService {
     }
 
     const existedUser = await this.usersService.findByEmail(email);
+    const isValidAccount =
+      !existedUser ||
+      existedUser.profile.role === this.adminRole ||
+      existedUser.status === this.blocked;
+
+    if (isValidAccount) {
+      throw new NotFoundException("Can't find your google account.");
+    }
 
     if (existedUser) {
       const { refreshToken, accessToken } = await this.generateTokens(

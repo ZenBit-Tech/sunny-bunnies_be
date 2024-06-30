@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Email Blocked</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background-color: #fafafa;
+    }
+
+    table {
+      width: 100%;
+      max-width: 800px;
+      background-color: white;
+      border-collapse: collapse;
+      margin: auto;
+    }
+
+    .header {
+      color: #fafafa;
+      text-align: center;
+      padding: 10px 0;
+    }
+
+
+    .header-logo {
+      width: 28px;
+      height: 28px;
+      background: black;
+      border-radius: 50%;
+      position: relative;
+      top: 2px;
+    }
+
+    .header-title {
+      font-family: Playfair Display, serif;
+      font-size: 30px;
+      font-weight: bold;
+      color: black;
+    }
+
+    .main {
+      padding: 20px 40px;
+      height: 400px;
+      vertical-align: top;
+    }
+
+    .main-title {
+      font-family: Playfair Display, serif;
+      font-size: 26px;
+      line-height: 22px;
+      font-weight: 600;
+    }
+
+    .main-description {
+      line-height: 1.5;
+      font-size: 20px;
+      color: #5e5e5e;;
+    }
+
+    .main-content {
+      margin-top: 30px;
+      text-align: center;
+      font-size: 18px;
+    }
+
+    .otp-code {
+      font-size: 20px;
+      font-weight: bold;
+      color: #121212;
+    }
+
+    .content-bottom {
+      background-color: black;
+      color: #fafafa;
+      text-align: center;
+      padding: 10px 0;
+      font-size: 18px;
+    }
+
+    table {
+      margin-top: 50px;
+    }
+
+    .content-bottom {
+      margin-top: 80px;
+    }
+
+    .main-content-text {
+      color: #5e5e5e;
+    }
+
+    .main-content-subtext {
+      color: #999;
+    }
+  </style>
+</head>
+<body>
+<table>
+  <tr>
+    <th colspan="2" class="header">
+      <span class="header-title">Black Circle</span>
+    </th>
+  </tr>
+<tr>
+    <td colspan="2" class="main">
+      <span class="main-title">Account Blocked</span>
+      <div class="main-description">
+        <p>Hello {{name}},</p>
+        <p>Your account associated with the email <span class="user-email">{{userEmail}}</span> has been blocked.</p>
+        <p>If you you have questions please reach out us via email.</p>
+      </div>
+      <div class="main-content">
+        <p class="main-content-text">Support Email: <span class="support-email">support.black.circle@gmail.com</span></p>
+      </div>
+    </td>
+  </tr>
+  <tr>
+    <td colspan="2" class="content-bottom">
+      <span class="content-bottom-text">Thank you for your understanding.</span>
+    </td>
+  </tr>
+</table>
+</body>
+</html>
