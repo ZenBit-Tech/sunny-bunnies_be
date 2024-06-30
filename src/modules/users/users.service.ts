@@ -6,6 +6,7 @@ import {
   UserCardDto,
   UserProfileUpdateDto,
   UpdateUserDto,
+  UpdateUserAndProfileDto,
 } from './dto';
 
 @Injectable()
@@ -86,6 +87,26 @@ export class UsersService {
     await this.usersRepository.updateProfile(user.id, {
       profilePhoto: photoUrl,
     });
+
+    return this.usersRepository.findById(userId);
+  }
+
+  async updateUserAndProfile(
+    userId: string,
+    updateUserAndProfileDto: UpdateUserAndProfileDto,
+  ): Promise<User> {
+    const user = await this.usersRepository.findById(userId);
+    if (!user) {
+      throw new NotFoundException('User not found');
+    }
+
+    const { profile, ...updateUserDto } = updateUserAndProfileDto;
+
+    await this.usersRepository.updateById(userId, updateUserDto);
+
+    if (profile) {
+      await this.usersRepository.updateProfile(userId, profile);
+    }
 
     return this.usersRepository.findById(userId);
   }

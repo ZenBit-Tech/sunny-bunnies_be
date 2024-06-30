@@ -16,7 +16,11 @@ import { FileInterceptor } from '@nestjs/platform-express';
 import { UsersService } from './users.service';
 import { GetUser, PublicRoute } from '~/common/decorators';
 import { User } from '~/entities';
-import { UserProfileUpdateDto, UserCardDto } from './dto/index';
+import {
+  UserProfileUpdateDto,
+  UserCardDto,
+  UpdateUserAndProfileDto,
+} from './dto/index';
 import { UploadService } from '../upload/upload.service';
 
 @ApiTags('Users')
@@ -44,7 +48,7 @@ export class UsersController {
     return this.usersService.findVendorById(param.id);
   }
 
-  @Patch('update')
+  @Patch('update-profile')
   @HttpCode(200)
   async updateProfile(
     @GetUser() user: User,
@@ -80,5 +84,17 @@ export class UsersController {
     @Body() updateCardDto: UserCardDto,
   ): Promise<User> {
     return this.usersService.updateCard(user.id, updateCardDto);
+  }
+
+  @Patch('update-user-and-profile')
+  @HttpCode(200)
+  async updateUserAndProfile(
+    @GetUser() user: User,
+    @Body() updateUserAndProfile: UpdateUserAndProfileDto,
+  ): Promise<User> {
+    return this.usersService.updateUserAndProfile(
+      user.id,
+      updateUserAndProfile,
+    );
   }
 }
