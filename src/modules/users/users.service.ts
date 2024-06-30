@@ -118,7 +118,7 @@ export class UsersService {
       await this.mailerService.sendMail({
         to: user.email,
         subject: 'Black circle your account has been blocked',
-        template: 'bloak-user',
+        template: 'block-user',
         context: {
           name: user.name,
           userEmail: user.email,
