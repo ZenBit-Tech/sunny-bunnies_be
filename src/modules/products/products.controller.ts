@@ -32,7 +32,6 @@ export class ProductsController {
     @GetUser() user: User,
     @Body() body: CreateProductDto,
   ): Promise<ProductEntity> {
-    console.log(user, 'user');
     return this.productsService.create(user.id, body);
   }
 }

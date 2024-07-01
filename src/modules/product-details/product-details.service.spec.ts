@@ -10,7 +10,7 @@ import {
   SizeEntity,
   StyleEntity,
 } from '~/entities';
-import { CategoriesRepository } from './categories.repository'; // Ensure this path is correct
+import { CategoriesRepository } from './categories.repository';
 
 const mockRepository = () => ({
   find: jest.fn(),
