@@ -1,5 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { NotFoundException } from '@nestjs/common';
+import { MailerService } from '@nestjs-modules/mailer';
 import { UsersService } from './users.service';
 import { UsersRepository } from './users.repository';
 import { UpdateStatusDto, UserStatus } from '../admin/dto/update-status.dto';
@@ -21,6 +22,12 @@ describe('UsersService', () => {
             softDelete: jest.fn(),
             save: jest.fn(),
             findAndSortUsers: jest.fn(),
+          },
+        },
+        {
+          provide: MailerService,
+          useValue: {
+            sendMail: jest.fn(),
           },
         },
       ],
@@ -126,6 +133,8 @@ describe('UsersService', () => {
     const sortField = 'name';
     const role = 'user';
     const searchQuery = 'John';
+    const page = 1;
+    const limit = 10;
     const mockUsers: User[] = [
       {
         id: '1',
@@ -172,15 +181,21 @@ describe('UsersService', () => {
         updatedAt: new Date(),
       },
     ];
+    const totalCount = mockUsers.length;
 
-    it('should return sorted users', async () => {
-      jest.spyOn(repository, 'findAndSortUsers').mockResolvedValue(mockUsers);
+    it('should return sorted users with total count and total pages', async () => {
+      jest.spyOn(repository, 'findAndSortUsers').mockResolvedValue({
+        users: mockUsers,
+        totalCount,
+      });
 
       const result = await service.findAndSortUsers(
         order,
         sortField,
         role,
         searchQuery,
+        page,
+        limit,
       );
 
       expect(repository.findAndSortUsers).toHaveBeenCalledWith(
@@ -188,8 +203,14 @@ describe('UsersService', () => {
         sortField,
         role,
         searchQuery,
+        page,
+        limit,
       );
-      expect(result).toEqual(mockUsers);
+      expect(result).toEqual({
+        users: mockUsers,
+        totalCount,
+        totalPages: Math.ceil(totalCount / limit),
+      });
     });
 
     it('should handle errors', async () => {
@@ -199,13 +220,22 @@ describe('UsersService', () => {
         .mockRejectedValue(new Error(errorMessage));
 
       await expect(
-        service.findAndSortUsers(order, sortField, role, searchQuery),
+        service.findAndSortUsers(
+          order,
+          sortField,
+          role,
+          searchQuery,
+          page,
+          limit,
+        ),
       ).rejects.toThrow(errorMessage);
       expect(repository.findAndSortUsers).toHaveBeenCalledWith(
         order,
         sortField,
         role,
         searchQuery,
+        page,
+        limit,
       );
     });
   });

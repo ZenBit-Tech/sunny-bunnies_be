@@ -134,13 +134,21 @@ export class UsersService {
     sortField: string,
     role: string,
     searchQuery: string,
-  ): Promise<User[]> {
-    return this.usersRepository.findAndSortUsers(
+    page: number,
+    limit: number,
+  ): Promise<{ users: User[]; totalCount: number; totalPages: number }> {
+    const { users, totalCount } = await this.usersRepository.findAndSortUsers(
       order,
       sortField,
       role,
       searchQuery,
+      page,
+      limit,
     );
+
+    const totalPages = Math.ceil(totalCount / limit);
+
+    return { users, totalCount, totalPages };
   }
 
   async softDeleteUser(userId: string): Promise<void> {
