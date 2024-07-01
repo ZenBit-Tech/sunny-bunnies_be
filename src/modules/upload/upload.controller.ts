@@ -51,7 +51,6 @@ export class UploadController {
     return { url: response };
   }
 
-  @PublicRoute()
   @Delete('/product-image')
   async deleteProductImage(
     @Body() deleteImageDto: DeleteProductImageDto,
