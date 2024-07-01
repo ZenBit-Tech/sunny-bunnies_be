@@ -51,12 +51,16 @@ export class AdminController {
     @Query('sortField') sortField: SortableField,
     @Query('role') role: SortableRole,
     @Query('searchQuery') searchQuery?: string,
-  ): Promise<User[]> {
+    @Query('page') page: number = 1,
+    @Query('limit') limit: number = 7,
+  ): Promise<{ users: User[]; totalCount: number; totalPages: number }> {
     return this.usersService.findAndSortUsers(
       order,
       sortField,
       role,
       searchQuery,
+      page,
+      limit,
     );
   }
 }

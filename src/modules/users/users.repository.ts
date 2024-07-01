@@ -184,7 +184,9 @@ export class UsersRepository extends Repository<User> {
     sortField: string,
     role: string,
     searchQuery: string,
-  ): Promise<User[]> {
+    page: number,
+    limit: number,
+  ): Promise<{ users: User[]; totalCount: number }> {
     const baseQuery = this.createQueryBuilder('user')
       .leftJoinAndSelect('user.profile', 'profile')
       .where('profile.role = :role', { role })
@@ -204,6 +206,11 @@ export class UsersRepository extends Repository<User> {
         .orderBy(`user.${sortField}`, order);
     }
 
-    return baseQuery.getMany();
+    const [users, totalCount] = await baseQuery
+      .skip((page - 1) * limit)
+      .take(limit)
+      .getManyAndCount();
+
+    return { users, totalCount };
   }
 }
