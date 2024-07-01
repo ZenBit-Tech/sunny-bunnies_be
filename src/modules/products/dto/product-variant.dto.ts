@@ -7,14 +7,14 @@ export class ProductVariantDto {
     example: 1,
   })
   @IsNumber()
-  color: string;
+  color: number;
 
   @ApiProperty({
     description: 'The size id of the product variant',
     example: 1,
   })
   @IsNumber()
-  size: string;
+  size: number;
 
   @ApiProperty({
     description: 'The quantity of the product variant',

@@ -12,6 +12,7 @@ import { ProductVariantDto } from './product-variant.dto';
 import { ProductImageDto } from './product-image.dto';
 
 const minProductVariantsLength = 1;
+const minImagesLength = 4;
 
 export class CreateProductDto {
   @ApiProperty({
@@ -87,12 +88,12 @@ export class CreateProductDto {
   style: number;
 
   @ApiProperty({
-    type: String,
+    type: Number,
     description: 'The gender of new product',
     required: true,
   })
-  @IsString()
-  gender: string;
+  @IsNumber()
+  gender: number;
 
   @ApiProperty({
     type: [ProductVariantDto],
@@ -115,9 +116,9 @@ export class CreateProductDto {
   })
   @IsArray()
   @ValidateNested({ each: true })
-  @Type(() => String)
-  @ArrayMinSize(minProductVariantsLength, {
-    message: 'At least one variant is required',
+  @Type(() => ProductImageDto)
+  @ArrayMinSize(minImagesLength, {
+    message: 'Four images are required',
   })
   images: ProductImageDto[];
 }
