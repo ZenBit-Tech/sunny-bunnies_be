@@ -1,4 +1,10 @@
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  Entity,
+  JoinColumn,
+  ManyToOne,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 import { ApiProperty } from '@nestjs/swagger';
 
 import { type CategoryEntity } from './category.entity';
@@ -16,16 +22,17 @@ export class TypeEntity {
     type: String,
     description: 'This is the name of the type',
   })
-  @Column({ type: 'text' })
+  @Column({ type: 'varchar' })
   name: string;
+
+  @ManyToOne('CategoryEntity', (category: CategoryEntity) => category.types)
+  @JoinColumn({ name: 'category_id' })
+  category: CategoryEntity;
 
   @ApiProperty({
     type: Number,
     description: 'This is the id of the category to which the type belongs',
   })
-  @Column()
-  category_id: number;
-
-  @ManyToOne('CategoryEntity', (category: CategoryEntity) => category.types)
-  category: CategoryEntity;
+  @Column({ name: 'category_id' })
+  categoryId: number;
 }

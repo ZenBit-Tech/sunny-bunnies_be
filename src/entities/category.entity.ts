@@ -16,7 +16,7 @@ export class CategoryEntity {
     type: String,
     description: 'This is the name of the category',
   })
-  @Column({ type: 'text' })
+  @Column({ type: 'varchar' })
   name: string;
 
   @OneToMany('TypeEntity', (type: TypeEntity) => type.category)

@@ -14,6 +14,6 @@ export class SizeEntity {
     type: String,
     description: 'This is the name of the size',
   })
-  @Column({ type: 'text' })
+  @Column({ type: 'varchar' })
   name: string;
 }

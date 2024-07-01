@@ -14,13 +14,6 @@ export class StyleEntity {
     type: String,
     description: 'This is the name of the style',
   })
-  @Column({ type: 'text' })
+  @Column({ type: 'varchar' })
   name: string;
-
-  @ApiProperty({
-    type: Number,
-    description: 'This is the id of the category to which the style belongs',
-  })
-  @Column()
-  category_id: number;
 }
