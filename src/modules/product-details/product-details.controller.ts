@@ -1,4 +1,4 @@
-import { Controller, Get } from '@nestjs/common';
+import { Controller, Get, Param } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 
 import { PublicRoute } from '~/common/decorators';
@@ -52,8 +52,11 @@ export class ProductDetailsController {
   }
 
   @PublicRoute()
-  @Get('/sizes')
-  async findAllSizes(): Promise<SizeEntity[]> {
-    return this.productDetailsService.findAllSizes();
+  @Get('/sizes/:categoryId')
+  async findAllSizes(
+    @Param() param: { categoryId: number },
+  ): Promise<SizeEntity[]> {
+    const { categoryId } = param;
+    return this.productDetailsService.findAllSizesByCategory(+categoryId);
   }
 }

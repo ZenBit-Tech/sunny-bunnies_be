@@ -6,33 +6,19 @@ import {
   CategoryEntity,
   ColorEntity,
   MaterialEntity,
+  ProductVariantEntity,
   SizeEntity,
   StyleEntity,
   TypeEntity,
 } from '~/entities';
 
 import { ProductDetailsController } from './product-details.controller';
-import { CategoriesRepository } from './repositories/categories.repository';
 import { ProductDetailsService } from './product-details.service';
-import {
-  BrandsRepository,
-  MaterialsRepository,
-  StylesRepository,
-} from './repositories';
-import { ColorRepository } from './repositories/colors.repository';
-import { SizesRepository } from './repositories/sizes.repository';
+import { CategoriesRepository } from './categories.repository';
 
 @Module({
   controllers: [ProductDetailsController],
-  providers: [
-    ProductDetailsService,
-    CategoriesRepository,
-    BrandsRepository,
-    StylesRepository,
-    MaterialsRepository,
-    ColorRepository,
-    SizesRepository,
-  ],
+  providers: [ProductDetailsService, CategoriesRepository],
   imports: [
     TypeOrmModule.forFeature([
       BrandEntity,
@@ -42,6 +28,7 @@ import { SizesRepository } from './repositories/sizes.repository';
       MaterialEntity,
       ColorEntity,
       SizeEntity,
+      ProductVariantEntity,
     ]),
   ],
 })

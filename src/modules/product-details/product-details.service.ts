@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
-
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
 import {
   BrandEntity,
   CategoryEntity,
@@ -8,66 +9,48 @@ import {
   SizeEntity,
   StyleEntity,
 } from '~/entities';
-import {
-  BrandsRepository,
-  CategoriesRepository,
-  MaterialsRepository,
-  StylesRepository,
-} from './repositories/index';
-import { SizesRepository } from './repositories/sizes.repository';
-import { ColorRepository } from './repositories/colors.repository';
+
+import { CategoriesRepository } from './categories.repository';
 
 @Injectable()
 export class ProductDetailsService {
-  private readonly categoriesRepository: CategoriesRepository;
-
-  private readonly brandsRepository: BrandsRepository;
-
-  private readonly stylesRepository: StylesRepository;
-
-  private readonly materialsRepository: MaterialsRepository;
-
-  private readonly colorsRepository: ColorRepository;
-
-  private readonly sizesRepository: SizesRepository;
-
   constructor(
-    categoriesRepository: CategoriesRepository,
-    brandsRepository: BrandsRepository,
-    stylesRepository: StylesRepository,
-    materialsRepository: MaterialsRepository,
-    sizesRepository: SizesRepository,
-    colorsRepository: ColorRepository,
-  ) {
-    this.categoriesRepository = categoriesRepository;
-    this.brandsRepository = brandsRepository;
-    this.stylesRepository = stylesRepository;
-    this.materialsRepository = materialsRepository;
-    this.sizesRepository = sizesRepository;
-    this.colorsRepository = colorsRepository;
-  }
+    @InjectRepository(BrandEntity)
+    private readonly brandsRepository: Repository<BrandEntity>,
+
+    @InjectRepository(StyleEntity)
+    private readonly stylesRepository: Repository<StyleEntity>,
+
+    @InjectRepository(MaterialEntity)
+    private readonly materialsRepository: Repository<MaterialEntity>,
+
+    @InjectRepository(ColorEntity)
+    private readonly colorsRepository: Repository<ColorEntity>,
+
+    private readonly categoriesRepository: CategoriesRepository,
+  ) {}
 
   async findAllCategoriesWithTypes(): Promise<CategoryEntity[]> {
     return this.categoriesRepository.findAllWithTypes();
   }
 
   async findAllBrands(): Promise<BrandEntity[]> {
-    return this.brandsRepository.findAll();
+    return this.brandsRepository.find();
   }
 
   async findAllStyles(): Promise<StyleEntity[]> {
-    return this.stylesRepository.findAll();
+    return this.stylesRepository.find();
   }
 
   async findAllMaterials(): Promise<MaterialEntity[]> {
-    return this.materialsRepository.findAll();
+    return this.materialsRepository.find();
   }
 
   async findAllColors(): Promise<ColorEntity[]> {
-    return this.colorsRepository.findAll();
+    return this.colorsRepository.find();
   }
 
-  async findAllSizes(): Promise<SizeEntity[]> {
-    return this.sizesRepository.findAll();
+  async findAllSizesByCategory(categoryId: number): Promise<SizeEntity[]> {
+    return this.categoriesRepository.findSizesByCategoryId(categoryId);
   }
 }
