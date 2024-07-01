@@ -1,7 +1,14 @@
-import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  Entity,
+  JoinTable,
+  ManyToMany,
+  OneToMany,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 import { ApiProperty } from '@nestjs/swagger';
 
-import { type TypeEntity } from './index';
+import { type SizeEntity, type TypeEntity } from './index';
 
 @Entity({ name: 'categories' })
 export class CategoryEntity {
@@ -21,4 +28,12 @@ export class CategoryEntity {
 
   @OneToMany('TypeEntity', (type: TypeEntity) => type.category)
   types: TypeEntity[];
+
+  @ManyToMany('SizeEntity', (size: SizeEntity) => size.categories)
+  @JoinTable({
+    name: 'sizes_categories',
+    joinColumn: { name: 'categoryId', referencedColumnName: 'id' },
+    inverseJoinColumn: { name: 'sizeId', referencedColumnName: 'id' },
+  })
+  sizes: SizeEntity[];
 }

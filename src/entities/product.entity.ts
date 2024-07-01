@@ -11,6 +11,7 @@ import { ApiProperty } from '@nestjs/swagger';
 
 import { Gender, ProductActivityStatus, ProductStatus } from '~/common/enums';
 import {
+  type TypeEntity,
   type BrandEntity,
   type CategoryEntity,
   type ImageEntity,
@@ -138,6 +139,14 @@ export class ProductEntity {
   @ManyToOne('MaterialEntity')
   @JoinColumn({ name: 'material_id' })
   material: MaterialEntity;
+
+  @ApiProperty({
+    type: Number,
+    description: 'Reference to the type entity',
+  })
+  @ManyToOne('TypeEntity')
+  @JoinColumn({ name: 'type_id' })
+  type: TypeEntity;
 
   @ApiProperty({
     type: Number,

@@ -1,5 +1,13 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  Entity,
+  JoinTable,
+  ManyToMany,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 import { ApiProperty } from '@nestjs/swagger';
+
+import { type CategoryEntity } from './category.entity';
 
 @Entity({ name: 'sizes' })
 export class SizeEntity {
@@ -16,4 +24,12 @@ export class SizeEntity {
   })
   @Column({ type: 'varchar' })
   name: string;
+
+  @ManyToMany('CategoryEntity', (category: CategoryEntity) => category.sizes)
+  @JoinTable({
+    name: 'sizes_categories',
+    joinColumn: { name: 'sizeId', referencedColumnName: 'id' },
+    inverseJoinColumn: { name: 'categoryId', referencedColumnName: 'id' },
+  })
+  categories: CategoryEntity[];
 }

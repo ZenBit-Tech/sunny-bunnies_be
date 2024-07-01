@@ -45,6 +45,7 @@ export class InsertSizesAndColors1719606310185 implements MigrationInterface {
       { name: '10.5' },
       { name: '11.0' },
       { name: '11.5' },
+      { name: 'One Size' },
     ]);
   }
 
@@ -88,5 +89,6 @@ export class InsertSizesAndColors1719606310185 implements MigrationInterface {
     await sizesRepo.delete({ name: '10.5' });
     await sizesRepo.delete({ name: '11.0' });
     await sizesRepo.delete({ name: '11.5' });
+    await sizesRepo.delete({ name: 'One Size' });
   }
 }
