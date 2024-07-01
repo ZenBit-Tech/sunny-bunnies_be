@@ -52,7 +52,7 @@ export class AdminController {
     @Query('role') role: SortableRole,
     @Query('searchQuery') searchQuery?: string,
     @Query('page') page: number = 1,
-    @Query('limit') limit: number = 10,
+    @Query('limit') limit: number = 7,
   ): Promise<{ users: User[]; totalCount: number; totalPages: number }> {
     return this.usersService.findAndSortUsers(
       order,
