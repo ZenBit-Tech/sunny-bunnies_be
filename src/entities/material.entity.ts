@@ -14,6 +14,6 @@ export class MaterialEntity {
     type: String,
     description: 'This is the name of the material',
   })
-  @Column({ type: 'text' })
+  @Column({ type: 'varchar' })
   name: string;
 }

@@ -14,6 +14,6 @@ export class BrandEntity {
     type: String,
     description: 'This is the name of the brand',
   })
-  @Column({ type: 'text' })
+  @Column({ type: 'varchar' })
   name: string;
 }

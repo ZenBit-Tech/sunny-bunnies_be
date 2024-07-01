@@ -23,6 +23,7 @@ export class StyleEntity1717425420610 implements MigrationInterface {
           {
             name: ColumnName.NAME,
             type: 'varchar',
+            length: '255',
           },
         ],
       }),

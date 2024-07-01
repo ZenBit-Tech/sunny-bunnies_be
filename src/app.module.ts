@@ -11,6 +11,7 @@ import { UsersModule } from './modules/users/users.module';
 import { FiltersModule } from './modules/filters/filters.module';
 import { FollowersModule } from './modules/followers/followers.module';
 import { UploadModule } from './modules/upload/upload.module';
+import { ProductDetailsModule } from './modules/product-details/product-details.module';
 
 @Module({
   imports: [
@@ -27,6 +28,7 @@ import { UploadModule } from './modules/upload/upload.module';
     TestModule,
     FollowersModule,
     ProductsModule,
+    ProductDetailsModule,
     AuthModule,
     UsersModule,
     FiltersModule,

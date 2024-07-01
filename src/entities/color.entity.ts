@@ -14,6 +14,6 @@ export class ColorEntity {
     type: String,
     description: 'This is the name of the color',
   })
-  @Column({ type: 'text' })
+  @Column({ type: 'varchar' })
   name: string;
 }

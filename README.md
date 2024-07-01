@@ -128,7 +128,7 @@ erDiagram
   product_images {
     int id PK
     varchar url
-    varchar description
+    boolean is_primary
     dateTime created_at
   }
 
@@ -147,14 +147,28 @@ erDiagram
     varchar name
   }
 
+  types {
+    int id PK
+    varchar name
+    int category_id FK
+  }
+
   categories {
     int id PK
     varchar category
   }
 
+  sizes_categories {
+    int size_id PK,FK
+    int category_id PK,FK
+  }
+
   product_variants {
     int id PK
     int quantity
+    int product_id FK
+    int size_id FK
+    int color_id FK
   }
 
   PRODUCTS {
@@ -164,8 +178,14 @@ erDiagram
     enum gender 
     enum  status
     enum activityStatus
-    decimal priceFrom
-    decimal priceTo
+    decimal minPrice
+    decimal maxPrice
+    int user_id FK
+    int brand_id FK
+    int category_id FK
+    int style_id FK
+    int material_id FK
+    int type_id FK
     dateTime createdAt
     dateTime updatedAt
   }
@@ -175,6 +195,7 @@ erDiagram
   products ||--o{ styles : "has"
   products ||--o{ brands : "has"
   products ||--o{ materials : "has"
+  products ||--o{ types : "has"
   products ||--o{ product_variants : "has"
   products }o--|| users : "belongs to"
 

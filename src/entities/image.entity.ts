@@ -27,11 +27,11 @@ export class ImageEntity {
   url: string;
 
   @ApiProperty({
-    type: String,
-    description: 'This is a description of the image',
+    type: Boolean,
+    description: 'This property set image primary or not',
   })
-  @Column({ type: 'text' })
-  description: string;
+  @Column({ type: 'boolean' })
+  isPrimary: boolean;
 
   @ManyToOne('ProductEntity', (product: ProductEntity) => product.images, {
     onDelete: 'CASCADE',

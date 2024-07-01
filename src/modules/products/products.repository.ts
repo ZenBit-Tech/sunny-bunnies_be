@@ -1,19 +1,44 @@
 import { subDays, format } from 'date-fns';
 import { DataSource, Repository } from 'typeorm';
-import { Injectable } from '@nestjs/common';
-
+import { BadRequestException, Injectable } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { CreateProductDto } from './dto';
+import { Gender, ProductActivityStatus, ProductStatus } from '~/common/enums';
+import {
+  BrandEntity,
+  CategoryEntity,
+  ColorEntity,
+  ImageEntity,
+  MaterialEntity,
+  ProductVariantEntity,
+  SizeEntity,
+  StyleEntity,
+  TypeEntity,
+  User,
+  ProductEntity,
+} from '~/entities';
 import {
   PRODUCT_DATE_RANGE_FORMAT,
   PRODUCTS_LIMIT,
   PRODUCTS_OFFSET,
 } from '~/common/constants/constants';
-import { ProductEntity } from '~/entities';
 
 import { GetProductsQueryDto } from './dto/get-products-query.dto';
 
 @Injectable()
 export class ProductsRepository extends Repository<ProductEntity> {
-  constructor(dataSource: DataSource) {
+  constructor(
+    dataSource: DataSource,
+
+    @InjectRepository(ProductEntity)
+    private readonly productRepository: Repository<ProductEntity>,
+
+    @InjectRepository(ProductVariantEntity)
+    private readonly variantRepository: Repository<ProductVariantEntity>,
+
+    @InjectRepository(ImageEntity)
+    private readonly imageRepository: Repository<ImageEntity>,
+  ) {
     super(ProductEntity, dataSource.createEntityManager());
   }
 
@@ -108,5 +133,58 @@ export class ProductsRepository extends Repository<ProductEntity> {
     qb.take(limit).skip(offset);
 
     return qb.getMany();
+  }
+
+  async createProductWithVariantsAndImages(
+    userId: string,
+    productDto: CreateProductDto,
+  ): Promise<ProductEntity> {
+    try {
+      const product = this.productRepository.create({
+        name: productDto.name,
+        description: productDto.description,
+        maxPrice: productDto.maxPrice,
+        minPrice: productDto.minPrice,
+        status: ProductStatus.FOR_RENT,
+        activityStatus: ProductActivityStatus.INACTIVE,
+        gender: productDto.gender === 1 ? Gender.MALE : Gender.FEMALE,
+        brand: { id: productDto.brand } as BrandEntity,
+        category: { id: productDto.category } as CategoryEntity,
+        type: { id: productDto.type } as TypeEntity,
+        style: { id: productDto.style } as StyleEntity,
+        material: { id: productDto.material } as MaterialEntity,
+        user: { id: userId } as User,
+      });
+
+      const savedProduct = await this.productRepository.save(product);
+
+      const variants = productDto.variants.map((variantDto) => {
+        const variant = this.variantRepository.create({
+          color: { id: variantDto.color } as ColorEntity,
+          size: { id: variantDto.size } as SizeEntity,
+          quantity: variantDto.quantity,
+          product: savedProduct,
+        });
+        return variant;
+      });
+
+      await this.variantRepository.save(variants);
+
+      const images = productDto.images.map((imageDto) => {
+        const image = this.imageRepository.create({
+          ...imageDto,
+          product: savedProduct,
+        });
+        return image;
+      });
+
+      await this.imageRepository.save(images);
+
+      return savedProduct;
+    } catch (error) {
+      throw new BadRequestException(
+        `Failed to create product: ${error.message}`,
+      );
+    }
   }
 }

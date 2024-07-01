@@ -199,7 +199,6 @@ export class CombinedSeeder implements Seeder {
 
       const imageEntity = repository.create({
         url: imageData.url,
-        description: imageData.description,
         createdAt: imageData.created_at,
         product,
       });

@@ -23,6 +23,7 @@ export class ColorEntity1717419028301 implements MigrationInterface {
           {
             name: ColumnName.NAME,
             type: 'varchar',
+            length: '255',
           },
         ],
       }),
