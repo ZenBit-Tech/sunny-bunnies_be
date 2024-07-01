@@ -32,6 +32,7 @@ export class AddTypesTable1719549708521 implements MigrationInterface {
           {
             name: ColumnName.NAME,
             type: 'varchar',
+            length: '255',
           },
           {
             name: ColumnName.CATEGORY_ID,

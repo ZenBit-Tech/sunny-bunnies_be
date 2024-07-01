@@ -23,6 +23,7 @@ export class MaterialEntity1717426524891 implements MigrationInterface {
           {
             name: ColumnName.NAME,
             type: 'varchar',
+            length: '255',
           },
         ],
       }),
