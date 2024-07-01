@@ -2,7 +2,14 @@ import { Controller, Get } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 
 import { PublicRoute } from '~/common/decorators';
-import { CategoryEntity, StyleEntity } from '~/entities';
+import {
+  BrandEntity,
+  CategoryEntity,
+  ColorEntity,
+  MaterialEntity,
+  SizeEntity,
+  StyleEntity,
+} from '~/entities';
 import { ProductDetailsService } from './product-details.service';
 
 @ApiTags('Product-Detail')
@@ -24,5 +31,29 @@ export class ProductDetailsController {
   @Get('/styles')
   async findAllStyles(): Promise<StyleEntity[]> {
     return this.productDetailsService.findAllStyles();
+  }
+
+  @PublicRoute()
+  @Get('/brands')
+  async findAllBrands(): Promise<BrandEntity[]> {
+    return this.productDetailsService.findAllBrands();
+  }
+
+  @PublicRoute()
+  @Get('/materials')
+  async findAllMaterials(): Promise<MaterialEntity[]> {
+    return this.productDetailsService.findAllMaterials();
+  }
+
+  @PublicRoute()
+  @Get('/colors')
+  async findAllColors(): Promise<ColorEntity[]> {
+    return this.productDetailsService.findAllColors();
+  }
+
+  @PublicRoute()
+  @Get('/sizes')
+  async findAllSizes(): Promise<SizeEntity[]> {
+    return this.productDetailsService.findAllSizes();
   }
 }

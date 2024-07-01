@@ -25,4 +25,10 @@ export class ProductsService {
 
     return product;
   }
+
+  async create(): Promise<ProductEntity> {
+    const product = await this.productsRepository.create();
+
+    return product;
+  }
 }
