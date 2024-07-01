@@ -3,6 +3,7 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { ProductEntity } from '~/entities';
 import { ProductsRepository } from './products.repository';
 import { GetProductsQueryDto } from './dto/get-products-query.dto';
+import { CreateProductDto } from './dto';
 
 @Injectable()
 export class ProductsService {
@@ -26,8 +27,15 @@ export class ProductsService {
     return product;
   }
 
-  async create(): Promise<ProductEntity> {
-    const product = await this.productsRepository.create();
+  async create(
+    userId: string,
+    productData: CreateProductDto,
+  ): Promise<ProductEntity> {
+    const product =
+      await this.productsRepository.createProductWithVariantsAndImages(
+        userId,
+        productData,
+      );
 
     return product;
   }

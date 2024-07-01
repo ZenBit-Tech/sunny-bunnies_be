@@ -1,8 +1,7 @@
 import { Body, Controller, Get, Param, Post, Query } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
-
-import { PublicRoute } from '~/common/decorators';
-import { ProductEntity } from '~/entities';
+import { GetUser, PublicRoute } from '~/common/decorators';
+import { ProductEntity, User } from '~/entities';
 
 import { ProductsService } from './products.service';
 import { CreateProductDto, GetProductsQueryDto } from './dto/index';
@@ -28,9 +27,11 @@ export class ProductsController {
     return this.productsService.findById(param.id);
   }
 
-  @PublicRoute()
   @Post('/')
-  async create(@Body() body: CreateProductDto): Promise<ProductEntity> {
-    return this.productsService.create(body);
+  async create(
+    @GetUser() user: User,
+    @Body() body: CreateProductDto,
+  ): Promise<ProductEntity> {
+    return this.productsService.create(user.id, body);
   }
 }
