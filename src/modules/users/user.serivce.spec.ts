@@ -74,6 +74,7 @@ describe('UsersService', () => {
       expect(updatedUser.passwordHash).not.toEqual(user.passwordHash);
     });
   });
+
   it('should throw ConflictException if new password is the same', async () => {
     const userId = '1';
     const newPassword = 'samePassword';
