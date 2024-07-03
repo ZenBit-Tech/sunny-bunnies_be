@@ -5,47 +5,58 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { MailerService } from '@nestjs-modules/mailer';
+import { ConfigService } from '@nestjs/config';
 import { UsersService } from '../users/users.service';
-import { EncryptService } from './encrypt.service';
 import {
   AuthGenerateAccess,
+  AuthResetPasswordDto,
+  AuthRestorePasswordDto,
   AuthSignInDto,
   AuthSignUpDto,
   AuthVerifyEmailDto,
   AuthVerifyOtpDto,
 } from './dto';
-import { USER_PASSWORD_SALT_ROUNDS } from '~/common/constants/constants';
-import { TokenService } from './token.service';
-import { GoogleAuthSingUpDto } from '~/modules/auth/dto';
 import {
   AuthPayloadToken,
   AuthResponse,
   AuthTokens,
   OtpCodePayloadToken,
 } from '~/common/types';
+import { Encrypt, Otp } from '~/utils';
+import { Token } from '~/utils/token.package';
 
 @Injectable()
 export class AuthService {
   private readonly usersService: UsersService;
 
-  private readonly encryptService: EncryptService;
-
-  private readonly tokenService: TokenService;
+  private readonly encrypt: Encrypt;
 
   private readonly mailerService: MailerService;
+
+  private readonly otp: Otp;
+
+  private readonly configService: ConfigService;
+
+  private readonly token: Token;
 
   private readonly adminRole = 'admin';
 
   constructor(
     usersService: UsersService,
-    encryptService: EncryptService,
-    tokenService: TokenService,
+    encryptService: Encrypt,
+
     mailerService: MailerService,
+    otp: Otp,
+    configService: ConfigService,
+    token: Token,
   ) {
     this.usersService = usersService;
-    this.encryptService = encryptService;
-    this.tokenService = tokenService;
+    this.encrypt = encryptService;
+
     this.mailerService = mailerService;
+    this.otp = otp;
+    this.configService = configService;
+    this.token = token;
   }
 
   async signIn(authSignInDto: AuthSignInDto): Promise<AuthResponse> {
@@ -57,7 +68,7 @@ export class AuthService {
       throw new ConflictException('Invalid email or password');
     }
 
-    const hasSamePassword = await this.encryptService.compare({
+    const hasSamePassword = await this.encrypt.compare({
       data: password,
       salt: user.passwordSalt,
       passwordHash: user.passwordHash,
@@ -85,7 +96,7 @@ export class AuthService {
       throw new ConflictException('Invalid email or password');
     }
 
-    const hasSamePassword = await this.encryptService.compare({
+    const hasSamePassword = await this.encrypt.compare({
       data: password,
       salt: user.passwordSalt,
       passwordHash: user.passwordHash,
@@ -104,8 +115,8 @@ export class AuthService {
     };
   }
 
-  async signUpGoogle(body: GoogleAuthSingUpDto): Promise<AuthResponse> {
-    const { email, name, jti } = this.tokenService.decode(body.credential) as {
+  async signUpGoogle(token: string): Promise<AuthResponse> {
+    const { email, name, jti } = this.token.decode(token) as {
       email: string;
       name: string;
       jti: string;
@@ -127,20 +138,14 @@ export class AuthService {
         refreshToken,
       };
     }
-    const passwordSalt = await this.encryptService.generateSalt(
-      USER_PASSWORD_SALT_ROUNDS,
-    );
-    const randomPassword = this.encryptService.generateRandomPassword();
-    const passwordHash = await this.encryptService.encrypt(
-      `${jti}+${randomPassword}`,
-      passwordSalt,
-    );
+
+    const randomGeneratedPassword = this.encrypt.generateRandomPassword();
+    const userRandomPassword = `${jti}+${randomGeneratedPassword}`;
 
     const user = await this.usersService.createOne({
       name,
       email,
-      passwordSalt,
-      passwordHash,
+      password: userRandomPassword,
     });
 
     const { refreshToken, accessToken } = await this.generateTokens(user.id);
@@ -160,20 +165,10 @@ export class AuthService {
       throw new ConflictException('User with this email already exists');
     }
 
-    const passwordSalt = await this.encryptService.generateSalt(
-      USER_PASSWORD_SALT_ROUNDS,
-    );
-
-    const passwordHash = await this.encryptService.encrypt(
-      password,
-      passwordSalt,
-    );
-
     const user = await this.usersService.createOne({
       name,
       email,
-      passwordSalt,
-      passwordHash,
+      password,
     });
     const { refreshToken, accessToken } = await this.generateTokens(user.id);
 
@@ -188,7 +183,7 @@ export class AuthService {
     authGenerateAccessDto: AuthGenerateAccess,
   ): Promise<AuthTokens> {
     const { refreshToken: token } = authGenerateAccessDto;
-    const { userId, type } = this.tokenService.decode<AuthPayloadToken>(token);
+    const { userId, type } = this.token.decode<AuthPayloadToken>(token);
 
     const user = await this.usersService.findById(userId);
 
@@ -216,13 +211,10 @@ export class AuthService {
       throw new ConflictException('Email is already verified');
     }
 
-    let otp = '';
-
-    for (let i = 0; i < 6; i += 1) {
-      otp += Math.floor(Math.random() * 10);
-    }
-
-    const expiresIn = '2m';
+    const otp = this.otp.generateCode({ length: 6 });
+    const expiresIn = this.configService.get<string>(
+      'MAIL_VERIFY_OTP_EXPIRATION_TIME',
+    );
 
     await this.mailerService.sendMail({
       to: user.email,
@@ -236,7 +228,7 @@ export class AuthService {
       },
     });
 
-    const otpToken = await this.tokenService.create<OtpCodePayloadToken>(
+    const otpToken = await this.token.generate<OtpCodePayloadToken>(
       {
         code: otp,
         email,
@@ -264,8 +256,9 @@ export class AuthService {
       throw new ConflictException('Email is already verified');
     }
 
-    const { code: otpCode, exp } =
-      this.tokenService.decode<OtpCodePayloadToken>(user.otpToken);
+    const { code: otpCode, exp } = this.token.decode<OtpCodePayloadToken>(
+      user.otpToken,
+    );
 
     const isValid = providedCode === otpCode;
 
@@ -273,7 +266,7 @@ export class AuthService {
       throw new ConflictException('Invalid code');
     }
 
-    const isExpired = this.tokenService.isExpired(exp);
+    const isExpired = this.token.isExpired(exp);
 
     if (isExpired) {
       throw new ConflictException('Code is expired');
@@ -285,14 +278,81 @@ export class AuthService {
     });
   }
 
+  async restorePassword(
+    authRestorePasswordOtpCode: AuthRestorePasswordDto,
+  ): Promise<void> {
+    const { email } = authRestorePasswordOtpCode;
+
+    const user = await this.usersService.findByEmail(email);
+
+    if (!user) {
+      throw new ConflictException('This email is not associated with any user');
+    }
+    const expiresIn = this.configService.get<string>(
+      'MAIL_RESET_PASSWORD_EXPIRATION_TIME',
+    );
+
+    const token = await this.token.generate<AuthPayloadToken>(
+      {
+        userId: user.id,
+      },
+      {
+        expiresIn,
+      },
+    );
+
+    const resetPasswordPageLink = `${this.configService.get<string>('CLIENT_RESET_PASSWORD-BASE_URL')}?${new URLSearchParams(
+      {
+        token,
+      },
+    ).toString()}`;
+
+    await this.mailerService.sendMail({
+      to: user.email,
+      subject: 'Black circle password restore',
+      template: 'restore-password',
+      context: {
+        name: user.name,
+        userEmail: user.email,
+        restorePasswordLink: resetPasswordPageLink,
+        expiresIn,
+      },
+    });
+  }
+
+  async resetPassword(
+    authResetPasswordDto: AuthResetPasswordDto,
+  ): Promise<void> {
+    const { token, password } = authResetPasswordDto;
+
+    const { userId, exp } = this.token.decode<AuthPayloadToken>(token);
+    if (!userId) {
+      throw new ConflictException('Invalid token');
+    }
+
+    const isExpired = this.token.isExpired(exp);
+    if (isExpired) {
+      throw new UnauthorizedException('Session expired');
+    }
+
+    const user = await this.usersService.findById(userId);
+
+    if (!user) {
+      throw new ConflictException('Invalid token');
+    }
+
+    await this.usersService.updatePassword(user.id, {
+      password,
+    });
+  }
+
   async generateTokens(userId: string): Promise<AuthTokens> {
-    const accessToken = await this.tokenService.createAccess<AuthPayloadToken>({
+    const accessToken = await this.token.generateAccess<AuthPayloadToken>({
       userId,
     });
-    const refreshToken =
-      await this.tokenService.createRefresh<AuthPayloadToken>({
-        userId,
-      });
+    const refreshToken = await this.token.generateRefresh<AuthPayloadToken>({
+      userId,
+    });
 
     return {
       accessToken,

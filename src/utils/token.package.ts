@@ -3,14 +3,14 @@ import { ConfigService } from '@nestjs/config';
 import { decodeJwt, JWTPayload, SignJWT } from 'jose';
 
 @Injectable()
-export class TokenService {
+export class Token {
   private readonly configService: ConfigService;
 
   public constructor(configService: ConfigService) {
     this.configService = configService;
   }
 
-  public async create<T extends Record<string, unknown>>(
+  public async generate<T extends Record<string, unknown>>(
     payload: T,
     config: {
       expiresIn: number | string | Date;
@@ -28,7 +28,7 @@ export class TokenService {
       );
   }
 
-  public async createRefresh<T extends Record<string, unknown>>(
+  public async generateRefresh<T extends Record<string, unknown>>(
     payload: T,
   ): Promise<string> {
     return new SignJWT({
@@ -48,7 +48,7 @@ export class TokenService {
       );
   }
 
-  public async createAccess<T extends Record<string, unknown>>(
+  public async generateAccess<T extends Record<string, unknown>>(
     payload: T,
   ): Promise<string> {
     return new SignJWT({

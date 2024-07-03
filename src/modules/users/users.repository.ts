@@ -3,7 +3,7 @@ import { DataSource, Repository } from 'typeorm';
 
 import { User, UserProfile, UserCard, UsersRating } from '~/entities';
 import { UserCardDto, UserProfileUpdateDto } from './dto';
-import { EncryptService } from '../auth/encrypt.service';
+import { Encrypt } from '~/utils';
 
 @Injectable()
 export class UsersRepository extends Repository<User> {
@@ -11,13 +11,13 @@ export class UsersRepository extends Repository<User> {
 
   private readonly userCardRepository: Repository<UserCard>;
 
-  private readonly encryptService: EncryptService;
+  private readonly encrypt: Encrypt;
 
-  constructor(dataSource: DataSource, encryptService: EncryptService) {
+  constructor(dataSource: DataSource, encrypt: Encrypt) {
     super(User, dataSource.createEntityManager());
     this.userProfileRepository = dataSource.getRepository(UserProfile);
     this.userCardRepository = dataSource.getRepository(UserCard);
-    this.encryptService = encryptService;
+    this.encrypt = encrypt;
   }
 
   async findById(id: string): Promise<User> {
@@ -127,15 +127,15 @@ export class UsersRepository extends Repository<User> {
   }
 
   async updateCard(user: User, updateData: UserCardDto): Promise<void> {
-    const encryptedCardNumber = await this.encryptService.encrypt(
+    const encryptedCardNumber = await this.encrypt.encrypt(
       updateData.cardNumber,
       user.passwordSalt,
     );
-    const encryptedCvvCode = await this.encryptService.encrypt(
+    const encryptedCvvCode = await this.encrypt.encrypt(
       updateData.cvvCode,
       user.passwordSalt,
     );
-    const encryptedExpireDate = await this.encryptService.encrypt(
+    const encryptedExpireDate = await this.encrypt.encrypt(
       updateData.expireDate,
       user.passwordSalt,
     );
