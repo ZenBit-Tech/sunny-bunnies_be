@@ -1,14 +1,22 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
 import { MailerService } from '@nestjs-modules/mailer';
+import {
+  ConflictException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { UsersRepository } from './users.repository';
 import { User } from '~/entities';
 import {
-  CreateUserDto,
+  UserCreateDto,
+  UpdateUserDto,
+  UserUpdatePasswordDto,
   UserCardDto,
   UserProfileUpdateDto,
-  UpdateUserDto,
+  UpdateUserAndProfileDto,
 } from './dto';
 import { UpdateStatusDto } from '../admin/dto';
+import { USER_PASSWORD_SALT_ROUNDS } from '~/common/constants/constants';
+import { Encrypt } from '~/utils/encrypt.package';
 
 @Injectable()
 export class UsersService {
@@ -16,9 +24,16 @@ export class UsersService {
 
   private readonly mailerService: MailerService;
 
-  constructor(usersRepository: UsersRepository, mailerService: MailerService) {
+  private readonly encryptService: Encrypt;
+
+  constructor(
+    usersRepository: UsersRepository,
+    encryptService: Encrypt,
+    mailerService: MailerService,
+  ) {
     this.usersRepository = usersRepository;
     this.mailerService = mailerService;
+    this.encryptService = encryptService;
   }
 
   async findById(userId: string): Promise<User> {
@@ -41,8 +56,17 @@ export class UsersService {
     return vendor;
   }
 
-  async createOne(createUserDto: CreateUserDto): Promise<User> {
-    const { name, email, passwordHash, passwordSalt } = createUserDto;
+  async createOne(userCreateDto: UserCreateDto): Promise<User> {
+    const { name, email, password } = userCreateDto;
+
+    const passwordSalt = await this.encryptService.generateSalt(
+      USER_PASSWORD_SALT_ROUNDS,
+    );
+
+    const passwordHash = await this.encryptService.encrypt(
+      password,
+      passwordSalt,
+    );
 
     return this.usersRepository.createOne({
       name,
@@ -58,6 +82,39 @@ export class UsersService {
 
   async updateById(id: string, updateUserDto: UpdateUserDto): Promise<User> {
     return this.usersRepository.updateById(id, updateUserDto);
+  }
+
+  async updatePassword(
+    id: string,
+    userUpdatePasswordDto: UserUpdatePasswordDto,
+  ): Promise<User> {
+    const { password } = userUpdatePasswordDto;
+
+    const user = await this.findById(id);
+
+    const hasSamePassword = await this.encryptService.compare({
+      data: password,
+      passwordHash: user.passwordHash,
+      salt: user.passwordSalt,
+    });
+
+    if (hasSamePassword) {
+      throw new ConflictException('Password can not be the same');
+    }
+
+    const passwordSalt = await this.encryptService.generateSalt(
+      USER_PASSWORD_SALT_ROUNDS,
+    );
+
+    const passwordHash = await this.encryptService.encrypt(
+      password,
+      passwordSalt,
+    );
+
+    return this.updateById(id, {
+      passwordSalt,
+      passwordHash,
+    });
   }
 
   async updateCard(userId: string, updateData: UserCardDto): Promise<User> {
@@ -160,5 +217,25 @@ export class UsersService {
 
     user.deletedAt = new Date();
     await this.usersRepository.save(user);
+  }
+
+  async updateUserAndProfile(
+    userId: string,
+    updateUserAndProfileDto: UpdateUserAndProfileDto,
+  ): Promise<User> {
+    const user = await this.usersRepository.findById(userId);
+    if (!user) {
+      throw new NotFoundException('User not found');
+    }
+
+    const { profile, ...updateUserDto } = updateUserAndProfileDto;
+
+    await this.usersRepository.updateById(userId, updateUserDto);
+
+    if (profile) {
+      await this.usersRepository.updateProfile(userId, profile);
+    }
+
+    return this.usersRepository.findById(userId);
   }
 }

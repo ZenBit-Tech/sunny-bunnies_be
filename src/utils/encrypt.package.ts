@@ -3,7 +3,7 @@ import { ConfigService } from '@nestjs/config';
 import { genSalt, hash } from 'bcrypt';
 
 @Injectable()
-export class EncryptService {
+export class Encrypt {
   private readonly configService: ConfigService;
 
   public constructor(configService: ConfigService) {
