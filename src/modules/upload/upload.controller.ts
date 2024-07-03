@@ -26,7 +26,7 @@ export class UploadController {
       }),
     )
     file: Express.Multer.File,
-  ) {
+  ): Promise<void> {
     await this.uploadService.upload(file.originalname, file.buffer);
   }
 }

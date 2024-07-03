@@ -17,8 +17,8 @@ export class ProductsRepository extends Repository<ProductEntity> {
     super(ProductEntity, dataSource.createEntityManager());
   }
 
-  async findById(id: number): Promise<ProductEntity> {
-    const product = await this.createQueryBuilder('product')
+  findById(id: number): Promise<ProductEntity> {
+    return this.createQueryBuilder('product')
       .leftJoinAndSelect('product.images', 'images')
       .leftJoinAndSelect('product.category', 'category')
       .leftJoinAndSelect('product.style', 'style')
@@ -30,20 +30,15 @@ export class ProductsRepository extends Repository<ProductEntity> {
       .leftJoinAndSelect('variants.color', 'color')
       .where('product.id = :id', { id })
       .getOne();
-
-    if (!product) {
-      throw new Error('Product not found');
-    }
-
-    return product;
   }
 
-  async findAll(query: GetProductsQueryDto): Promise<ProductEntity[]> {
+  findAll(query: GetProductsQueryDto): Promise<ProductEntity[]> {
     const qb = this.createQueryBuilder('product')
       .leftJoinAndSelect('product.images', 'images')
       .leftJoinAndSelect('product.category', 'category')
       .leftJoinAndSelect('product.style', 'style')
       .leftJoinAndSelect('product.brand', 'brand')
+      .leftJoinAndSelect('product.user', 'user')
       .leftJoinAndSelect('product.material', 'material')
       .leftJoinAndSelect('product.variants', 'variants')
       .leftJoinAndSelect('variants.color', 'color')

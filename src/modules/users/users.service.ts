@@ -11,6 +11,7 @@ import {
   UserUpdatePasswordDto,
   UserCardDto,
   UserProfileUpdateDto,
+  UpdateUserAndProfileDto,
 } from './dto';
 import { USER_PASSWORD_SALT_ROUNDS } from '~/common/constants/constants';
 import { Encrypt } from '~/utils/encrypt.package';
@@ -138,6 +139,26 @@ export class UsersService {
     await this.usersRepository.updateProfile(user.id, {
       profilePhoto: photoUrl,
     });
+
+    return this.usersRepository.findById(userId);
+  }
+
+  async updateUserAndProfile(
+    userId: string,
+    updateUserAndProfileDto: UpdateUserAndProfileDto,
+  ): Promise<User> {
+    const user = await this.usersRepository.findById(userId);
+    if (!user) {
+      throw new NotFoundException('User not found');
+    }
+
+    const { profile, ...updateUserDto } = updateUserAndProfileDto;
+
+    await this.usersRepository.updateById(userId, updateUserDto);
+
+    if (profile) {
+      await this.usersRepository.updateProfile(userId, profile);
+    }
 
     return this.usersRepository.findById(userId);
   }
