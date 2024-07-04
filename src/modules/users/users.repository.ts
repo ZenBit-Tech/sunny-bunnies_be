@@ -189,8 +189,13 @@ export class UsersRepository extends Repository<User> {
   ): Promise<{ users: User[]; totalCount: number }> {
     const baseQuery = this.createQueryBuilder('user')
       .leftJoinAndSelect('user.profile', 'profile')
-      .where('profile.role = :role', { role })
-      .andWhere('user.deletedAt IS NULL');
+      .where('user.deletedAt IS NULL');
+
+    if (role !== 'no-role') {
+      baseQuery.andWhere('profile.role = :role', { role });
+    } else {
+      baseQuery.andWhere('profile.role IS NULL');
+    }
 
     if (sortField === 'addressLineOne') {
       baseQuery

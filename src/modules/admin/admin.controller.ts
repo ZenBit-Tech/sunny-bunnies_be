@@ -32,7 +32,7 @@ export class AdminController {
 
   @Patch('update-status/:id')
   @HttpCode(200)
-  async updateStatus(
+  async updateUserStatus(
     @Param('id') userId: string,
     @Body() updateStatusDto: UpdateStatusDto,
   ): Promise<User> {
