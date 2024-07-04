@@ -1,3 +1,4 @@
+import { MailerService } from '@nestjs-modules/mailer';
 import {
   ConflictException,
   Injectable,
@@ -13,6 +14,7 @@ import {
   UserProfileUpdateDto,
   UpdateUserAndProfileDto,
 } from './dto';
+import { UpdateStatusDto } from '../admin/dto';
 import { USER_PASSWORD_SALT_ROUNDS } from '~/common/constants/constants';
 import { Encrypt } from '~/utils/encrypt.package';
 
@@ -20,15 +22,28 @@ import { Encrypt } from '~/utils/encrypt.package';
 export class UsersService {
   private readonly usersRepository: UsersRepository;
 
+  private readonly mailerService: MailerService;
+
   private readonly encryptService: Encrypt;
 
-  constructor(usersRepository: UsersRepository, encryptService: Encrypt) {
+  constructor(
+    usersRepository: UsersRepository,
+    encryptService: Encrypt,
+    mailerService: MailerService,
+  ) {
     this.usersRepository = usersRepository;
+    this.mailerService = mailerService;
     this.encryptService = encryptService;
   }
 
   async findById(userId: string): Promise<User> {
-    return this.usersRepository.findById(userId);
+    const user = await this.usersRepository.findById(userId);
+
+    if (!user) {
+      throw new NotFoundException('User not found');
+    }
+
+    return user;
   }
 
   async findVendorById(userId: string): Promise<User | null> {
@@ -141,6 +156,67 @@ export class UsersService {
     });
 
     return this.usersRepository.findById(userId);
+  }
+
+  async updateStatus(
+    userId: string,
+    updateStatus: UpdateStatusDto,
+  ): Promise<User> {
+    const user = await this.usersRepository.findById(userId);
+    const active = 'active';
+
+    if (!user) {
+      throw new NotFoundException('User not found');
+    }
+
+    await this.usersRepository.updateStatus(userId, updateStatus);
+
+    if (user.status === active) {
+      await this.mailerService.sendMail({
+        to: user.email,
+        subject: 'Black circle your account has been blocked',
+        template: 'block-user',
+        context: {
+          name: user.name,
+          userEmail: user.email,
+        },
+      });
+    }
+
+    return this.usersRepository.findById(userId);
+  }
+
+  async findAndSortUsers(
+    order: 'ASC' | 'DESC',
+    sortField: string,
+    role: string,
+    searchQuery: string,
+    page: number,
+    limit: number,
+  ): Promise<{ users: User[]; totalCount: number; totalPages: number }> {
+    const { users, totalCount } = await this.usersRepository.findAndSortUsers(
+      order,
+      sortField,
+      role,
+      searchQuery,
+      page,
+      limit,
+    );
+
+    const totalPages = Math.ceil(totalCount / limit);
+
+    return { users, totalCount, totalPages };
+  }
+
+  async softDeleteUser(userId: string): Promise<void> {
+    const user = await this.findById(userId);
+
+    if (!user) {
+      throw new NotFoundException('User not found');
+    }
+
+    user.deletedAt = new Date();
+    await this.usersRepository.save(user);
   }
 
   async updateUserAndProfile(
