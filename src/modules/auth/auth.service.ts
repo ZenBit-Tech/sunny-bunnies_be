@@ -138,7 +138,7 @@ export class AuthService {
       existedUser.profile.role === this.adminRole ||
       existedUser.status === this.blocked;
 
-    if (isValidAccount) {
+    if (!isValidAccount) {
       throw new NotFoundException("Can't find your google account.");
     }
 
