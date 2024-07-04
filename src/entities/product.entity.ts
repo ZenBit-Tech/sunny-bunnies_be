@@ -143,7 +143,7 @@ export class ProductEntity {
     type: Number,
     description: 'Reference to the user entity (vendor)',
   })
-  @ManyToOne('User', (user: User) => user.products)
+  @ManyToOne('User')
   @JoinColumn({ name: 'user_id' })
   user: User;
 
