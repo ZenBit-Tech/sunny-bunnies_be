@@ -8,14 +8,7 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   const configService = app.get(ConfigService);
 
-  app.enableCors({
-    origin: [
-      configService.get<string>('ORIGIN_URL'),
-      configService.get<string>('PRODUCTION_ORIGIN_URL'),
-    ],
-    methods: 'GET,PUT,PATCH,POST,DELETE',
-    credentials: true,
-  });
+  app.enableCors();
 
   const config = new DocumentBuilder()
     .setTitle('Sunny-bunnies')
