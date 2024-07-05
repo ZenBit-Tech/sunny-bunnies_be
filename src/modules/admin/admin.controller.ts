@@ -20,6 +20,7 @@ import {
 import { UpdateStatusDto } from './dto/update-status.dto';
 import { ProductEntity, User } from '~/entities';
 import { ProductsService } from '../products/products.service';
+import { ProductActivityStatus } from '~/common/enums';
 
 @Controller('admin')
 @UseGuards(RolesGuard)
@@ -54,6 +55,7 @@ export class AdminController {
     @Query('order') order: SortableOption,
     @Query('sortField') sortField: SortableField,
     @Query('role') role: SortableRole,
+
     @Query('searchQuery') searchQuery?: string,
     @Query('page') page: number = 1,
     @Query('limit') limit: number = 7,
@@ -63,6 +65,7 @@ export class AdminController {
       sortField,
       role,
       searchQuery,
+
       page,
       limit,
     );
@@ -71,9 +74,10 @@ export class AdminController {
   @Get('products')
   async findAllProducts(
     @Query('order') order: SortableOption,
-    @Query('searchQuery') searchQuery?: string,
+    @Query('activityStatus') productActivityStatus: ProductActivityStatus,
     @Query('page') page: number = 1,
     @Query('limit') limit: number = 5,
+    @Query('searchQuery') searchQuery?: string,
   ): Promise<{
     products: ProductEntity[];
     totalCount: number;
@@ -84,6 +88,7 @@ export class AdminController {
       searchQuery,
       page,
       limit,
+      productActivityStatus,
     );
   }
 }

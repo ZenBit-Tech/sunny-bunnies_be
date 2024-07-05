@@ -10,6 +10,7 @@ import {
 import { ProductEntity } from '~/entities';
 
 import { GetProductsQueryDto } from './dto/get-products-query.dto';
+import { ProductActivityStatus } from '~/common/enums';
 
 @Injectable()
 export class ProductsRepository extends Repository<ProductEntity> {
@@ -114,14 +115,23 @@ export class ProductsRepository extends Repository<ProductEntity> {
     order: 'ASC' | 'DESC',
     page: number,
     limit: number,
+    productActivityStatus: ProductActivityStatus,
     searchQuery: string,
   ): Promise<{ products: ProductEntity[]; totalCount: number }> {
     const baseQuery = this.createQueryBuilder('product');
+
     if (searchQuery) {
       baseQuery.andWhere('product.name LIKE :searchQuery', {
         searchQuery: `%${searchQuery}%`,
       });
     }
+
+    if (productActivityStatus) {
+      baseQuery.andWhere('product.activity_status = :activityStatus', {
+        activityStatus: productActivityStatus,
+      });
+    }
+
     baseQuery.orderBy('product.createdAt', order);
 
     const [products, totalCount] = await baseQuery

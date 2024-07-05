@@ -3,6 +3,7 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { ProductEntity } from '~/entities';
 import { ProductsRepository } from './products.repository';
 import { GetProductsQueryDto } from './dto/get-products-query.dto';
+import { ProductActivityStatus } from '~/common/enums';
 
 @Injectable()
 export class ProductsService {
@@ -31,6 +32,7 @@ export class ProductsService {
     searchQuery: string,
     page: number,
     limit: number,
+    productActivityStatus: ProductActivityStatus,
   ): Promise<{
     products: ProductEntity[];
     totalCount: number;
@@ -41,6 +43,7 @@ export class ProductsService {
         order,
         page,
         limit,
+        productActivityStatus,
         searchQuery,
       );
     const totalPages = Math.ceil(totalCount / limit);
