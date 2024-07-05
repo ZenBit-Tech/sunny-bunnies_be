@@ -25,4 +25,25 @@ export class ProductsService {
 
     return product;
   }
+
+  async findAndSortProducts(
+    order: 'ASC' | 'DESC',
+    searchQuery: string,
+    page: number,
+    limit: number,
+  ): Promise<{
+    products: ProductEntity[];
+    totalCount: number;
+    totalPages: number;
+  }> {
+    const { products, totalCount } =
+      await this.productsRepository.findAndSortProducts(
+        order,
+        page,
+        limit,
+        searchQuery,
+      );
+    const totalPages = Math.ceil(totalCount / limit);
+    return { products, totalCount, totalPages };
+  }
 }

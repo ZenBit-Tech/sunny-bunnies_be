@@ -109,4 +109,26 @@ export class ProductsRepository extends Repository<ProductEntity> {
 
     return qb.getMany();
   }
+
+  async findAndSortProducts(
+    order: 'ASC' | 'DESC',
+    page: number,
+    limit: number,
+    searchQuery: string,
+  ): Promise<{ products: ProductEntity[]; totalCount: number }> {
+    const baseQuery = this.createQueryBuilder('product');
+    if (searchQuery) {
+      baseQuery.andWhere('product.name LIKE :searchQuery', {
+        searchQuery: `%${searchQuery}%`,
+      });
+    }
+    baseQuery.orderBy('product.createdAt', order);
+
+    const [products, totalCount] = await baseQuery
+      .skip((page - 1) * limit)
+      .take(limit)
+      .getManyAndCount();
+
+    return { products, totalCount };
+  }
 }

@@ -18,12 +18,16 @@ import {
   SortableRole,
 } from './dto/sort-option.dto';
 import { UpdateStatusDto } from './dto/update-status.dto';
-import { User } from '~/entities';
+import { ProductEntity, User } from '~/entities';
+import { ProductsService } from '../products/products.service';
 
 @Controller('admin')
 @UseGuards(RolesGuard)
 export class AdminController {
-  constructor(private readonly usersService: UsersService) {}
+  constructor(
+    private readonly usersService: UsersService,
+    private readonly productsService: ProductsService,
+  ) {}
 
   @Get('user/:id')
   async getUserById(@Param('id') id: string): Promise<User> {
@@ -58,6 +62,25 @@ export class AdminController {
       order,
       sortField,
       role,
+      searchQuery,
+      page,
+      limit,
+    );
+  }
+
+  @Get('products')
+  async findAllProducts(
+    @Query('order') order: SortableOption,
+    @Query('searchQuery') searchQuery?: string,
+    @Query('page') page: number = 1,
+    @Query('limit') limit: number = 5,
+  ): Promise<{
+    products: ProductEntity[];
+    totalCount: number;
+    totalPages: number;
+  }> {
+    return this.productsService.findAndSortProducts(
+      order,
       searchQuery,
       page,
       limit,
