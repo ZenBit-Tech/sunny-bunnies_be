@@ -23,6 +23,7 @@ export class AddUserIdToProducts1718623765257 implements MigrationInterface {
         name: ColumnName.USER_ID,
         type: 'varchar',
         isNullable: true,
+        length: '36',
       }),
     );
 
