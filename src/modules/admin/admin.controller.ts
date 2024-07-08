@@ -20,7 +20,7 @@ import {
 import { UpdateStatusDto } from './dto/update-status.dto';
 import { ProductEntity, User } from '~/entities';
 import { ProductsService } from '../products/products.service';
-import { ProductActivityStatus } from '~/common/enums';
+import { GetProductsQueryDto } from '../products/dto/get-products-query.dto';
 
 @Controller('admin')
 @UseGuards(RolesGuard)
@@ -65,30 +65,17 @@ export class AdminController {
       sortField,
       role,
       searchQuery,
-
       page,
       limit,
     );
   }
 
   @Get('products')
-  async findAllProducts(
-    @Query('order') order: SortableOption,
-    @Query('activityStatus') productActivityStatus: ProductActivityStatus,
-    @Query('page') page: number = 1,
-    @Query('limit') limit: number = 5,
-    @Query('searchQuery') searchQuery?: string,
-  ): Promise<{
+  async findAllProducts(@Query() query: GetProductsQueryDto): Promise<{
     products: ProductEntity[];
     totalCount: number;
     totalPages: number;
   }> {
-    return this.productsService.findAndSortProducts(
-      order,
-      searchQuery,
-      page,
-      limit,
-      productActivityStatus,
-    );
+    return this.productsService.findAll(query);
   }
 }

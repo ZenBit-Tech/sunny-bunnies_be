@@ -10,7 +10,6 @@ import {
 import { ProductEntity } from '~/entities';
 
 import { GetProductsQueryDto } from './dto/get-products-query.dto';
-import { ProductActivityStatus } from '~/common/enums';
 
 @Injectable()
 export class ProductsRepository extends Repository<ProductEntity> {
@@ -33,7 +32,9 @@ export class ProductsRepository extends Repository<ProductEntity> {
       .getOne();
   }
 
-  findAll(query: GetProductsQueryDto): Promise<ProductEntity[]> {
+  async findAll(
+    query: GetProductsQueryDto,
+  ): Promise<{ products: ProductEntity[]; totalCount: number }> {
     const qb = this.createQueryBuilder('product')
       .leftJoinAndSelect('product.images', 'images')
       .leftJoinAndSelect('product.category', 'category')
@@ -103,41 +104,31 @@ export class ProductsRepository extends Repository<ProductEntity> {
       });
     }
 
+    if (query.activityStatuses && query.activityStatuses.length > 0) {
+      qb.andWhere('product.activity_status IN (:...statuses)', {
+        statuses: query.activityStatuses,
+      });
+    }
+
+    if (query.searchQuery) {
+      qb.andWhere('LOWER(product.name) LIKE LOWER(:searchQuery)', {
+        searchQuery: `%${query.searchQuery}%`,
+      });
+    }
+
+    if (query.order) {
+      qb.orderBy('product.createdAt', query.order);
+    }
+
+    const totalCount = await qb.getCount();
+
     const limit = query.limit || PRODUCTS_LIMIT;
-    const offset = query.offset || PRODUCTS_OFFSET;
+    const offset =
+      (query.page ? (query.page - 1) * limit : query.offset) || PRODUCTS_OFFSET;
 
     qb.take(limit).skip(offset);
 
-    return qb.getMany();
-  }
-
-  async findAndSortProducts(
-    order: 'ASC' | 'DESC',
-    page: number,
-    limit: number,
-    productActivityStatus: ProductActivityStatus,
-    searchQuery: string,
-  ): Promise<{ products: ProductEntity[]; totalCount: number }> {
-    const baseQuery = this.createQueryBuilder('product');
-
-    if (searchQuery) {
-      baseQuery.andWhere('product.name LIKE :searchQuery', {
-        searchQuery: `%${searchQuery}%`,
-      });
-    }
-
-    if (productActivityStatus) {
-      baseQuery.andWhere('product.activity_status = :activityStatus', {
-        activityStatus: productActivityStatus,
-      });
-    }
-
-    baseQuery.orderBy('product.createdAt', order);
-
-    const [products, totalCount] = await baseQuery
-      .skip((page - 1) * limit)
-      .take(limit)
-      .getManyAndCount();
+    const products = await qb.getMany();
 
     return { products, totalCount };
   }

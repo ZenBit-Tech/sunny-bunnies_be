@@ -3,7 +3,7 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { ProductEntity } from '~/entities';
 import { ProductsRepository } from './products.repository';
 import { GetProductsQueryDto } from './dto/get-products-query.dto';
-import { ProductActivityStatus } from '~/common/enums';
+import { PRODUCTS_LIMIT } from '~/common/constants/constants';
 
 @Injectable()
 export class ProductsService {
@@ -13,8 +13,16 @@ export class ProductsService {
     this.productsRepository = productsRepository;
   }
 
-  async findAll(query: GetProductsQueryDto): Promise<ProductEntity[]> {
-    return this.productsRepository.findAll(query);
+  async findAll(query: GetProductsQueryDto): Promise<{
+    products: ProductEntity[];
+    totalCount: number;
+    totalPages: number;
+  }> {
+    const { products, totalCount } =
+      await this.productsRepository.findAll(query);
+    const limit = query.limit || PRODUCTS_LIMIT;
+    const totalPages = Math.ceil(totalCount / limit);
+    return { products, totalCount, totalPages };
   }
 
   async findById(id: number): Promise<ProductEntity | null> {
@@ -25,28 +33,5 @@ export class ProductsService {
     }
 
     return product;
-  }
-
-  async findAndSortProducts(
-    order: 'ASC' | 'DESC',
-    searchQuery: string,
-    page: number,
-    limit: number,
-    productActivityStatus: ProductActivityStatus,
-  ): Promise<{
-    products: ProductEntity[];
-    totalCount: number;
-    totalPages: number;
-  }> {
-    const { products, totalCount } =
-      await this.productsRepository.findAndSortProducts(
-        order,
-        page,
-        limit,
-        productActivityStatus,
-        searchQuery,
-      );
-    const totalPages = Math.ceil(totalCount / limit);
-    return { products, totalCount, totalPages };
   }
 }
