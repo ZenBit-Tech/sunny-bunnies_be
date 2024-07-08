@@ -13,14 +13,14 @@ import {
 import { RolesGuard } from './guard/roles.guard';
 import { UsersService } from '../users/users.service';
 import {
+  GetAdminProductsQueryDto,
   SortableField,
   SortableOption,
   SortableRole,
-} from './dto/sort-option.dto';
-import { UpdateStatusDto } from './dto/update-status.dto';
+  UpdateStatusDto,
+} from './dto/index';
 import { ProductEntity, User } from '~/entities';
 import { ProductsService } from '../products/products.service';
-import { GetProductsQueryDto } from '../products/dto/get-products-query.dto';
 
 @Controller('admin')
 @UseGuards(RolesGuard)
@@ -71,7 +71,7 @@ export class AdminController {
   }
 
   @Get('products')
-  async findAllProducts(@Query() query: GetProductsQueryDto): Promise<{
+  async findAllProducts(@Query() query: GetAdminProductsQueryDto): Promise<{
     products: ProductEntity[];
     totalCount: number;
     totalPages: number;
