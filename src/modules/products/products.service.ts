@@ -22,6 +22,7 @@ export class ProductsService {
       await this.productsRepository.findAll(query);
     const limit = query.limit || PRODUCTS_LIMIT;
     const totalPages = Math.ceil(totalCount / limit);
+
     return { products, totalCount, totalPages };
   }
 
