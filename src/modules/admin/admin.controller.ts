@@ -10,6 +10,7 @@ import {
   Delete,
 } from '@nestjs/common';
 
+import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { RolesGuard } from './guard/roles.guard';
 import { UsersService } from '../users/users.service';
 import {
@@ -22,6 +23,7 @@ import {
 import { ProductEntity, User } from '~/entities';
 import { ProductsService } from '../products/products.service';
 
+@ApiTags('Admin')
 @Controller('admin')
 @UseGuards(RolesGuard)
 export class AdminController {
@@ -71,6 +73,17 @@ export class AdminController {
   }
 
   @Get('products')
+  @ApiOperation({
+    summary: 'Retrieve a list of products',
+    description:
+      'This endpoint allows admins to retrieve a list of products along with pagination details.',
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'List of products retrieved successfully',
+  })
+  @ApiResponse({ status: 400, description: 'Bad Request' })
+  @ApiResponse({ status: 500, description: 'Internal Server Error' })
   async findAllProducts(@Query() query: GetAdminProductsQueryDto): Promise<{
     products: ProductEntity[];
     totalCount: number;
