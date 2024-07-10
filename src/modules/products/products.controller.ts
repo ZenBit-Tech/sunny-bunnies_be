@@ -18,7 +18,11 @@ export class ProductsController {
 
   @PublicRoute()
   @Get()
-  async findAll(@Query() query: GetProductsQueryDto): Promise<ProductEntity[]> {
+  async findAll(@Query() query: GetProductsQueryDto): Promise<{
+    products: ProductEntity[];
+    totalCount: number;
+    totalPages: number;
+  }> {
     return this.productsService.findAll(query);
   }
 

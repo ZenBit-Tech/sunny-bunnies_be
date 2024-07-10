@@ -32,7 +32,9 @@ export class ProductsRepository extends Repository<ProductEntity> {
       .getOne();
   }
 
-  findAll(query: GetProductsQueryDto): Promise<ProductEntity[]> {
+  async findAll(
+    query: GetProductsQueryDto,
+  ): Promise<{ products: ProductEntity[]; totalCount: number }> {
     const qb = this.createQueryBuilder('product')
       .leftJoinAndSelect('product.images', 'images')
       .leftJoinAndSelect('product.category', 'category')
@@ -102,11 +104,32 @@ export class ProductsRepository extends Repository<ProductEntity> {
       });
     }
 
+    if (query.activityStatuses && query.activityStatuses.length > 0) {
+      qb.andWhere('product.activity_status IN (:...statuses)', {
+        statuses: query.activityStatuses,
+      });
+    }
+
+    if (query.searchQuery) {
+      qb.andWhere('LOWER(product.name) LIKE LOWER(:searchQuery)', {
+        searchQuery: `%${query.searchQuery}%`,
+      });
+    }
+
+    if (query.order) {
+      qb.orderBy('product.createdAt', query.order);
+    }
+
+    const totalCount = await qb.getCount();
+
     const limit = query.limit || PRODUCTS_LIMIT;
-    const offset = query.offset || PRODUCTS_OFFSET;
+    const offset =
+      (query.page ? (query.page - 1) * limit : query.offset) || PRODUCTS_OFFSET;
 
     qb.take(limit).skip(offset);
 
-    return qb.getMany();
+    const products = await qb.getMany();
+
+    return { products, totalCount };
   }
 }

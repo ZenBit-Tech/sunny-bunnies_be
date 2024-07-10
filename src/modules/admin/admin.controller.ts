@@ -10,20 +10,27 @@ import {
   Delete,
 } from '@nestjs/common';
 
+import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { RolesGuard } from './guard/roles.guard';
 import { UsersService } from '../users/users.service';
 import {
+  GetAdminProductsQueryDto,
   SortableField,
   SortableOption,
   SortableRole,
-} from './dto/sort-option.dto';
-import { UpdateStatusDto } from './dto/update-status.dto';
-import { User } from '~/entities';
+  UpdateStatusDto,
+} from './dto/index';
+import { ProductEntity, User } from '~/entities';
+import { ProductsService } from '../products/products.service';
 
+@ApiTags('Admin')
 @Controller('admin')
 @UseGuards(RolesGuard)
 export class AdminController {
-  constructor(private readonly usersService: UsersService) {}
+  constructor(
+    private readonly usersService: UsersService,
+    private readonly productsService: ProductsService,
+  ) {}
 
   @Get('user/:id')
   async getUserById(@Param('id') id: string): Promise<User> {
@@ -50,6 +57,7 @@ export class AdminController {
     @Query('order') order: SortableOption,
     @Query('sortField') sortField: SortableField,
     @Query('role') role: SortableRole,
+
     @Query('searchQuery') searchQuery?: string,
     @Query('page') page: number = 1,
     @Query('limit') limit: number = 7,
@@ -62,5 +70,25 @@ export class AdminController {
       page,
       limit,
     );
+  }
+
+  @Get('products')
+  @ApiOperation({
+    summary: 'Retrieve a list of products',
+    description:
+      'This endpoint allows admins to retrieve a list of products along with pagination details.',
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'List of products retrieved successfully',
+  })
+  @ApiResponse({ status: 400, description: 'Bad Request' })
+  @ApiResponse({ status: 500, description: 'Internal Server Error' })
+  async findAllProducts(@Query() query: GetAdminProductsQueryDto): Promise<{
+    products: ProductEntity[];
+    totalCount: number;
+    totalPages: number;
+  }> {
+    return this.productsService.findAll(query);
   }
 }
