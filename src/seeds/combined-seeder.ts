@@ -30,7 +30,7 @@ import {
   usersSeedData,
   typesSeedData,
 } from './seed-data';
-import { TypeEntity } from "~/entities/type.entity";
+import { TypeEntity } from '~/entities/type.entity';
 
 export class CombinedSeeder implements Seeder {
   public async run(dataSource: DataSource): Promise<void> {
@@ -87,7 +87,7 @@ export class CombinedSeeder implements Seeder {
     await repository.insert(typesSeedData);
   }
 
-  private async  seedCategories(dataSource: DataSource): Promise<void> {
+  private async seedCategories(dataSource: DataSource): Promise<void> {
     const categoryRepository = dataSource.getRepository(CategoryEntity);
     const styleRepository = dataSource.getRepository(StyleEntity);
     const typeRepository = dataSource.getRepository(TypeEntity);
@@ -116,7 +116,9 @@ export class CombinedSeeder implements Seeder {
       }
 
       if (categoryData.materials) {
-        const materials = await materialRepository.findByIds(categoryData.materials);
+        const materials = await materialRepository.findByIds(
+          categoryData.materials,
+        );
         category.materials = Array.from(new Set(materials));
       }
 
@@ -187,7 +189,7 @@ export class CombinedSeeder implements Seeder {
         .findOne({ where: { id: product.brand_id } });
       const type = dataSource
         .getRepository(TypeEntity)
-        .findOne({ where: { id: product.type_id }});
+        .findOne({ where: { id: product.type_id } });
       const material = dataSource
         .getRepository(MaterialEntity)
         .findOne({ where: { id: product.material_id } });

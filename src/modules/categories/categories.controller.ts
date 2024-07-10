@@ -1,5 +1,5 @@
 import { Controller, Get } from '@nestjs/common';
-import { ApiOperation, ApiResponse, ApiTags } from "@nestjs/swagger";
+import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 
 import { CategoryEntity } from '~/entities';
 
@@ -16,7 +16,8 @@ export class CategoriesController {
 
   @Get()
   @ApiOperation({
-    summary: 'Retrieve a list of categories with their types, brands, styles and materials',
+    summary:
+      'Retrieve a list of categories with their types, brands, styles and materials',
     description:
       'This endpoint allows vendor to retrieve a list of categories.',
   })

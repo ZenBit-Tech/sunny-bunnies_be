@@ -1,9 +1,15 @@
-import { Column, Entity, JoinTable, ManyToMany, PrimaryGeneratedColumn } from "typeorm";
+import {
+  Column,
+  Entity,
+  JoinTable,
+  ManyToMany,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 import { ApiProperty } from '@nestjs/swagger';
-import { TypeEntity } from "~/entities/type.entity";
-import { StyleEntity } from "~/entities/style.entity";
-import { BrandEntity } from "~/entities/brand.entity";
-import { MaterialEntity } from "~/entities/material.entity";
+import { TypeEntity } from '~/entities/type.entity';
+import { StyleEntity } from '~/entities/style.entity';
+import { BrandEntity } from '~/entities/brand.entity';
+import { MaterialEntity } from '~/entities/material.entity';
 
 @Entity({ name: 'categories' })
 export class CategoryEntity {
@@ -34,7 +40,8 @@ export class CategoryEntity {
     inverseJoinColumn: {
       name: 'type_id',
       referencedColumnName: 'id',
-    },})
+    },
+  })
   types: TypeEntity[];
 
   @ApiProperty({
