@@ -6,6 +6,7 @@ export const nodemailerConfigFactory = async (
   configService: ConfigService,
 ): Promise<MailerOptions> => ({
   transport: {
+    service: 'gmail',
     host: configService.get<string>('MAIL_HOST'),
     auth: {
       user: configService.get<string>('AUTH_EMAIL'),

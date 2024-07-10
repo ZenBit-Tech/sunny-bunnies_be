@@ -314,7 +314,7 @@ export class AuthService {
       },
     );
 
-    const resetPasswordPageLink = `${this.configService.get<string>('CLIENT_RESET_PASSWORD-BASE_URL')}?${new URLSearchParams(
+    const resetPasswordPageLink = `${this.configService.get<string>('CLIENT_RESET_PASSWORD_BASE_URL')}?${new URLSearchParams(
       {
         token,
       },
