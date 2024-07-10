@@ -1,8 +1,15 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsOptional, IsString, IsNumber } from 'class-validator';
-import { Type } from 'class-transformer';
+import {
+  IsOptional,
+  IsString,
+  IsNumber,
+  IsEnum,
+  IsArray,
+} from 'class-validator';
+import { Transform, Type } from 'class-transformer';
 
 import { PRODUCTS_LIMIT, PRODUCTS_OFFSET } from '~/common/constants/constants';
+import { ProductActivityStatus } from '~/common/enums';
 
 export class GetProductsQueryDto {
   @ApiProperty({
@@ -126,4 +133,50 @@ export class GetProductsQueryDto {
   @IsOptional()
   @IsString()
   material?: string;
+
+  @ApiProperty({
+    type: String,
+    description: 'The sort order of the products',
+    required: false,
+    enum: ['ASC', 'DESC'],
+  })
+  @IsOptional()
+  @IsEnum(['ASC', 'DESC'])
+  order?: 'ASC' | 'DESC';
+
+  @ApiProperty({
+    type: [String],
+    description: 'The activity statuses of the products',
+    required: false,
+    enum: ProductActivityStatus,
+    isArray: true,
+  })
+  @IsOptional()
+  @IsArray()
+  @IsEnum(ProductActivityStatus, { each: true })
+  @Transform(
+    ({ value }) => (typeof value === 'string' ? value.split(',') : value),
+    { toClassOnly: true },
+  )
+  activityStatuses?: ProductActivityStatus[];
+
+  @ApiProperty({
+    type: Number,
+    description: 'The page number for pagination',
+    required: false,
+    default: 1,
+  })
+  @IsOptional()
+  @IsNumber()
+  @Type(() => Number)
+  page?: number;
+
+  @ApiProperty({
+    type: String,
+    description: 'Search query for the product name',
+    required: false,
+  })
+  @IsOptional()
+  @IsString()
+  searchQuery?: string;
 }
