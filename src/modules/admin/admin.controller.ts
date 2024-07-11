@@ -91,4 +91,13 @@ export class AdminController {
   }> {
     return this.productsService.findAll(query);
   }
+
+  @Delete('product/:id')
+  @ApiOperation({
+    summary: 'Delete a product',
+  })
+  @HttpCode(204)
+  async softDeleteProduct(@Param('id') productId: string): Promise<void> {
+    await this.productsService.softDeleteProduct(productId);
+  }
 }

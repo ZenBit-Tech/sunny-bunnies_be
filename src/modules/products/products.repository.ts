@@ -17,7 +17,7 @@ export class ProductsRepository extends Repository<ProductEntity> {
     super(ProductEntity, dataSource.createEntityManager());
   }
 
-  findById(id: number): Promise<ProductEntity> {
+  findById(id: string): Promise<ProductEntity> {
     return this.createQueryBuilder('product')
       .leftJoinAndSelect('product.images', 'images')
       .leftJoinAndSelect('product.category', 'category')
@@ -44,7 +44,8 @@ export class ProductsRepository extends Repository<ProductEntity> {
       .leftJoinAndSelect('product.material', 'material')
       .leftJoinAndSelect('product.variants', 'variants')
       .leftJoinAndSelect('variants.color', 'color')
-      .leftJoinAndSelect('variants.size', 'size');
+      .leftJoinAndSelect('variants.size', 'size')
+      .where('product.deletedAt IS NULL');
 
     if (query.category) {
       qb.andWhere('category.name = :categoryName', {

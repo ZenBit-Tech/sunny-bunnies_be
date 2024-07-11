@@ -155,6 +155,9 @@ export class ProductEntity {
   @JoinColumn({ name: 'user_id' })
   user: User;
 
+  @Column({ type: 'timestamp', nullable: true, name: 'deleted_at' })
+  deletedAt: Date | null;
+
   @ApiProperty({
     type: Number,
     description: 'This is the time when product was created',

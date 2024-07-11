@@ -28,7 +28,7 @@ export class ProductsController {
 
   @PublicRoute()
   @Get('/:id')
-  async findById(@Param() param: { id: number }): Promise<ProductEntity> {
+  async findById(@Param() param: { id: string }): Promise<ProductEntity> {
     return this.productsService.findById(param.id);
   }
 }

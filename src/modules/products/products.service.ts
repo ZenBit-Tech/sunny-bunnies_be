@@ -26,7 +26,7 @@ export class ProductsService {
     return { products, totalCount, totalPages };
   }
 
-  async findById(id: number): Promise<ProductEntity | null> {
+  async findById(id: string): Promise<ProductEntity | null> {
     const product = await this.productsRepository.findById(id);
 
     if (!product) {
@@ -34,5 +34,16 @@ export class ProductsService {
     }
 
     return product;
+  }
+
+  async softDeleteProduct(productId: string): Promise<void> {
+    const product = await this.findById(productId);
+
+    if (!product) {
+      throw new NotFoundException('Product not found');
+    }
+
+    product.deletedAt = new Date();
+    await this.productsRepository.save(product);
   }
 }
