@@ -18,9 +18,11 @@ export class ProductsService {
   constructor(
     productsRepository: ProductsRepository,
     usersRepository: UsersRepository,
+    mailerService: MailerService,
   ) {
     this.productsRepository = productsRepository;
     this.usersRepository = usersRepository;
+    this.mailerService = mailerService;
   }
 
   async findAll(query: GetProductsQueryDto): Promise<{
