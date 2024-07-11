@@ -3,7 +3,7 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { MailerService } from '@nestjs-modules/mailer';
 import { ProductEntity } from '~/entities';
 import { ProductsRepository } from './products.repository';
-import { UsersRepository } from '../users/users.repository';
+import { UsersService } from '../users/users.service';
 import { GetProductsQueryDto } from './dto/get-products-query.dto';
 import { PRODUCTS_LIMIT } from '~/common/constants/constants';
 
@@ -11,17 +11,17 @@ import { PRODUCTS_LIMIT } from '~/common/constants/constants';
 export class ProductsService {
   private readonly productsRepository: ProductsRepository;
 
-  private readonly usersRepository: UsersRepository;
+  private readonly usersService: UsersService;
 
   private readonly mailerService: MailerService;
 
   constructor(
     productsRepository: ProductsRepository,
-    usersRepository: UsersRepository,
+    usersService: UsersService,
     mailerService: MailerService,
   ) {
     this.productsRepository = productsRepository;
-    this.usersRepository = usersRepository;
+    this.usersService = usersService;
     this.mailerService = mailerService;
   }
 
@@ -58,7 +58,7 @@ export class ProductsService {
     product.deletedAt = new Date();
     await this.productsRepository.save(product);
 
-    const user = await this.usersRepository.findById(product.user.id);
+    const user = await this.usersService.findById(product.user.id);
 
     if (user) {
       await this.mailerService.sendMail({
