@@ -1,7 +1,9 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 
+import { MailerService } from '@nestjs-modules/mailer';
 import { ProductEntity } from '~/entities';
 import { ProductsRepository } from './products.repository';
+import { UsersRepository } from '../users/users.repository';
 import { GetProductsQueryDto } from './dto/get-products-query.dto';
 import { PRODUCTS_LIMIT } from '~/common/constants/constants';
 
@@ -9,8 +11,16 @@ import { PRODUCTS_LIMIT } from '~/common/constants/constants';
 export class ProductsService {
   private readonly productsRepository: ProductsRepository;
 
-  constructor(productsRepository: ProductsRepository) {
+  private readonly usersRepository: UsersRepository;
+
+  private readonly mailerService: MailerService;
+
+  constructor(
+    productsRepository: ProductsRepository,
+    usersRepository: UsersRepository,
+  ) {
     this.productsRepository = productsRepository;
+    this.usersRepository = usersRepository;
   }
 
   async findAll(query: GetProductsQueryDto): Promise<{
@@ -45,5 +55,19 @@ export class ProductsService {
 
     product.deletedAt = new Date();
     await this.productsRepository.save(product);
+
+    const user = await this.usersRepository.findById(product.user.id);
+
+    if (user) {
+      await this.mailerService.sendMail({
+        to: user.email,
+        subject: 'Product Was Deleted',
+        template: 'delete-product',
+        context: {
+          name: user.name,
+          productName: product.name,
+        },
+      });
+    }
   }
 }
