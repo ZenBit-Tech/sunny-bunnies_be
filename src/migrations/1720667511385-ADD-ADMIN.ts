@@ -2,7 +2,7 @@ import { MigrationInterface, QueryRunner } from 'typeorm';
 import { randomUUID } from 'crypto';
 import { genSalt, hash } from 'bcrypt';
 
-class CreateAdminUser1720442169503 implements MigrationInterface {
+class CreateAdminUser1720667511385 implements MigrationInterface {
   public async up(queryRunner: QueryRunner): Promise<void> {
     const userId = randomUUID();
     const profileId = randomUUID();
@@ -62,4 +62,4 @@ class CreateAdminUser1720442169503 implements MigrationInterface {
   }
 }
 
-export { CreateAdminUser1720442169503 };
+export { CreateAdminUser1720667511385 };

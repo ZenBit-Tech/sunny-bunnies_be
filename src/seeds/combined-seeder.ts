@@ -28,18 +28,21 @@ import {
   profilesSeedData,
   reviewsSeedData,
   usersSeedData,
+  typesSeedData,
 } from './seed-data';
+import { TypeEntity } from '~/entities/type.entity';
 
 export class CombinedSeeder implements Seeder {
   public async run(dataSource: DataSource): Promise<void> {
     await this.disableForeignKeyChecks(dataSource);
     await this.truncateTables(dataSource);
     await this.seedColors(dataSource);
-    await this.seedCategories(dataSource);
     await this.seedSizes(dataSource);
+    await this.seedTypes(dataSource);
     await this.seedStyles(dataSource);
     await this.seedMaterials(dataSource);
     await this.seedBrands(dataSource);
+    await this.seedCategories(dataSource);
     await this.seedUsers(dataSource);
     await this.seedProfiles(dataSource);
     await this.seedProducts(dataSource);
@@ -57,12 +60,17 @@ export class CombinedSeeder implements Seeder {
     await dataSource.query('TRUNCATE TABLE products;');
     await dataSource.query('TRUNCATE TABLE product_variants;');
     await dataSource.query('TRUNCATE TABLE colors;');
-    await dataSource.query('TRUNCATE TABLE categories;');
     await dataSource.query('TRUNCATE TABLE sizes;');
     await dataSource.query('TRUNCATE TABLE styles;');
     await dataSource.query('TRUNCATE TABLE brands;');
     await dataSource.query('TRUNCATE TABLE materials;');
     await dataSource.query('TRUNCATE TABLE users_reviews;');
+    await dataSource.query('TRUNCATE TABLE types');
+    await dataSource.query('TRUNCATE TABLE category_brands');
+    await dataSource.query('TRUNCATE TABLE category_materials');
+    await dataSource.query('TRUNCATE TABLE category_styles');
+    await dataSource.query('TRUNCATE TABLE category_types');
+    await dataSource.query('TRUNCATE TABLE categories;');
   }
 
   private async enableForeignKeyChecks(dataSource: DataSource): Promise<void> {
@@ -74,9 +82,48 @@ export class CombinedSeeder implements Seeder {
     await repository.insert(colorsSeedData);
   }
 
+  private async seedTypes(dataSource: DataSource): Promise<void> {
+    const repository = dataSource.getRepository(TypeEntity);
+    await repository.insert(typesSeedData);
+  }
+
   private async seedCategories(dataSource: DataSource): Promise<void> {
-    const repository = dataSource.getRepository(CategoryEntity);
-    await repository.insert(categoriesSeedData);
+    const categoryRepository = dataSource.getRepository(CategoryEntity);
+    const styleRepository = dataSource.getRepository(StyleEntity);
+    const typeRepository = dataSource.getRepository(TypeEntity);
+    const brandRepository = dataSource.getRepository(BrandEntity);
+    const materialRepository = dataSource.getRepository(MaterialEntity);
+
+    for (const categoryData of categoriesSeedData) {
+      const category = categoryRepository.create({
+        id: categoryData.id,
+        name: categoryData.name,
+      });
+
+      if (categoryData.styles) {
+        const styles = await styleRepository.findByIds(categoryData.styles);
+        category.styles = Array.from(new Set(styles));
+      }
+
+      if (categoryData.types) {
+        const types = await typeRepository.findByIds(categoryData.types);
+        category.types = Array.from(new Set(types));
+      }
+
+      if (categoryData.brands) {
+        const brands = await brandRepository.findByIds(categoryData.brands);
+        category.brands = Array.from(new Set(brands));
+      }
+
+      if (categoryData.materials) {
+        const materials = await materialRepository.findByIds(
+          categoryData.materials,
+        );
+        category.materials = Array.from(new Set(materials));
+      }
+
+      await categoryRepository.save(category);
+    }
   }
 
   private async seedSizes(dataSource: DataSource): Promise<void> {
@@ -140,6 +187,9 @@ export class CombinedSeeder implements Seeder {
       const brand = dataSource
         .getRepository(BrandEntity)
         .findOne({ where: { id: product.brand_id } });
+      const type = dataSource
+        .getRepository(TypeEntity)
+        .findOne({ where: { id: product.type_id } });
       const material = dataSource
         .getRepository(MaterialEntity)
         .findOne({ where: { id: product.material_id } });
@@ -150,15 +200,17 @@ export class CombinedSeeder implements Seeder {
       const [
         resolvedCategory,
         resolvedStyle,
+        resolvedType,
         resolvedBrand,
         resolvedMaterial,
         resolvedUser,
-      ] = await Promise.all([category, style, brand, material, user]);
+      ] = await Promise.all([category, style, type, brand, material, user]);
 
       const insertedProduct = await repository.save({
         ...productData,
         category: resolvedCategory,
         style: resolvedStyle,
+        type: resolvedType,
         brand: resolvedBrand,
         user: resolvedUser,
         material: resolvedMaterial,

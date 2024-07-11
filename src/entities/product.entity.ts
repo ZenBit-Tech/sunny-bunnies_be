@@ -19,6 +19,7 @@ import {
   type StyleEntity,
   type User,
 } from './index';
+import { TypeEntity } from '~/entities/type.entity';
 
 @Entity({ name: 'products' })
 export class ProductEntity {
@@ -122,6 +123,13 @@ export class ProductEntity {
   @ManyToOne('StyleEntity')
   @JoinColumn({ name: 'style_id' })
   style: StyleEntity;
+
+  @ApiProperty({
+    type: Number,
+    description: 'Reference to the type entity',
+  })
+  @JoinColumn({ name: 'type_id' })
+  type: TypeEntity;
 
   @ApiProperty({
     type: Number,
