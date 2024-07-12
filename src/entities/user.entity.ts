@@ -17,6 +17,7 @@ import { type ProductEntity } from './product.entity';
 import { type UsersRating } from './users-rating.entity';
 import { type UsersReview } from './users-review.entity';
 import { type UserProfile } from './user-profile.entity';
+import { type Wishlist } from './wishlist.entity';
 
 @Entity({ name: 'users' })
 export class User {
@@ -95,6 +96,9 @@ export class User {
 
   @Column({ type: 'timestamp', nullable: true, name: 'deleted_at' })
   deletedAt: Date | null;
+
+  @OneToOne('Wishlist', (wishlist: Wishlist) => wishlist.user)
+  wishlist: Wishlist;
 
   @ApiProperty({ description: 'Created date of user' })
   @CreateDateColumn({ name: 'created_at' })

@@ -57,7 +57,6 @@ export class AdminController {
     @Query('order') order: SortableOption,
     @Query('sortField') sortField: SortableField,
     @Query('role') role: SortableRole,
-
     @Query('searchQuery') searchQuery?: string,
     @Query('page') page: number = 1,
     @Query('limit') limit: number = 7,

@@ -12,6 +12,6 @@ import { Encrypt } from '~/utils';
   controllers: [UsersController],
   providers: [UsersService, UsersRepository, Encrypt, ConfigService],
   imports: [TypeOrmModule.forFeature([User]), UploadModule],
-  exports: [UsersService],
+  exports: [UsersService, UsersRepository],
 })
 export class UsersModule {}

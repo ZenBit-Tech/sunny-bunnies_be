@@ -5,6 +5,7 @@ import { User, UserProfile, UserCard, UsersRating } from '~/entities';
 import { UserCardDto, UserProfileUpdateDto } from './dto';
 import { Encrypt } from '~/utils';
 import { UpdateStatusDto } from '../admin/dto';
+import { Wishlist } from '~/entities/wishlist.entity';
 
 @Injectable()
 export class UsersRepository extends Repository<User> {
@@ -12,12 +13,15 @@ export class UsersRepository extends Repository<User> {
 
   private readonly userCardRepository: Repository<UserCard>;
 
+  private readonly wishlistRepository: Repository<Wishlist>;
+
   private readonly encrypt: Encrypt;
 
   constructor(dataSource: DataSource, encrypt: Encrypt) {
     super(User, dataSource.createEntityManager());
     this.userProfileRepository = dataSource.getRepository(UserProfile);
     this.userCardRepository = dataSource.getRepository(UserCard);
+    this.wishlistRepository = dataSource.getRepository(Wishlist);
     this.encrypt = encrypt;
   }
 
@@ -27,7 +31,7 @@ export class UsersRepository extends Repository<User> {
         id,
         deletedAt: IsNull(),
       },
-      relations: ['profile'],
+      relations: ['profile', 'wishlist'],
     });
   }
 
@@ -111,11 +115,14 @@ export class UsersRepository extends Repository<User> {
     };
     await this.userCardRepository.save(userCard);
 
-    await this.userCardRepository.save(userCard);
+    const wishlist = this.wishlistRepository.create({
+      user,
+    });
+    await this.wishlistRepository.save(wishlist);
 
     return this.findOne({
       where: { id: user.id },
-      relations: ['profile'],
+      relations: ['profile', 'wishlist'],
     });
   }
 
@@ -124,7 +131,7 @@ export class UsersRepository extends Repository<User> {
       where: {
         email,
       },
-      relations: ['profile'],
+      relations: ['profile', 'wishlist'],
     });
   }
 

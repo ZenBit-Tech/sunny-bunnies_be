@@ -8,6 +8,7 @@ import { Encrypt } from '~/utils/encrypt.package';
 import { UpdateStatusDto } from '../admin/dto';
 import { User } from '~/entities';
 import { UserStatus } from '../admin/dto/update-status.dto';
+import { Wishlist } from '~/entities/wishlist.entity';
 
 describe('UsersService', () => {
   let service: UsersService;
@@ -177,6 +178,7 @@ describe('UsersService', () => {
         reviewsGiven: [],
         createdAt: new Date(),
         updatedAt: new Date(),
+        wishlist: new Wishlist(),
       },
       {
         id: '2',
@@ -199,6 +201,7 @@ describe('UsersService', () => {
         reviewsGiven: [],
         createdAt: new Date(),
         updatedAt: new Date(),
+        wishlist: new Wishlist(),
       },
     ];
     const totalCount = mockUsers.length;

@@ -75,6 +75,25 @@ erDiagram
     dateTime updated_at
   }
 
+   wishlist {
+    uuid id PK
+    uuid user_id FK
+    dateTime created_at
+    dateTime updated_at
+  }
+
+  wishlist_item {
+    uuid id PK
+    uuid wishlist_id FK
+    uuid product_id FK
+    dateTime created_at
+    dateTime updated_at
+  }
+
+  users ||--o{ wishlist : "1"
+  wishlist ||--o{ wishlist_item : "1"
+  products ||--|| wishlist_item : "n"
+
   user_cards {
     int id PK
     int user_id FK

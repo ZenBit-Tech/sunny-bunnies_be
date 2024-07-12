@@ -13,3 +13,4 @@ export { SizeEntity } from './size.entity';
 export { StyleEntity } from './style.entity';
 export { User } from './user.entity';
 export { UserCard } from './card.entity';
+export { Wishlist } from './wishlist.entity';
