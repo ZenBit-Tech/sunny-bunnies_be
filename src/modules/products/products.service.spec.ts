@@ -137,6 +137,7 @@ describe('ProductsService', () => {
           useValue: {
             findAll: jest.fn(),
             findById: jest.fn(),
+            save: jest.fn(),
           },
         },
       ],
@@ -250,7 +251,7 @@ describe('ProductsService', () => {
   });
 
   describe('findById', () => {
-    const productId = 1;
+    const productId = '1';
 
     it('should return product by id', async () => {
       jest.spyOn(repository, 'findById').mockResolvedValue(mockProduct1);
@@ -268,6 +269,36 @@ describe('ProductsService', () => {
         NotFoundException,
       );
       expect(repository.findById).toHaveBeenCalledWith(productId);
+    });
+  });
+
+  describe('softDeleteProduct', () => {
+    const productId = '1';
+    let mockProduct: ProductEntity;
+
+    beforeEach(() => {
+      mockProduct = mockProduct1;
+
+      jest.spyOn(repository, 'findById').mockResolvedValue(mockProduct);
+      jest.spyOn(repository, 'save').mockResolvedValue(mockProduct);
+    });
+
+    it('should soft delete the product', async () => {
+      await service.softDeleteProduct(productId);
+
+      expect(repository.findById).toHaveBeenCalledWith(productId);
+      expect(repository.save).toHaveBeenCalledWith(
+        expect.objectContaining({ deletedAt: expect.any(Date) }),
+      );
+    });
+    it('should throw NotFoundException if product not found', async () => {
+      jest.spyOn(repository, 'findById').mockResolvedValue(null);
+
+      await expect(service.softDeleteProduct(productId)).rejects.toThrow(
+        NotFoundException,
+      );
+      expect(repository.findById).toHaveBeenCalledWith(productId);
+      expect(repository.save).not.toHaveBeenCalled();
     });
   });
 });

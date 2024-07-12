@@ -1,7 +1,9 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 
+import { MailerService } from '@nestjs-modules/mailer';
 import { ProductEntity } from '~/entities';
 import { ProductsRepository } from './products.repository';
+import { UsersService } from '../users/users.service';
 import { GetProductsQueryDto } from './dto/get-products-query.dto';
 import { PRODUCTS_LIMIT } from '~/common/constants/constants';
 
@@ -9,8 +11,18 @@ import { PRODUCTS_LIMIT } from '~/common/constants/constants';
 export class ProductsService {
   private readonly productsRepository: ProductsRepository;
 
-  constructor(productsRepository: ProductsRepository) {
+  private readonly usersService: UsersService;
+
+  private readonly mailerService: MailerService;
+
+  constructor(
+    productsRepository: ProductsRepository,
+    usersService: UsersService,
+    mailerService: MailerService,
+  ) {
     this.productsRepository = productsRepository;
+    this.usersService = usersService;
+    this.mailerService = mailerService;
   }
 
   async findAll(query: GetProductsQueryDto): Promise<{
@@ -26,7 +38,7 @@ export class ProductsService {
     return { products, totalCount, totalPages };
   }
 
-  async findById(id: number): Promise<ProductEntity | null> {
+  async findById(id: string): Promise<ProductEntity | null> {
     const product = await this.productsRepository.findById(id);
 
     if (!product) {
@@ -34,5 +46,30 @@ export class ProductsService {
     }
 
     return product;
+  }
+
+  async softDeleteProduct(productId: string): Promise<void> {
+    const product = await this.findById(productId);
+
+    if (!product) {
+      throw new NotFoundException('Product not found');
+    }
+
+    product.deletedAt = new Date();
+    await this.productsRepository.save(product);
+
+    const user = await this.usersService.findById(product.user.id);
+
+    if (user) {
+      await this.mailerService.sendMail({
+        to: user.email,
+        subject: 'Product Was Deleted',
+        template: 'delete-product',
+        context: {
+          name: user.name,
+          productName: product.name,
+        },
+      });
+    }
   }
 }
