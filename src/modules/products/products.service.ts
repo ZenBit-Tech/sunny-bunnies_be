@@ -38,6 +38,22 @@ export class ProductsService {
     return { products, totalCount, totalPages };
   }
 
+  async fintAllVendorsProduct(
+    query: GetProductsQueryDto,
+    userId: string,
+  ): Promise<{
+    products: ProductEntity[];
+    totalCount: number;
+    totalPages: number;
+  }> {
+    const { products, totalCount } =
+      await this.productsRepository.findAllVendorsProduct(query, userId);
+    const limit = query.limit || PRODUCTS_LIMIT;
+    const totalPages = Math.ceil(totalCount / limit);
+
+    return { products, totalCount, totalPages };
+  }
+
   async findById(id: string): Promise<ProductEntity | null> {
     const product = await this.productsRepository.findById(id);
 
