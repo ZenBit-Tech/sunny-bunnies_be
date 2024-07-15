@@ -29,6 +29,6 @@ export class CategoriesController {
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   @ApiResponse({ status: 500, description: 'Internal Server Error' })
   async findAll(): Promise<CategoryEntity[]> {
-    return await this.categoriesService.findAll();
+    return this.categoriesService.findAll();
   }
 }

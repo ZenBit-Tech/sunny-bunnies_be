@@ -9,7 +9,7 @@ export class RolesGuard implements CanActivate {
   canActivate(
     context: ExecutionContext,
   ): boolean | Promise<boolean> | Observable<boolean> {
-    const guardRole = 'vendor'
+    const guardRole = 'vendor';
     const request = context.switchToHttp().getRequest();
     const { user } = request;
 

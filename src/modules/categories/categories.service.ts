@@ -12,6 +12,6 @@ export class CategoriesService {
   }
 
   async findAll(): Promise<CategoryEntity[]> {
-    return await this.categoriesRepository.findAll();
+    return this.categoriesRepository.findAll();
   }
 }
