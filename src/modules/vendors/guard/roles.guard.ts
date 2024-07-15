@@ -9,6 +9,7 @@ export class RolesGuard implements CanActivate {
   canActivate(
     context: ExecutionContext,
   ): boolean | Promise<boolean> | Observable<boolean> {
+    const guardRole = 'vendor'
     const request = context.switchToHttp().getRequest();
     const { user } = request;
 
@@ -16,6 +17,6 @@ export class RolesGuard implements CanActivate {
       return false;
     }
 
-    return user.profile.role === 'vendor';
+    return user.profile.role === guardRole;
   }
 }
