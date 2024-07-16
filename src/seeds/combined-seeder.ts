@@ -94,7 +94,7 @@ export class CombinedSeeder implements Seeder {
     const brandRepository = dataSource.getRepository(BrandEntity);
     const materialRepository = dataSource.getRepository(MaterialEntity);
 
-    for (const categoryData of categoriesSeedData) {
+    const createCategory = async (categoryData) => {
       const category = categoryRepository.create({
         id: categoryData.id,
         name: categoryData.name,
@@ -123,7 +123,9 @@ export class CombinedSeeder implements Seeder {
       }
 
       await categoryRepository.save(category);
-    }
+    };
+
+    await Promise.all(categoriesSeedData.map(createCategory));
   }
 
   private async seedSizes(dataSource: DataSource): Promise<void> {

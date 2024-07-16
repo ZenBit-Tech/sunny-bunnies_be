@@ -16,4 +16,12 @@ export class SizeEntity {
   })
   @Column({ type: 'text' })
   name: string;
+
+  @ApiProperty({
+    type: String,
+    description:
+      'This is the size for clothing size, shoes size or no size (like bags, accessories)',
+  })
+  @Column({ type: 'text' })
+  sizeFor: string;
 }

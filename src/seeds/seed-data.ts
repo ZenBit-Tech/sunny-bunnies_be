@@ -104,14 +104,18 @@ const categoriesSeedData = [
 ];
 
 const sizesSeedData = [
-  { id: 1, name: 'XS' },
-  { id: 2, name: 'S' },
-  { id: 3, name: 'M' },
-  { id: 4, name: 'L' },
-  { id: 5, name: 'XL' },
-  { id: 6, name: '40' },
-  { id: 7, name: '42' },
-  { id: 8, name: '43' },
+  { id: 1, name: 'XS', sizeFor: 'clothing' },
+  { id: 2, name: 'S', sizeFor: 'clothing' },
+  { id: 3, name: 'M', sizeFor: 'clothing' },
+  { id: 4, name: 'L', sizeFor: 'clothing' },
+  { id: 5, name: 'XL', sizeFor: 'clothing' },
+  { id: 6, name: '3.5', sizeFor: 'shoes' },
+  { id: 7, name: '4.0', sizeFor: 'shoes' },
+  { id: 8, name: '4.5', sizeFor: 'shoes' },
+  { id: 9, name: '5.0', sizeFor: 'shoes' },
+  { id: 10, name: '5.5', sizeFor: 'shoes' },
+  { id: 11, name: '6.0', sizeFor: 'shoes' },
+  { id: 12, name: 'standard', sizeFor: 'no_size' },
 ];
 
 const stylesSeedData = [
