@@ -10,6 +10,7 @@ import {
 import { ProductEntity } from '~/entities';
 
 import { GetProductsQueryDto } from './dto/get-products-query.dto';
+import { GetVendorsProductsQueryDto } from '../vendors/dto';
 
 @Injectable()
 export class ProductsRepository extends Repository<ProductEntity> {
@@ -119,6 +120,60 @@ export class ProductsRepository extends Repository<ProductEntity> {
 
     if (query.order) {
       qb.orderBy('product.createdAt', query.order);
+    }
+
+    const totalCount = await qb.getCount();
+
+    const limit = query.limit || PRODUCTS_LIMIT;
+    const offset =
+      (query.page ? (query.page - 1) * limit : query.offset) || PRODUCTS_OFFSET;
+
+    qb.take(limit).skip(offset);
+
+    const products = await qb.getMany();
+
+    return { products, totalCount };
+  }
+
+  async findAllVendorsProduct(
+    query: GetVendorsProductsQueryDto,
+    userId: string,
+  ): Promise<{ products: ProductEntity[]; totalCount: number }> {
+    const qb = this.createQueryBuilder('product')
+      .leftJoinAndSelect('product.images', 'images')
+      .leftJoinAndSelect('product.category', 'category')
+      .leftJoinAndSelect('product.user', 'user')
+      .leftJoinAndSelect('product.variants', 'variants')
+      .where('product.deletedAt IS NULL')
+      .andWhere('user.id = :userId', { userId });
+
+    if (query.searchQuery) {
+      qb.andWhere('LOWER(product.name) LIKE LOWER(:searchQuery)', {
+        searchQuery: `%${query.searchQuery}%`,
+      });
+    }
+
+    if (query.order) {
+      qb.orderBy('product.createdAt', query.order);
+    }
+
+    if (query.filter) {
+      switch (query.filter) {
+        case 'name':
+          qb.orderBy('product.name', query.order);
+          break;
+        case 'price':
+          qb.orderBy('product.minPrice', query.order);
+          break;
+        case 'activityStatus':
+          qb.orderBy('product.activity_status', query.order);
+          break;
+        case 'category':
+          qb.orderBy('category.name', query.order);
+          break;
+        default:
+          qb.orderBy('product.createdAt', query.order);
+      }
     }
 
     const totalCount = await qb.getCount();
