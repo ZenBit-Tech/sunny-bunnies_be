@@ -20,6 +20,13 @@ export class ImageEntity {
   id: number;
 
   @ApiProperty({
+    type: Boolean,
+    description: 'If this image is primary',
+  })
+  @Column({ type: 'boolean', default: false })
+  isPrimary: boolean;
+
+  @ApiProperty({
     type: String,
     description: 'This is the URL of the image',
   })
